@@ -2,7 +2,7 @@
 
 A static website for a personal collection of vintage Macintosh computers. Each machine gets a page with specs, photos, and videos. It is built with [Eleventy](https://www.11ty.dev/).
 
-The three machines included (Macintosh 128K, Macintosh SE/30, iMac G3) are **sample entries**. Replace them with your own.
+The machines included are placeholders for the machines in the collection. Fill each one in as you document it.
 
 ## Quick start
 
@@ -23,7 +23,9 @@ npm run new -- "Macintosh Plus" 1986
 
 This creates `src/machines/macintosh-plus.md` and a media folder at `src/assets/machines/macintosh-plus/`. Fill in the specs, drop in your photos and videos, and list them in the file's front matter. `SHOT-LIST.md` explains what to shoot and how to prepare the files.
 
-To remove a sample, delete its `.md` file.
+Each machine starts as a placeholder marked "Not yet documented". A machine is checked off on the collection page's Checklist as soon as its front matter lists at least one photo. When every machine has a photo, the Checklist disappears on its own.
+
+To remove a machine, delete its `.md` file.
 
 ## The look
 

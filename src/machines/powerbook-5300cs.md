@@ -1,8 +1,8 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
-family: Compact Macintosh
-glyph: compact
+title: "PowerBook 5300cs"
+year: 1995
+family: PowerBook (PowerPC)
+glyph: laptop
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

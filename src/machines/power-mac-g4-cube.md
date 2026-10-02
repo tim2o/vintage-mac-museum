@@ -1,8 +1,8 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
-family: Compact Macintosh
-glyph: compact
+title: "Power Mac G4 Cube"
+year: 2000
+family: Power Mac G4
+glyph: cube
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

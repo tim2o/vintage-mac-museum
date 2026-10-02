@@ -1,8 +1,8 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
-family: Compact Macintosh
-glyph: compact
+title: "Macintosh LC III"
+year: 1993
+family: Macintosh LC
+glyph: desktop
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

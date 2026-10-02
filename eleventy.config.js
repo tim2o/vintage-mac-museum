@@ -12,6 +12,11 @@ module.exports = function (eleventyConfig) {
       .sort((a, b) => (a.data.year || 0) - (b.data.year || 0))
   );
 
+  // A machine counts as documented once it has at least one photo.
+  eleventyConfig.addFilter("documentedCount", (machines) =>
+    machines.filter((m) => (m.data.photos || []).length > 0).length
+  );
+
   return {
     dir: {
       input: "src",

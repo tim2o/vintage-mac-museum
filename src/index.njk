@@ -3,6 +3,8 @@ layout: base.njk
 title: Collection
 ---
 {% from "icons.njk" import icon %}
+{% set total = collections.machines.length %}
+{% set documented = collections.machines | documentedCount %}
 <div class="stack">
 
   <section class="window readme">
@@ -24,8 +26,8 @@ title: Collection
       <span class="zoombox" aria-hidden="true"></span>
     </div>
     <div class="infobar">
-      <span>{{ collections.machines.length }} {% if collections.machines.length == 1 %}item{% else %}items{% endif %}</span>
-      <span>Oldest first</span>
+      <span>{{ total }} {% if total == 1 %}item{% else %}items{% endif %}</span>
+      <span>{{ documented }} documented</span>
     </div>
     <ul class="icons" role="list">
       {% for m in collections.machines %}
@@ -46,5 +48,31 @@ title: Collection
       {% endfor %}
     </ul>
   </section>
+
+  {% if documented < total %}
+  <section class="window checklist" aria-labelledby="checklist-title">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2 id="checklist-title">Checklist</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="infobar">
+      <span>{{ documented }} of {{ total }} documented</span>
+      <span>Checked once a machine has a photo</span>
+    </div>
+    <ul class="checks" role="list">
+      {% for m in collections.machines %}
+      {% set done = m.data.photos and m.data.photos.length %}
+      <li>
+        <a class="check-row" href="{{ m.url | url }}">
+          <span class="check{% if done %} is-done{% endif %}" aria-hidden="true"></span>
+          <span>{{ m.data.title }}</span>
+          <span class="visually-hidden">{% if done %}, documented{% else %}, not yet documented{% endif %}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
 
 </div>

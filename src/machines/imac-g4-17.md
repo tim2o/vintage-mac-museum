@@ -1,8 +1,8 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
-family: Compact Macintosh
-glyph: compact
+title: "iMac G4 (17-inch)"
+year: 2002
+family: iMac
+glyph: flatpanel
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

@@ -1,6 +1,6 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
+title: "Macintosh 512K"
+year: 1984
 family: Compact Macintosh
 glyph: compact
 status: Not yet documented

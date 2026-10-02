@@ -1,8 +1,8 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
-family: Compact Macintosh
-glyph: compact
+title: "PowerBook 3400c/240"
+year: 1997
+family: PowerBook (PowerPC)
+glyph: laptop
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

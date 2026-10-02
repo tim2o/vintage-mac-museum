@@ -1,8 +1,8 @@
 ---
-title: "Macintosh SE/30"
-year: 1989
-family: Compact Macintosh
-glyph: compact
+title: "PowerBook G3 \"Wallstreet\" 300"
+year: 1998
+family: PowerBook G3
+glyph: laptop
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---
