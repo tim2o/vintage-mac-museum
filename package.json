@@ -1,0 +1,18 @@
+{
+  "name": "vintage-mac-museum",
+  "version": "1.0.0",
+  "description": "Photo and video catalog of a vintage Macintosh collection",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "new": "node scripts/new-machine.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6"
+  }
+}

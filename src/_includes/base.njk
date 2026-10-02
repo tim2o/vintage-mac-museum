@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ summary or description or site.description }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="menubar">
+    <nav class="menus" aria-label="Main">
+      <a class="menu-logo" href="{{ '/' | url }}" aria-label="{{ site.title }}, home"><span class="stripe" aria-hidden="true"></span></a>
+      <div class="menu">
+        <a href="{{ '/' | url }}">Collection</a>
+        <ul class="dropdown" role="list">
+          <li><a href="{{ '/' | url }}">All machines</a></li>
+          <li class="sep" aria-hidden="true"></li>
+          {% for m in collections.machines %}
+          <li><a href="{{ m.url | url }}">{{ m.data.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <a href="{{ '/about/' | url }}">About</a>
+    </nav>
+    <span class="clock" id="clock"></span>
+  </header>
+
+  <a class="desk-icon" href="{{ '/' | url }}">
+    {% from "icons.njk" import icon %}
+    {{ icon("disk", 48) }}
+    <span>{{ site.title }}</span>
+  </a>
+
+  <main id="main">
+    {{ content | safe }}
+  </main>
+
+  <footer class="footer">
+    <p>Every machine on this site is part of a private collection. Specifications are from the machines themselves and Apple's published documentation.</p>
+  </footer>
+
+  <script>
+    (function () {
+      var el = document.getElementById("clock");
+      if (!el) return;
+      function tick() {
+        el.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+      }
+      tick();
+      setInterval(tick, 15000);
+    })();
+  </script>
+</body>
+</html>

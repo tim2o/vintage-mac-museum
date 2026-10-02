@@ -1,0 +1,50 @@
+---
+layout: base.njk
+title: Collection
+---
+{% from "icons.njk" import icon %}
+<div class="stack">
+
+  <section class="window readme">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2>Read Me</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="doc">
+      <h1 class="doc-h1">{{ site.title }}</h1>
+      <p class="lede">{{ site.tagline }}</p>
+    </div>
+  </section>
+
+  <section class="window finder" aria-labelledby="finder-title">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2 id="finder-title">Collection</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="infobar">
+      <span>{{ collections.machines.length }} {% if collections.machines.length == 1 %}item{% else %}items{% endif %}</span>
+      <span>Oldest first</span>
+    </div>
+    <ul class="icons" role="list">
+      {% for m in collections.machines %}
+      <li>
+        <a class="icon-item" href="{{ m.url | url }}">
+          {% set cover = m.data.photos[0] if m.data.photos and m.data.photos.length else null %}
+          <span class="thumb">
+            {% if cover %}
+            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ cover.file) | url }}" alt="" loading="lazy">
+            {% else %}
+            {{ icon(m.data.glyph or "compact", 48) }}
+            {% endif %}
+          </span>
+          <span class="name">{{ m.data.title }}</span>
+          <span class="sub">{{ m.data.year }}{% if m.data.sample %}, sample{% endif %}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+</div>

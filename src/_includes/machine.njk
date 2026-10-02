@@ -1,0 +1,125 @@
+---
+layout: base.njk
+---
+{% from "icons.njk" import icon %}
+{% set mediaDir = '/assets/machines/' ~ page.fileSlug ~ '/' %}
+{% set prev = collections.machines | getPreviousCollectionItem(page) %}
+{% set next = collections.machines | getNextCollectionItem(page) %}
+{% set iconKind = glyph or "compact" %}
+
+<div class="machine-layout">
+
+  {# Main window: the photo and the write-up, like a SimpleText document #}
+  <article class="window">
+    <div class="titlebar">
+      <a class="closebox" href="{{ '/' | url }}" aria-label="Close this window and return to the collection"></a>
+      <h1>{{ title }}</h1>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="doc">
+      {% if sample %}
+      <p class="alert">
+        {{ icon("caution", 32) }}
+        <span><strong>Sample entry.</strong> This page shows how a machine is laid out. Replace its details and photos with your own, or delete the file.</span>
+      </p>
+      {% endif %}
+
+      <div class="hero">
+        {% if photos and photos.length %}
+        <a href="{{ (mediaDir ~ photos[0].file) | url }}">
+          <img src="{{ (mediaDir ~ photos[0].file) | url }}" alt="{{ photos[0].caption or title }}">
+        </a>
+        {% else %}
+        <div class="thumb thumb-empty" role="img" aria-label="No photo yet for {{ title }}">
+          {{ icon(iconKind, 64) }}
+          <span>No photo yet</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="prose">
+        {{ content | safe }}
+      </div>
+
+      <div class="buttons">
+        {% if prev %}<a class="btn" href="{{ prev.url | url }}" rel="prev">Previous</a>{% endif %}
+        <a class="btn btn-default" href="{{ '/' | url }}">All machines</a>
+        {% if next %}<a class="btn" href="{{ next.url | url }}" rel="next">Next</a>{% endif %}
+      </div>
+    </div>
+  </article>
+
+  {# Get Info window: the specs #}
+  <aside class="window info" aria-label="Specifications for {{ title }}">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2>{{ title }} Info</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="info-head">
+      {{ icon(iconKind, 32) }}
+      <span class="name-big">{{ title }}</span>
+    </div>
+    <dl class="specs">
+      {% if family %}<div><dt>Kind</dt><dd>{{ family }}</dd></div>{% endif %}
+      <div><dt>Introduced</dt><dd>{{ year }}</dd></div>
+      {% if model %}<div><dt>Model number</dt><dd>{{ model }}</dd></div>{% endif %}
+      {% for key, value in specs %}
+      <div><dt>{{ key }}</dt><dd>{{ value }}</dd></div>
+      {% endfor %}
+    </dl>
+    {% if status %}
+    <div class="comments">
+      <span class="label">Condition</span>
+      <div class="box">{{ status }}</div>
+    </div>
+    {% endif %}
+  </aside>
+
+  {# One QuickTime-style window per video #}
+  {% if videos and videos.length %}
+  {% for v in videos %}
+  <section class="window span">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2>{{ v.title }}</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="movie">
+      {% if v.youtube %}
+      <iframe src="https://www.youtube-nocookie.com/embed/{{ v.youtube }}" title="{{ v.title }}" loading="lazy" allowfullscreen></iframe>
+      {% else %}
+      <video controls preload="metadata"{% if v.poster %} poster="{{ (mediaDir ~ v.poster) | url }}"{% endif %}>
+        <source src="{{ (mediaDir ~ v.file) | url }}" type="video/mp4">
+        Your browser can't play this video.
+      </video>
+      {% endif %}
+    </div>
+    {% if v.description %}<p class="movie-caption">{{ v.description }}</p>{% endif %}
+  </section>
+  {% endfor %}
+  {% endif %}
+
+  {# Photos window, in the style of a Finder icon view #}
+  {% if photos and photos.length > 1 %}
+  <section class="window span">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2>{{ title }} Photos</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="infobar"><span>{{ photos.length }} items</span><span>Select a photo to see it full size</span></div>
+    <ul class="icons" role="list">
+      {% for p in photos %}
+      <li>
+        <a class="icon-item" href="{{ (mediaDir ~ p.file) | url }}">
+          <span class="thumb"><img src="{{ (mediaDir ~ p.file) | url }}" alt="" loading="lazy"></span>
+          <span class="name">{{ p.caption or ('Photo ' ~ loop.index) }}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+</div>
