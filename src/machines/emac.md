@@ -1,6 +1,6 @@
 ---
-title: "eMac"
-year: 2002
+title: "eMac 1.25 GHz"
+year: 2004
 family: eMac
 glyph: imac
 status: Not yet documented
