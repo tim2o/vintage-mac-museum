@@ -1,4 +1,4 @@
-# The Macintosh Shelf
+# Tim's Vintage Macintosh Shelf
 
 A static website for a personal collection of vintage Macintosh computers. Each machine gets a page with specs, photos, and videos. It is built with [Eleventy](https://www.11ty.dev/).
 
