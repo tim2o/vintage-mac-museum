@@ -11,6 +11,10 @@ specs:
   Display: "Active-matrix color, 640 x 480 (as shipped)"
   Configuration: Stock
 photos:
+  - file: powerbook-duo-270c-front.jpg
+    alt: "The PowerBook Duo 270c open on a table, with its screen dark and showing only reflections"
+  - file: powerbook-duo-270c-front-2.jpg
+    alt: "The PowerBook Duo 270c open on a table, photographed a little closer, with its screen dark"
   - file: powerbook-duo-270c-escape-velocity.jpg
     alt: "The PowerBook Duo 270c showing the Escape Velocity loading screen"
   - video: powerbook-duo-270c-escape-velocity.mp4

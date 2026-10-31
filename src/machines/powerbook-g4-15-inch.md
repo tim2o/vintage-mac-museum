@@ -1,9 +1,32 @@
 ---
-title: "PowerBook G4 (15-inch)"
-year: 2003
+title: "PowerBook G4 1.67 GHz (15-inch)"
+year: 2005
 family: PowerBook G4
 glyph: laptop
-status: Not yet documented
-summary: Placeholder for a machine in the collection.
+status: Working
+summary: A 15-inch PowerBook G4 at 1.67 GHz with 2 GB of memory and a solid-state drive, running Mac OS X 10.5.9.
+specs:
+  Model identifier: PowerBook5,6
+  Processor: "PowerPC G4, 1.67 GHz (as reported by System Profiler)"
+  L2 cache: 512 KB
+  Bus speed: 167 MHz
+  Memory: "2 GB (two 1 GB PC2700 DDR SDRAM modules)"
+  Storage: "Solid-state drive, model TS64GSSD25-M, 59.7 GB, on the ATA bus (as reported by System Profiler)"
+  Optical drive: MATSHITA DVD-R UJ-835E
+  System software: Mac OS X 10.5.9
+photos:
+  - file: powerbook-g4-15-inch-boot.jpg
+    alt: "The 15-inch PowerBook G4 at its startup screen, with a grey Apple logo on a pale blue background"
+  - file: powerbook-g4-15-inch-about.jpg
+    alt: "The 15-inch PowerBook G4 showing the About This Mac window for Mac OS X 10.5.9, with a 1.67 GHz PowerPC G4 and 2 GB of DDR SDRAM"
+  - file: powerbook-g4-15-inch-system-profiler.jpg
+    alt: "System Profiler on the 15-inch PowerBook G4, showing model identifier PowerBook5,6, a 1.67 GHz PowerPC G4 and 2 GB of memory"
+  - file: powerbook-g4-15-inch-system-profiler-2.jpg
+    alt: "The same System Profiler hardware overview on the 15-inch PowerBook G4, from a slightly different angle"
+  - file: powerbook-g4-15-inch-memory.jpg
+    alt: "System Profiler on the 15-inch PowerBook G4, listing two 1 GB DDR SDRAM modules in the memory slots"
+  - file: powerbook-g4-15-inch-storage.jpg
+    alt: "System Profiler on the 15-inch PowerBook G4, showing the ATA device tree with a DVD drive and a 59.7 GB TS64GSSD25-M drive"
+videos: []
 ---
-Not yet documented. Add photos, then fill in the specs for this machine, including the exact model and year.
+A 15-inch PowerBook G4 running Mac OS X 10.5.9 from a volume named Sorbet Leopard. The desktop also shows a volume named Tiger. System Profiler reports a 1.67 GHz PowerPC G4 with a 512 KB L2 cache and two 1 GB memory modules, and the drive on the ATA bus is a 59.7 GB TS64GSSD25-M.
