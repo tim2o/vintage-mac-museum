@@ -16,6 +16,7 @@
     var status = strip.querySelector("[data-strip-status]");
     var items = Array.prototype.slice.call(slides.querySelectorAll(".slide"));
     var total = items.length;
+    var noun = strip.getAttribute("data-noun") === "item" ? "Item" : "Photo";
 
     // Hide the browser's own scroll bar and show ours.
     strip.classList.add("has-js");
@@ -60,7 +61,12 @@
       knob.hidden = max <= 1; // everything fits: show an empty track, like a Mac does
       prevBtn.disabled = slides.scrollLeft <= 1;
       nextBtn.disabled = slides.scrollLeft >= max - 1;
-      if (status) status.textContent = "Photo " + (currentIndex() + 1) + " of " + total;
+      var cur = currentIndex();
+      if (status) status.textContent = noun + " " + (cur + 1) + " of " + total;
+      items.forEach(function (el, i) {
+        var v = el.querySelector("video");
+        if (v && i !== cur && !v.paused) v.pause();
+      });
     }
 
     function scrollToPos(x) {

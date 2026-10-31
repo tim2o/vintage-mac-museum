@@ -109,3 +109,12 @@ videos:
 ```
 
 For longer videos, upload to YouTube and use `youtube: <video id>` instead of `file:`.
+
+A short clip can also play right in the photo strip. List it in `photos:` with `video:` and an optional `poster:` image instead of `file:`:
+
+```yaml
+photos:
+  - video: macintosh-se30-boot.mp4
+    poster: macintosh-se30-boot-poster.jpg
+    alt: The SE/30 booting
+```

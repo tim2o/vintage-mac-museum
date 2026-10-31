@@ -291,8 +291,17 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   max-height: var(--slide-h);
   border: 1px solid var(--black);
 }
+.slide video {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100cqw - 32px);
+  max-height: var(--slide-h);
+  border: 1px solid var(--black);
+  background: var(--black);
+}
 /* With several photos, leave a sliver of the next one showing so it is clear the strip scrolls. */
-.strip-multi .slide img { max-width: calc(100cqw - 32px - 1.75rem); }
+.strip-multi .slide img, .strip-multi .slide video { max-width: calc(100cqw - 32px - 1.75rem); }
 
 /* Scroll bar: arrow boxes at each end, a dithered track, and a thumb */
 .sbar {

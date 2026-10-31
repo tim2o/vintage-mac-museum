@@ -27,18 +27,29 @@ layout: base.njk
       {% if photos and photos.length %}
       {# Side-scrolling photo strip with a System 7-style scroll bar (see assets/js/strip.js) #}
       {% set multi = photos.length > 1 %}
-      <div class="strip{% if multi %} strip-multi{% endif %}" data-strip>
+      {% set hasVideo = (photos | selectattr("video") | list).length > 0 %}
+      {% set noun = "item" if hasVideo else "photo" %}
+      <div class="strip{% if multi %} strip-multi{% endif %}" data-strip data-noun="{{ noun }}">
         <div class="infobar">
-          <span data-strip-status>{{ photos.length }} {% if multi %}photos{% else %}photo{% endif %}</span>
+          <span data-strip-status>{{ photos.length }} {{ noun }}{% if multi %}s{% endif %}</span>
           {% if multi %}<span>Swipe or use the scroll bar</span>{% endif %}
         </div>
         <div class="slides" data-strip-slides{% if multi %} tabindex="0" role="group" aria-label="Photos of {{ title }}"{% endif %}>
           {% for p in photos %}
+          {% if p.video %}
+          <figure class="slide slide-video">
+            <video controls playsinline preload="metadata"{% if p.poster %} poster="{{ (mediaDir ~ p.poster) | url }}"{% endif %} aria-label="{{ p.alt or title }}">
+              <source src="{{ (mediaDir ~ p.video) | url }}" type="video/mp4">
+              Your browser can't play this video.
+            </video>
+          </figure>
+          {% else %}
           <figure class="slide">
             <a href="{{ (mediaDir ~ p.file) | url }}">
               <img src="{{ (mediaDir ~ p.file) | url }}" alt="{{ p.alt or title }}" decoding="async" draggable="false">
             </a>
           </figure>
+          {% endif %}
           {% endfor %}
         </div>
         {% if multi %}

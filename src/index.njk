@@ -36,7 +36,7 @@ title: Collection
           {% set cover = m.data.photos[0] if m.data.photos and m.data.photos.length else null %}
           <span class="thumb">
             {% if cover %}
-            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ cover.file) | url }}" alt="" loading="lazy">
+            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ (cover.poster if cover.video else cover.file)) | url }}" alt="" loading="lazy">
             {% else %}
             {{ icon(m.data.glyph or "compact", 48) }}
             {% endif %}
