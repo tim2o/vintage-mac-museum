@@ -27,6 +27,8 @@ photos:
     alt: "System Profiler on the 15-inch PowerBook G4, listing two 1 GB DDR SDRAM modules in the memory slots"
   - file: powerbook-g4-15-inch-storage.jpg
     alt: "System Profiler on the 15-inch PowerBook G4, showing the ATA device tree with a DVD drive and a 59.7 GB TS64GSSD25-M drive"
+  - file: powerbook-g4-15-inch-terminal.jpg
+    alt: "The 15-inch PowerBook G4 with a Terminal window showing a brew upgrade in progress and a CPU Monitor window beside it"
 videos: []
 ---
 A 15-inch PowerBook G4 running Mac OS X 10.5.9 from a volume named Sorbet Leopard. The desktop also shows a volume named Tiger. System Profiler reports a 1.67 GHz PowerPC G4 with a 512 KB L2 cache and two 1 GB memory modules, and the SSD, which sits behind an IDE to SATA adapter, shows up on the ATA bus as a 59.7 GB TS64GSSD25-M.
