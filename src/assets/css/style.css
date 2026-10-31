@@ -260,7 +260,7 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 .slides {
   position: relative;
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* mixed portrait and landscape photos sit centered, with no shifting height */
   gap: 16px;
   padding: 16px;
   overflow-x: auto;
@@ -293,7 +293,6 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 }
 /* With several photos, leave a sliver of the next one showing so it is clear the strip scrolls. */
 .strip-multi .slide img { max-width: calc(100cqw - 32px - 1.75rem); }
-.slide figcaption { width: 0; min-width: 100%; margin-top: 8px; font-size: 1.05rem; line-height: 1.3; }
 
 /* Scroll bar: arrow boxes at each end, a dithered track, and a thumb */
 .sbar {

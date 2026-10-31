@@ -14,17 +14,17 @@ specs:
   Display: Built-in 9-inch monochrome, 512 x 342
 photos:
   - file: macintosh-se30-about.jpg
-    caption: "About This Computer: Mac OS 8.1 with 64 MB of built-in memory"
+    alt: "About This Computer: Mac OS 8.1 with 64 MB of built-in memory"
   - file: macintosh-se30-installer.jpg
-    caption: "Install System Software, installing onto a disk named SE/30. The SE/30 sits on an LC III, next to the Color Classic"
+    alt: "Install System Software, installing onto a disk named SE/30. The SE/30 sits on an LC III, next to the Color Classic"
   - file: macintosh-se30-aux.jpg
-    caption: "A/UX: the CommandShell window, \"Welcome to A/UX\""
+    alt: "A/UX: the CommandShell window, \"Welcome to A/UX\""
   - file: macintosh-se30-aux-wide.jpg
-    caption: "The same A/UX session from further back"
+    alt: "The same A/UX session from further back"
   - file: macintosh-se30-benchmark.jpg
-    caption: "A benchmark window with every result at 0.000, next to an Apple Extended Keyboard"
+    alt: "A benchmark window with every result at 0.000, next to an Apple Extended Keyboard"
   - file: macintosh-se30-openretroscsi.jpg
-    caption: "The Finder with a volume named OpenRetroSCSI and a \"Creating Directory\" dialog"
+    alt: "The Finder with a volume named OpenRetroSCSI and a \"Creating Directory\" dialog"
 videos: []
 ---
 An SE/30 with a BMOW Carbon ROM and 64 MB of RAM. Storage is a SCSIKnife SD card adapter. The BMOW Carbon ROM is a flash replacement for the stock ROM SIMM that makes the SE/30 32-bit clean, which is what lets it use up to 128 MB of RAM.

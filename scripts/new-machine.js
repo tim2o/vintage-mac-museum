@@ -37,7 +37,7 @@ specs:
   System software:
 photos:
   # - file: ${slug}-front.jpg
-  #   caption: Front, with the screen on
+  #   alt: Front, with the screen on
 videos:
   # - file: ${slug}-boot.mp4
   #   title: Cold boot to the desktop

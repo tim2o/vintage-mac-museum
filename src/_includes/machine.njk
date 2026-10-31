@@ -36,9 +36,8 @@ layout: base.njk
           {% for p in photos %}
           <figure class="slide">
             <a href="{{ (mediaDir ~ p.file) | url }}">
-              <img src="{{ (mediaDir ~ p.file) | url }}" alt="{{ p.caption or title }}" decoding="async" draggable="false">
+              <img src="{{ (mediaDir ~ p.file) | url }}" alt="{{ p.alt or title }}" decoding="async" draggable="false">
             </a>
-            {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
           </figure>
           {% endfor %}
         </div>

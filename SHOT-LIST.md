@@ -101,7 +101,7 @@ Then list them in the machine's front matter:
 ```yaml
 photos:
   - file: macintosh-se30-front.jpg
-    caption: Front, powered off
+    alt: Front, powered off
 videos:
   - file: macintosh-se30-boot.mp4
     title: Cold boot to the desktop
