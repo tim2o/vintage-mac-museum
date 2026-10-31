@@ -20,7 +20,7 @@ photos:
   - file: macintosh-color-classic-ii-profiler.jpg
     caption: "Apple System Profiler: Performa 275, 68040 at 34 MHz, 68 MB memory"
   - file: macintosh-color-classic-ii-metronome.jpg
-    caption: "Metronome: 33 MHz bus, 4K instruction and 4K data cache"
+    caption: "Metronome: MC68RC040 on a 33 MHz bus"
   - file: macintosh-color-classic-ii-macbench.jpg
     caption: "MacBench 3.0 next to a Power Macintosh 6100/60, an LC 575, and a Quadra 630"
   - file: macintosh-color-classic-ii-macbench-lc3.jpg
