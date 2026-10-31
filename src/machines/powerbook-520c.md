@@ -10,6 +10,10 @@ specs:
   Memory: "12 MB built in, with virtual memory bringing the total to 24 MB"
   System software: System Software 7.5.5
 photos:
+  - file: powerbook-520c-starting-up.jpg
+    alt: "The PowerBook 520c starting up Mac OS on a blue cat pattern desktop, with three Control Strip icons loading"
+  - file: powerbook-520c-starting-up-2.jpg
+    alt: "The PowerBook 520c starting up Mac OS, from a slightly closer angle"
   - file: powerbook-520c-about.jpg
     alt: "The PowerBook 520c showing the About This Macintosh window for System Software 7.5.5, over a blue cat pattern desktop"
   - file: powerbook-520c-tattletech.jpg
