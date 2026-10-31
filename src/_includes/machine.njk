@@ -9,7 +9,7 @@ layout: base.njk
 
 <div class="machine-layout">
 
-  {# Main window: the photo and the write-up, like a SimpleText document #}
+  {# Main window: the photos and the write-up, like a SimpleText document #}
   <article class="window">
     <div class="titlebar">
       <a class="closebox" href="{{ '/' | url }}" aria-label="Close this window and return to the collection"></a>
@@ -24,18 +24,44 @@ layout: base.njk
       </p>
       {% endif %}
 
+      {% if photos and photos.length %}
+      {# Side-scrolling photo strip with a System 7-style scroll bar (see assets/js/strip.js) #}
+      {% set multi = photos.length > 1 %}
+      <div class="strip{% if multi %} strip-multi{% endif %}" data-strip>
+        <div class="infobar">
+          <span data-strip-status>{{ photos.length }} {% if multi %}photos{% else %}photo{% endif %}</span>
+          {% if multi %}<span>Swipe or use the scroll bar</span>{% endif %}
+        </div>
+        <div class="slides" data-strip-slides{% if multi %} tabindex="0" role="group" aria-label="Photos of {{ title }}"{% endif %}>
+          {% for p in photos %}
+          <figure class="slide">
+            <a href="{{ (mediaDir ~ p.file) | url }}">
+              <img src="{{ (mediaDir ~ p.file) | url }}" alt="{{ p.caption or title }}" decoding="async" draggable="false">
+            </a>
+            {% if p.caption %}<figcaption>{{ p.caption }}</figcaption>{% endif %}
+          </figure>
+          {% endfor %}
+        </div>
+        {% if multi %}
+        <div class="sbar" data-strip-bar hidden>
+          <button type="button" class="sbtn" data-dir="-1" aria-label="Previous photo">
+            <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="10,3 10,13 4,8" fill="currentColor"/></svg>
+          </button>
+          <div class="track" data-strip-track><span class="knob" data-strip-knob></span></div>
+          <button type="button" class="sbtn" data-dir="1" aria-label="Next photo">
+            <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="6,3 6,13 12,8" fill="currentColor"/></svg>
+          </button>
+        </div>
+        {% endif %}
+      </div>
+      {% else %}
       <div class="hero">
-        {% if photos and photos.length %}
-        <a href="{{ (mediaDir ~ photos[0].file) | url }}">
-          <img src="{{ (mediaDir ~ photos[0].file) | url }}" alt="{{ photos[0].caption or title }}">
-        </a>
-        {% else %}
         <div class="thumb thumb-empty" role="img" aria-label="No photo yet for {{ title }}">
           {{ icon(iconKind, 64) }}
           <span>No photo yet</span>
         </div>
-        {% endif %}
       </div>
+      {% endif %}
 
       <div class="prose">
         {{ content | safe }}
@@ -100,26 +126,6 @@ layout: base.njk
   {% endfor %}
   {% endif %}
 
-  {# Photos window, in the style of a Finder icon view #}
-  {% if photos and photos.length > 1 %}
-  <section class="window span">
-    <div class="titlebar">
-      <span class="closebox" aria-hidden="true"></span>
-      <h2>{{ title }} Photos</h2>
-      <span class="zoombox" aria-hidden="true"></span>
-    </div>
-    <div class="infobar"><span>{{ photos.length }} items</span><span>Select a photo to see it full size</span></div>
-    <ul class="icons" role="list">
-      {% for p in photos %}
-      <li>
-        <a class="icon-item" href="{{ (mediaDir ~ p.file) | url }}">
-          <span class="thumb"><img src="{{ (mediaDir ~ p.file) | url }}" alt="" loading="lazy"></span>
-          <span class="name">{{ p.caption or ('Photo ' ~ loop.index) }}</span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
-
 </div>
+
+<script src="{{ '/assets/js/strip.js' | url }}" defer></script>

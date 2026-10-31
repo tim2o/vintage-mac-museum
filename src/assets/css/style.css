@@ -249,7 +249,98 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   align-items: start;
 }
 .machine-layout .span { grid-column: 1 / -1; }
-.hero img { display: block; width: 100%; height: auto; border: 1px solid var(--black); }
+/* Photo strip: a side-scrolling row of photos with a System 7-style scroll bar */
+.strip {
+  container-type: inline-size;
+  --slide-h: min(72vh, 36rem);
+  margin: 0 0 20px;
+  border: 1px solid var(--black);
+}
+.strip .infobar { border-bottom: 1px solid var(--black); }
+.slides {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 16px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .slides { scroll-behavior: smooth; }
+}
+.slides:focus-visible { outline: 2px solid var(--black); outline-offset: -4px; }
+.strip.has-js .slides { scrollbar-width: none; }
+.strip.has-js .slides::-webkit-scrollbar { display: none; }
+.slide {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  scroll-snap-align: start;
+}
+.slide a { display: block; line-height: 0; }
+/* The photo keeps its own shape, up to a set height and never wider than the strip. */
+.slide img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: calc(100cqw - 32px);
+  max-height: var(--slide-h);
+  border: 1px solid var(--black);
+}
+/* With several photos, leave a sliver of the next one showing so it is clear the strip scrolls. */
+.strip-multi .slide img { max-width: calc(100cqw - 32px - 1.75rem); }
+.slide figcaption { width: 0; min-width: 100%; margin-top: 8px; font-size: 1.05rem; line-height: 1.3; }
+
+/* Scroll bar: arrow boxes at each end, a dithered track, and a thumb */
+.sbar {
+  display: flex;
+  align-items: stretch;
+  height: 18px;
+  border-top: 1px solid var(--black);
+  background: var(--white);
+}
+.sbar[hidden] { display: none; }
+.sbtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  padding: 0;
+  background: var(--white);
+  border: 0;
+  border-right: 1px solid var(--black);
+  color: var(--black);
+  cursor: pointer;
+}
+.sbtn:last-child { border-right: 0; border-left: 1px solid var(--black); }
+.sbtn:active:not(:disabled) { background: var(--black); color: var(--white); }
+.sbtn:disabled { opacity: 0.3; cursor: default; }
+.sbtn:focus-visible { outline: 2px solid var(--black); outline-offset: -4px; }
+.sbtn svg { display: block; }
+.track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--white) conic-gradient(#8c8c8c 25%, var(--white) 0 50%, #8c8c8c 0 75%, var(--white) 0) 0 0 / 2px 2px;
+}
+.knob {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  min-width: 24px;
+  background: var(--grey-light);
+  border: 1px solid var(--black);
+  box-shadow: inset 1px 1px 0 var(--white), inset -1px -1px 0 #888;
+  cursor: grab;
+  touch-action: none;
+}
+.knob:active { cursor: grabbing; }
 
 /* Photo placeholder and thumbnails */
 .thumb {

@@ -29,7 +29,7 @@ To remove a machine, delete its `.md` file.
 
 ## The look
 
-The site is styled after Mac OS 7.5. Every page is a desktop: the collection is a Finder-style icon view, each machine's specs sit in a Get Info window, and videos play in QuickTime-style windows. The icons are simple pixel drawings made for this site.
+The site is styled after Mac OS 7.5. Every page is a desktop: the collection is a Finder-style icon view, each machine's specs sit in a Get Info window, photos scroll sideways in a strip with a classic scroll bar (swipe, or use the arrows, track, and thumb), and videos play in QuickTime-style windows. The icons are simple pixel drawings made for this site.
 
 Each machine can pick an icon with `glyph:` in its front matter: `compact`, `desktop`, or `imac`. Once a machine has a photo, the photo replaces the icon on the collection page.
 
