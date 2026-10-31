@@ -9,6 +9,7 @@ specs:
   Processor: "PowerPC 603e, 100 MHz (as reported by Apple System Profiler)"
   Memory: "48 MB (16 MB on the logic board plus a 32 MB expansion module)"
   L2 cache: Not installed
+  Storage: IDE to CompactFlash adapter
   System software: "Mac OS 8.7b3 (as reported by Apple System Profiler)"
   Display: "Color LCD, 640 x 480 (as shown in the Control Strip)"
 photos:

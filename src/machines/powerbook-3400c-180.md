@@ -9,6 +9,7 @@ specs:
   Processor: "PowerPC 603ev, 180 MHz (as reported by Apple System Profiler)"
   Memory: "48 MB (16 MB on the logic board plus a 32 MB expansion module)"
   L2 cache: 256K
+  Storage: IDE to CompactFlash adapter
   System software: Mac OS 9.1
 photos:
   - file: powerbook-3400c-180-about.jpg

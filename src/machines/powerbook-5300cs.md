@@ -7,6 +7,7 @@ status: Working, with a delaminating display
 summary: A PowerBook 5300cs that works, apart from a delaminating display, with 40 MB of memory and Mac OS 8.6.
 specs:
   Memory: 40 MB built in
+  Storage: Mechanical hard drive
   System software: Mac OS 8.6
 photos:
   - file: powerbook-5300cs-about.jpg

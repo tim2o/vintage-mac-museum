@@ -10,6 +10,7 @@ specs:
   Memory: "64 MB (16 MB on the logic board plus a 48 MB expansion module)"
   L2 cache: Not installed
   Display: "800 x 600, color LCD"
+  Storage: IDE to CompactFlash adapter
   System software: "Mac OS 9.0, with volumes named Mac OS 9, Mac OS 8.7b and Mac OS 8.1"
 photos:
   - file: powerbook-1400c-166-color-lcd.jpg

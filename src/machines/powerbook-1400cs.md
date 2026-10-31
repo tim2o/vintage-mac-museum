@@ -6,7 +6,7 @@ glyph: laptop
 status: Working
 summary: A working PowerBook 1400cs with no hard drive installed at the moment, so it shows a floppy disk icon at startup.
 specs:
-  Storage: No hard drive installed
+  Storage: Mechanical hard drive bay, no drive installed at the moment
 photos:
   - file: powerbook-1400cs-floppy.jpg
     alt: "The PowerBook 1400cs showing a floppy disk icon on a light screen"
