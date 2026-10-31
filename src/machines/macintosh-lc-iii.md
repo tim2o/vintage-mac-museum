@@ -18,8 +18,6 @@ photos:
     alt: "The installer reading from the install disks, with the LC III, keyboard, and mouse"
   - file: macintosh-lc-iii-install-close.jpg
     alt: "A closer view of the installer installing onto the disk named LC III"
-  - file: macintosh-lc-iii-front.jpg
-    alt: "The LC III with its monitor and keyboard"
 videos: []
 ---
 This LC III has been in the family since it was purchased new. It is stock apart from an Ethernet card. It has 32 MB of RAM and an 80 MB mechanical SCSI hard disk, and it runs System 7.5.3.
