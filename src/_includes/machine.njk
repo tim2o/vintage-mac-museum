@@ -66,10 +66,16 @@ layout: base.njk
       </div>
       {% else %}
       <div class="hero">
+        {% if still %}
+        <div class="thumb">
+          <img src="{{ (mediaDir ~ still) | url }}" alt="{{ stillAlt or title }}" decoding="async">
+        </div>
+        {% else %}
         <div class="thumb thumb-empty" role="img" aria-label="No photo yet for {{ title }}">
           {{ icon(iconKind, 64) }}
           <span>No photo yet</span>
         </div>
+        {% endif %}
       </div>
       {% endif %}
 

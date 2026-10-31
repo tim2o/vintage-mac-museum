@@ -16,7 +16,8 @@
     var status = strip.querySelector("[data-strip-status]");
     var items = Array.prototype.slice.call(slides.querySelectorAll(".slide"));
     var total = items.length;
-    var noun = strip.getAttribute("data-noun") === "item" ? "Item" : "Photo";
+    var dn = strip.getAttribute("data-noun");
+    var noun = dn === "item" ? "Item" : dn === "video" ? "Video" : "Photo";
 
     // Hide the browser's own scroll bar and show ours.
     strip.classList.add("has-js");

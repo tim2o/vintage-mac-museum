@@ -19,6 +19,45 @@ title: Collection
     </div>
   </section>
 
+  {# Video montages of the PowerBooks, in the same scrolling strip as the machine pages #}
+  {% set montages = [
+    { video: "powerbook-montage-1.mp4", poster: "powerbook-montage-1-poster.jpg", alt: "Video montage 1 of the PowerBooks in the collection" },
+    { video: "powerbook-montage-2.mp4", poster: "powerbook-montage-2-poster.jpg", alt: "Video montage 2 of the PowerBooks in the collection" },
+    { video: "powerbook-montage-3.mp4", poster: "powerbook-montage-3-poster.jpg", alt: "Video montage 3 of the PowerBooks in the collection" }
+  ] %}
+  <section class="window movies" aria-labelledby="montage-title">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2 id="montage-title">PowerBook Montages</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="strip strip-multi" data-strip data-noun="video">
+      <div class="infobar">
+        <span data-strip-status>{{ montages.length }} videos</span>
+        <span>Swipe or use the scroll bar</span>
+      </div>
+      <div class="slides" data-strip-slides tabindex="0" role="group" aria-label="Video montages of the PowerBooks">
+        {% for v in montages %}
+        <figure class="slide slide-video">
+          <video controls playsinline preload="metadata" poster="{{ ('/assets/montages/' ~ v.poster) | url }}" aria-label="{{ v.alt }}">
+            <source src="{{ ('/assets/montages/' ~ v.video) | url }}" type="video/mp4">
+            Your browser can't play this video.
+          </video>
+        </figure>
+        {% endfor %}
+      </div>
+      <div class="sbar" data-strip-bar hidden>
+        <button type="button" class="sbtn" data-dir="-1" aria-label="Previous video">
+          <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="10,3 10,13 4,8" fill="currentColor"/></svg>
+        </button>
+        <div class="track" data-strip-track><span class="knob" data-strip-knob></span></div>
+        <button type="button" class="sbtn" data-dir="1" aria-label="Next video">
+          <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="6,3 6,13 12,8" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
   <section class="window finder" aria-labelledby="finder-title">
     <div class="titlebar">
       <span class="closebox" aria-hidden="true"></span>
@@ -37,6 +76,8 @@ title: Collection
           <span class="thumb">
             {% if cover %}
             <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ (cover.poster if cover.video else cover.file)) | url }}" alt="" loading="lazy">
+            {% elif m.data.still %}
+            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ m.data.still) | url }}" alt="" loading="lazy">
             {% else %}
             {{ icon(m.data.glyph or "compact", 48) }}
             {% endif %}
@@ -76,3 +117,5 @@ title: Collection
   {% endif %}
 
 </div>
+
+<script src="{{ '/assets/js/strip.js' | url }}" defer></script>

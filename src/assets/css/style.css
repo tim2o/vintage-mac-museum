@@ -301,6 +301,8 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   background: var(--black);
 }
 /* With several photos, leave a sliver of the next one showing so it is clear the strip scrolls. */
+/* The home page montages mix wide and tall videos, so keep the row a little shorter */
+.movies .strip { --slide-h: min(60vh, 30rem); }
 .strip-multi .slide img, .strip-multi .slide video { max-width: calc(100cqw - 32px - 1.75rem); }
 
 /* Scroll bar: arrow boxes at each end, a dithered track, and a thumb */
