@@ -11,6 +11,7 @@ specs:
   L2 cache: 256 KB
   Bus speed: 67 MHz
   Memory: 576 MB
+  Storage: Stock mechanical hard drive
   System software: Mac OS X
 photos:
   - file: ibook-g3-466-se-boot.jpg

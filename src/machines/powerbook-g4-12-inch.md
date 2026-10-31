@@ -11,6 +11,7 @@ specs:
   L2 cache: 512 KB
   Bus speed: 167 MHz
   Memory: 768 MB
+  Storage: IDE to SATA adapter with an SSD
   System software: Mac OS X 10.5.9
 photos:
   - file: powerbook-g4-12-inch-boot.jpg

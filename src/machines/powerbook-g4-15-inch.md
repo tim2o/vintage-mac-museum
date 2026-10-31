@@ -4,14 +4,14 @@ year: 2005
 family: PowerBook G4
 glyph: laptop
 status: Working
-summary: A 15-inch PowerBook G4 at 1.67 GHz with 2 GB of memory and a solid-state drive, running Mac OS X 10.5.9.
+summary: A 15-inch PowerBook G4 at 1.67 GHz with 2 GB of memory and an SSD on an IDE to SATA adapter, running Mac OS X 10.5.9.
 specs:
   Model identifier: PowerBook5,6
   Processor: "PowerPC G4, 1.67 GHz (as reported by System Profiler)"
   L2 cache: 512 KB
   Bus speed: 167 MHz
   Memory: "2 GB (two 1 GB PC2700 DDR SDRAM modules)"
-  Storage: "Solid-state drive, model TS64GSSD25-M, 59.7 GB, on the ATA bus (as reported by System Profiler)"
+  Storage: "IDE to SATA adapter with an SSD, which System Profiler reports as TS64GSSD25-M, 59.7 GB"
   Optical drive: MATSHITA DVD-R UJ-835E
   System software: Mac OS X 10.5.9
 photos:
@@ -29,4 +29,4 @@ photos:
     alt: "System Profiler on the 15-inch PowerBook G4, showing the ATA device tree with a DVD drive and a 59.7 GB TS64GSSD25-M drive"
 videos: []
 ---
-A 15-inch PowerBook G4 running Mac OS X 10.5.9 from a volume named Sorbet Leopard. The desktop also shows a volume named Tiger. System Profiler reports a 1.67 GHz PowerPC G4 with a 512 KB L2 cache and two 1 GB memory modules, and the drive on the ATA bus is a 59.7 GB TS64GSSD25-M.
+A 15-inch PowerBook G4 running Mac OS X 10.5.9 from a volume named Sorbet Leopard. The desktop also shows a volume named Tiger. System Profiler reports a 1.67 GHz PowerPC G4 with a 512 KB L2 cache and two 1 GB memory modules, and the SSD, which sits behind an IDE to SATA adapter, shows up on the ATA bus as a 59.7 GB TS64GSSD25-M.

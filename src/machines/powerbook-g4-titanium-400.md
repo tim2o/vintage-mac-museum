@@ -11,6 +11,7 @@ specs:
   L2 cache: 1 MB
   Bus speed: 100 MHz
   Memory: 384 MB
+  Storage: IDE to SATA adapter with an SSD
   System software: "OS X 10.8.5, as shown in About This Mac, on a volume named Sorbet Leopard"
 photos:
   - file: powerbook-g4-titanium-400-boot.jpg
