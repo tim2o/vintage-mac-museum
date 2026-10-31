@@ -5,11 +5,16 @@ module.exports = function (eleventyConfig) {
   // Everything in src/assets (CSS, photos, videos) is copied to the site as-is.
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
-  // All machines, oldest first.
+  // All machines, oldest first. Machines from the same year are ordered by
+  // page name, so "powerbook-540c" comes before "powerbook-540c-2".
   eleventyConfig.addCollection("machines", (api) =>
     api
       .getFilteredByGlob("src/machines/*.md")
-      .sort((a, b) => (a.data.year || 0) - (b.data.year || 0))
+      .sort(
+        (a, b) =>
+          (a.data.year || 0) - (b.data.year || 0) ||
+          (a.fileSlug < b.fileSlug ? -1 : a.fileSlug > b.fileSlug ? 1 : 0)
+      )
   );
 
   // A machine counts as documented once it has at least one photo.
