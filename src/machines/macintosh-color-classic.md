@@ -30,5 +30,3 @@ videos: []
 An original Color Classic that has been upgraded twice. Apple built it with a 16 MHz 68030, but its logic board has been replaced with an LC 550 board, which has an added FPU. A Sonnet Presto Plus card on top of that gives it a full 68040 at 33 MHz, also with an FPU. It has 68 MB of RAM and runs Mac OS 8.1. Storage is a BlueSCSI v2 with WiFi.
 
 The LC 550 board is the same board family that Apple used in the Color Classic II, also known as the Performa 275. That matches what Apple System Profiler reports.
-
-The photos were taken over several weeks, so the lighting varies.

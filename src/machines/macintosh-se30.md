@@ -30,5 +30,3 @@ videos: []
 An SE/30 with a BMOW Carbon ROM and 64 MB of RAM. Storage is a SCSIKnife SD card adapter. The BMOW Carbon ROM is a flash replacement for the stock ROM SIMM that makes the SE/30 32-bit clean, which is what lets it use up to 128 MB of RAM.
 
 It runs a patched System 8.1, and the drive has partitions for System 7.5.3, System 6.0.8, and A/UX 3.1, so it can boot any of them.
-
-The photos were taken at different times, so the lighting varies.
