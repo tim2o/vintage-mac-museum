@@ -1,5 +1,5 @@
 ---
-title: "PowerBook 3400c/240"
+title: "PowerBook 3400c"
 year: 1997
 family: PowerBook (PowerPC)
 glyph: laptop
