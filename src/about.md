@@ -33,7 +33,7 @@ If you collect, restore, or just remember these computers, I hope you find somet
 
 ## Credits
 
-The look of this site was guided by the Mac OS 8 screenshots on [GUIdebook](https://guidebookgallery.org/screenshots/macos80/), a gallery of graphical user interfaces created by Marcin Wichary. Thank you to GUIdebook for keeping them online.
+The look of this site was guided by the Mac OS 9 screenshots on [GUIdebook](https://guidebookgallery.org/screenshots/macos90/), a gallery of graphical user interfaces created by Marcin Wichary. Thank you to GUIdebook for keeping them online.
 
 </div>
 </div>
