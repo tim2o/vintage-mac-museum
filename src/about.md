@@ -31,6 +31,10 @@ These machines were built to be used, and a lot of the joy is in using them: bri
 
 If you collect, restore, or just remember these computers, I hope you find something here worth looking at.
 
+## Credits
+
+The look of this site was guided by the Mac OS 8 screenshots on [GUIdebook](https://guidebookgallery.org/screenshots/macos80/), a gallery of graphical user interfaces created by Marcin Wichary. Thank you to GUIdebook for keeping them online.
+
 </div>
 </div>
 <div class="vbar" data-vs-bar hidden>
