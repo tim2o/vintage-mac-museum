@@ -169,7 +169,6 @@
   }
 
   wins.forEach(setup);
-  // The window in front at the start: the one marked data-front, or the first.
   // On a desktop browser the windows overlap and the topmost one starts in front. Elsewhere the first
   // window below the sticky note starts in front, so the top of the page is not all grey.
   var plain = wins.filter(function (w) {
