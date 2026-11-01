@@ -9,9 +9,9 @@
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var canDrag = window.matchMedia("(min-width: 52rem) and (hover: hover) and (pointer: fine)");
   var wins = Array.prototype.slice.call(document.querySelectorAll(".window"));
-  if (!wins.length) return;
+  var count = wins.length; // used to give each window body a unique id
 
-  var front = 2; // z-index of the window in front
+  var front = 10; // z-index of the window in front (popups start at 10)
 
   function activate(win) {
     wins.forEach(function (w) {
@@ -168,6 +168,115 @@
     });
   }
 
+  // "Coming soon" windows, opened from the desktop icons. Each one is built here, joins the other
+  // windows (drag, collapse, bring forward) and is removed again by its close box or OK button.
+  var popups = 0;
+  function openPopup(trigger) {
+    var key = trigger.getAttribute("data-popup");
+    var title = trigger.getAttribute("data-popup-title") || "Coming soon";
+    var existing = document.getElementById("popup-" + key);
+    if (existing) {
+      // Already open: roll it back down if needed and bring it to the front.
+      if (existing.classList.contains("is-shaded")) {
+        var b = existing.querySelector(".collapsebox");
+        if (b) b.click();
+      }
+      activate(existing);
+      var again = existing.querySelector(".btn");
+      if (again) again.focus();
+      return;
+    }
+
+    var win = document.createElement("section");
+    win.className = "window popup";
+    win.id = "popup-" + key;
+    win.setAttribute("role", "dialog");
+    win.setAttribute("aria-labelledby", "popup-title-" + key);
+
+    var bar = document.createElement("div");
+    bar.className = "titlebar";
+    var close = document.createElement("button");
+    close.type = "button";
+    close.className = "closebox";
+    close.setAttribute("aria-label", "Close " + title);
+    var h = document.createElement("h2");
+    h.id = "popup-title-" + key;
+    h.textContent = title;
+    bar.appendChild(close);
+    bar.appendChild(h);
+
+    var body = document.createElement("div");
+    body.className = "winbody";
+    var inner = document.createElement("div");
+    inner.className = "popup-body";
+    var svg = trigger.querySelector("svg");
+    if (svg) {
+      var pic = svg.cloneNode(true);
+      pic.setAttribute("aria-hidden", "true");
+      inner.appendChild(pic);
+    }
+    var text = document.createElement("div");
+    text.className = "popup-text";
+    var h3 = document.createElement("h3");
+    h3.textContent = "Coming soon";
+    var p = document.createElement("p");
+    p.textContent = title + " aren't on the shelf yet. Check back later.";
+    text.appendChild(h3);
+    text.appendChild(p);
+    inner.appendChild(text);
+    var actions = document.createElement("div");
+    actions.className = "popup-actions";
+    var ok = document.createElement("button");
+    ok.type = "button";
+    ok.className = "btn btn-default";
+    ok.textContent = "OK";
+    actions.appendChild(ok);
+    body.appendChild(inner);
+    body.appendChild(actions);
+
+    win.appendChild(bar);
+    win.appendChild(body);
+
+    // Open near the middle of the part of the page you are looking at, a little offset each time.
+    document.body.appendChild(win);
+    var menu = document.querySelector(".menubar");
+    var minY = (menu ? menu.offsetHeight : 22) + 4;
+    var left = window.scrollX + Math.max(16, (document.documentElement.clientWidth - 120 - win.offsetWidth) / 2) + (popups % 4) * 26;
+    var top = window.scrollY + Math.max(minY + 8, window.innerHeight / 2 - 110) + (popups % 4) * 26;
+    popups++;
+    win.style.left = left + "px";
+    win.style.top = top + "px";
+
+    wins.push(win);
+    setup(win, count++);
+    activate(win);
+
+    function dismiss() {
+      var i = wins.indexOf(win);
+      if (i > -1) wins.splice(i, 1);
+      win.remove();
+      // Hand the front back to the topmost window that is left.
+      var topmost = null;
+      wins.forEach(function (w) {
+        if (!topmost || (parseInt(w.style.zIndex, 10) || 0) >= (parseInt(topmost.style.zIndex, 10) || 0)) topmost = w;
+      });
+      if (topmost) activate(topmost);
+      trigger.focus();
+    }
+    close.addEventListener("click", dismiss);
+    ok.addEventListener("click", dismiss);
+    win.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") dismiss();
+    });
+    ok.focus();
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll("[data-popup]"), function (t) {
+    t.addEventListener("click", function () {
+      openPopup(t);
+    });
+  });
+
   wins.forEach(setup);
   // On a desktop browser the windows overlap and the topmost one starts in front. Elsewhere the first
   // window below the sticky note starts in front, so the top of the page is not all grey.
@@ -175,7 +284,7 @@
     return !w.classList.contains("sticky");
   });
   var start = canDrag.matches ? document.querySelector(".window[data-front]") : null;
-  activate(start || plain[0] || wins[0]);
+  if (wins.length) activate(start || plain[0] || wins[0]);
 
   // If the screen stops allowing drags (narrow window, rotated phone), put windows back in place.
   function resetIfNeeded() {
