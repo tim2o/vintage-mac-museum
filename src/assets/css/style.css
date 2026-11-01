@@ -93,7 +93,16 @@ a:focus-visible, video:focus-visible, button:focus-visible {
   color: var(--white);
   outline: none;
 }
-.menu-logo { padding: 0 13px; }
+.menu-logo {
+  display: flex;
+  align-items: center;
+  padding: 0 13px;
+  background: none;
+  border: 0;
+  cursor: default;
+}
+.menu:hover > .menu-logo, .menu.is-open > .menu-logo, .menu-logo:focus-visible { background: var(--hilite-dark); outline: none; }
+.menu.is-open .dropdown { display: block; }
 .menu-mac { display: block; width: 16px; height: 16px; image-rendering: pixelated; }
 .menu { position: relative; display: flex; }
 .dropdown {
@@ -781,17 +790,19 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   white-space: nowrap;
 }
 
-.movies { margin-left: 0; }
+/* The Videos window is spawned from the menu bar. With JavaScript it starts closed; on a wide screen
+   it opens over the Collection window. Without JavaScript it is simply the last window on the page. */
+.js .movies:not(.is-open) { display: none; }
 @media (min-width: 52rem) {
-  .movies { margin-left: 4rem; }
+  .movies.is-open { position: absolute; margin: 0; }
 }
 
 /* On a desktop browser the home page windows overlap a little, like windows left on a desktop.
    The window above gets a bit of extra frame for the next one to slide over, so nothing is hidden. */
 @media (min-width: 52rem) and (hover: hover) and (pointer: fine) {
   .stack > .cascade + .cascade { margin-top: -22px; }
-  .cascade:not(:last-child) { padding-bottom: 23px; }
-  .checklist { margin-left: 8rem; }
+  .cascade:has(+ .cascade) { padding-bottom: 23px; }
+  .checklist { margin-left: 4rem; }
 }
 
 /* Footer bar */

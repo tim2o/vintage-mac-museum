@@ -282,6 +282,29 @@
     });
   });
 
+  // The Apple menu in the menu bar: click or tap to open, click elsewhere or press Esc to close.
+  var appleMenu = document.querySelector(".menu-apple");
+  if (appleMenu) {
+    var appleBtn = appleMenu.querySelector(".menu-logo");
+    var setApple = function (open) {
+      appleMenu.classList.toggle("is-open", open);
+      appleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    appleBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setApple(!appleMenu.classList.contains("is-open"));
+    });
+    document.addEventListener("click", function (e) {
+      if (!appleMenu.contains(e.target)) setApple(false);
+    });
+    appleMenu.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        setApple(false);
+        appleBtn.focus();
+      }
+    });
+  }
+
   // The Application menu in the menu bar: click to open, click outside or press Esc to close.
   var appMenu = document.querySelector(".app-menu");
   if (appMenu) {
@@ -319,6 +342,65 @@
     });
   }
 
+  // The Videos window: opened from the "Videos" item in the menu bar. On a wide screen it appears over
+  // the Collection window, offset a little, like a window opened on top of another.
+  var movies = document.querySelector(".movies");
+  var wide = window.matchMedia("(min-width: 52rem)");
+  var topmostOpen = function () {
+    var top = null;
+    wins.forEach(function (w) {
+      if (w === movies && !movies.classList.contains("is-open")) return;
+      if (!top || (parseInt(w.style.zIndex, 10) || 0) >= (parseInt(top.style.zIndex, 10) || 0)) top = w;
+    });
+    return top;
+  };
+  function openMovies() {
+    if (!movies) return;
+    var fresh = !movies.classList.contains("is-open");
+    movies.classList.add("is-open");
+    if (movies.classList.contains("is-shaded")) {
+      var box = movies.querySelector(".collapsebox");
+      if (box) box.click();
+    }
+    if (fresh) {
+      movies.removeAttribute("data-dx");
+      movies.removeAttribute("data-dy");
+      movies.style.removeProperty("--dx");
+      movies.style.removeProperty("--dy");
+      if (wide.matches) {
+        var host = document.querySelector(".finder") || document.querySelector(".stack");
+        var r = host.getBoundingClientRect();
+        var menu = document.querySelector(".menubar");
+        var minTop = window.scrollY + (menu ? menu.offsetHeight : 22) + 24;
+        movies.style.left = r.left + window.scrollX + 44 + "px";
+        movies.style.top = Math.max(r.top + window.scrollY + 56, minTop) + "px";
+        movies.style.width = r.width - 88 + "px";
+      } else {
+        movies.style.left = movies.style.top = movies.style.width = "";
+      }
+    }
+    activate(movies);
+    var close = movies.querySelector("button.closebox");
+    if (fresh && close) movies.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+  }
+  function closeMovies() {
+    if (!movies) return;
+    pauseVideos(movies);
+    movies.classList.remove("is-open");
+    var top = topmostOpen();
+    if (top) activate(top);
+  }
+  if (movies) {
+    var movieClose = movies.querySelector("button.closebox");
+    if (movieClose) movieClose.addEventListener("click", closeMovies);
+    Array.prototype.forEach.call(document.querySelectorAll("[data-open-window=videos]"), function (a) {
+      a.addEventListener("click", function (e) {
+        e.preventDefault();
+        openMovies();
+      });
+    });
+  }
+
   wins.forEach(setup);
   // On a desktop browser the windows overlap and the topmost one starts in front. Elsewhere the first
   // window below the sticky note starts in front, so the top of the page is not all grey.
@@ -327,6 +409,7 @@
   });
   var start = canDrag.matches ? document.querySelector(".window[data-front]") : null;
   if (wins.length) activate(start || plain[0] || wins[0]);
+  if (movies && window.location.hash === "#videos") openMovies();
 
   // If the screen stops allowing drags (narrow window, rotated phone), put windows back in place.
   function resetIfNeeded() {

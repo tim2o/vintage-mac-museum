@@ -403,7 +403,7 @@ def main():
         save_png(build(k), "src/assets/img/icons/%s.png" % k)
     save_png(menu_mac(), "src/assets/img/icons/menu-mac.png")
     save_png(menu_mac(blue=True), "src/assets/img/icons/menu-finder.png")
-    save_png(apple(), "src/assets/img/icons/menu-apple.png")
+    save_png(apple(), "src/assets/img/icons/menu-apple-dark.png")
     # Small 16 x 16 copies for the Application menu
     from PIL import Image
     for k in ("disk", "doc", "laptop", "mini"):

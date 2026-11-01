@@ -60,9 +60,37 @@ title: Collection
     { video: "powerbook-montage-1.mp4", poster: "powerbook-montage-1-poster.jpg", alt: "Video montage 1 of the PowerBooks in the collection" },
     { video: "powerbook-montage-2.mp4", poster: "powerbook-montage-2-poster.jpg", alt: "Video montage 2 of the PowerBooks in the collection" }
   ] %}
-  <section class="window cascade movies" aria-labelledby="montage-title">
+  {% if documented < total %}
+  <section class="window cascade checklist" data-front aria-labelledby="checklist-title">
     <div class="titlebar">
       <span class="closebox" aria-hidden="true"></span>
+      <h2 id="checklist-title">Checklist</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="winbody">
+    <div class="infobar">
+      <span>{{ documented }} of {{ total }} documented</span>
+      <span>Checked once a machine has a photo</span>
+    </div>
+    <ul class="checks" role="list">
+      {% for m in collections.machines %}
+      {% set done = m.data.photos and m.data.photos.length %}
+      <li>
+        <a class="check-row" href="{{ m.url | url }}">
+          <span class="check{% if done %} is-done{% endif %}" aria-hidden="true"></span>
+          <span>{{ m.data.title }}</span>
+          <span class="visually-hidden">{% if done %}, documented{% else %}, not yet documented{% endif %}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    </div>
+  </section>
+  {% endif %}
+
+  <section class="window movies" id="videos" aria-labelledby="montage-title">
+    <div class="titlebar">
+      <button type="button" class="closebox" aria-label="Close PowerBook Montages"></button>
       <h2 id="montage-title">PowerBook Montages</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
@@ -94,34 +122,6 @@ title: Collection
     </div>
     </div>
   </section>
-
-  {% if documented < total %}
-  <section class="window cascade checklist" data-front aria-labelledby="checklist-title">
-    <div class="titlebar">
-      <span class="closebox" aria-hidden="true"></span>
-      <h2 id="checklist-title">Checklist</h2>
-      <span class="zoombox" aria-hidden="true"></span>
-    </div>
-    <div class="winbody">
-    <div class="infobar">
-      <span>{{ documented }} of {{ total }} documented</span>
-      <span>Checked once a machine has a photo</span>
-    </div>
-    <ul class="checks" role="list">
-      {% for m in collections.machines %}
-      {% set done = m.data.photos and m.data.photos.length %}
-      <li>
-        <a class="check-row" href="{{ m.url | url }}">
-          <span class="check{% if done %} is-done{% endif %}" aria-hidden="true"></span>
-          <span>{{ m.data.title }}</span>
-          <span class="visually-hidden">{% if done %}, documented{% else %}, not yet documented{% endif %}</span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-    </div>
-  </section>
-  {% endif %}
 
 </div>
 

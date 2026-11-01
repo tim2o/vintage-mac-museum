@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}">
 </head>
 <body>
@@ -15,7 +16,12 @@
 
   <header class="menubar">
     <nav class="menus" aria-label="Main">
-      <a class="menu-logo" href="{{ '/' | url }}" aria-label="{{ site.title }}, home"><img class="menu-mac" src="{{ '/assets/img/icons/menu-apple.png' | url }}" width="16" height="16" alt=""></a>
+      <div class="menu menu-apple">
+        <button type="button" class="menu-logo" aria-haspopup="menu" aria-expanded="false" aria-label="Apple menu"><img class="menu-mac" src="{{ '/assets/img/icons/menu-apple-dark.png' | url }}" width="16" height="16" alt=""></button>
+        <ul class="dropdown" role="list">
+          <li><a href="{{ '/about/' | url }}">About This Collection</a></li>
+        </ul>
+      </div>
       <div class="menu">
         <a href="{{ '/' | url }}">Collection</a>
         <ul class="dropdown" role="list">
@@ -26,7 +32,7 @@
           {% endfor %}
         </ul>
       </div>
-      <a href="{{ '/about/' | url }}">About</a>
+      <a href="{{ '/' | url }}#videos" data-open-window="videos">Videos</a>
     </nav>
     <div class="menubar-right">
       <span class="clock" id="clock"></span>
