@@ -94,13 +94,7 @@ a:focus-visible, video:focus-visible, button:focus-visible {
   outline: none;
 }
 .menu-logo { padding: 0 13px; }
-.stripe {
-  width: 13px;
-  height: 14px;
-  border: 1px solid var(--black);
-  border-radius: 3px 3px 5px 5px;
-  background: linear-gradient(#61bb46 0 16.66%, #fdb827 0 33.33%, #f5821f 0 50%, #e03a3e 0 66.66%, #963d97 0 83.33%, #009ddc 0);
-}
+.menu-mac { display: block; width: 16px; height: 16px; image-rendering: pixelated; }
 .menu { position: relative; display: flex; }
 .dropdown {
   display: none;

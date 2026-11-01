@@ -35,11 +35,12 @@ def dgrad(x0, y0, x1, y1, c0, c1):
 
 
 class Icon:
-    def __init__(self):
+    def __init__(self, n=N):
+        self.n = n
         self.px = {}
 
     def put(self, x, y, fill):
-        if 0 <= x < N and 0 <= y < N:
+        if 0 <= x < self.n and 0 <= y < self.n:
             self.px[(x, y)] = fill(x, y) if callable(fill) else fill
 
     def rect(self, x, y, w, h, fill):
@@ -48,8 +49,8 @@ class Icon:
                 self.put(i, j, fill)
 
     def poly(self, pts, fill):
-        for j in range(N):
-            for i in range(N):
+        for j in range(self.n):
+            for i in range(self.n):
                 cx, cy, inside = i + 0.5, j + 0.5, False
                 for k in range(len(pts)):
                     (x1, y1), (x2, y2) = pts[k], pts[(k + 1) % len(pts)]
@@ -91,7 +92,7 @@ class Icon:
 
     def shadow(self, dx=2, dy=2):
         body = set(self.px)
-        self.sh = {(x + dx, y + dy) for (x, y) in body if (x + dx, y + dy) not in body and 0 <= x + dx < N and 0 <= y + dy < N}
+        self.sh = {(x + dx, y + dy) for (x, y) in body if (x + dx, y + dy) not in body and 0 <= x + dx < self.n and 0 <= y + dy < self.n}
 
 
 GLASS_LIGHT, GLASS_DARK = "#dcecff", "#4d73b0"
@@ -220,12 +221,24 @@ def build(kind):
     return ic
 
 
+def menu_mac():
+    """A tiny Macintosh with a rainbow-striped screen, 16 x 16, for the menu bar."""
+    ic = Icon(16)
+    ic.rect(3, 1, 10, 12, hgrad(3, 13, "#f0f0f0", "#a4a4a4"))
+    ic.rect(2, 13, 12, 1, hgrad(2, 14, "#c8c8c8", "#6a6a6a"))
+    ic.outline()
+    for i, c in enumerate(("#61bb46", "#fdb827", "#f5821f", "#e03a3e", "#963d97", "#009ddc")):
+        ic.rect(5, 3 + i, 6, 1, c)
+    ic.rect(5, 11, 4, 1, "#262626")
+    return ic
+
+
 KINDS = ["compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
 
 
 def save_png(ic, path):
     from PIL import Image
-    im = Image.new("RGBA", (N, N), (0, 0, 0, 0))
+    im = Image.new("RGBA", (ic.n, ic.n), (0, 0, 0, 0))
     for (x, y) in getattr(ic, "sh", set()):
         im.putpixel((x, y), (0, 0, 0, 82))
     for (x, y), c in ic.px.items():
@@ -251,6 +264,7 @@ def main():
     os.makedirs("src/assets/img/icons", exist_ok=True)
     for k in KINDS:
         save_png(build(k), "src/assets/img/icons/%s.png" % k)
+    save_png(menu_mac(), "src/assets/img/icons/menu-mac.png")
     open("src/_includes/icons.njk", "w").write(MACRO.replace("KINDS", ", ".join(KINDS)))
     print("wrote", len(KINDS), "icons")
 
