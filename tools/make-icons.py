@@ -354,6 +354,23 @@ def menu_mac(blue=False):
     return ic
 
 
+def apple():
+    """A plain red fruit apple, 16 x 16, for the menu bar. Round, with a stem and a leaf."""
+    ic = Icon(16)
+    ic.rrect(1, 5, 14, 10, 4, dgrad(1, 5, 15, 15, "#ff6b57", "#b01a1a"))
+    ic.rrect(1, 4, 7, 7, 3, dgrad(1, 4, 8, 11, "#ff7a66", "#d83a30"))
+    ic.rrect(8, 4, 7, 7, 3, dgrad(8, 4, 15, 11, "#f2493c", "#c02a24"))
+    ic.rect(7, 4, 2, 1, "#c8352c")
+    ic.outline()
+    ic.rect(7, 3, 2, 1, "#000000")
+    ic.rect(8, 1, 1, 3, "#6b4423")
+    ic.poly([(9, 1), (13, 0), (14, 2), (10, 3)], "#3fae3f")
+    ic.line(10, 2, 13, 1, "#2a7a2a")
+    ic.rect(3, 6, 2, 1, "#ffd8d0")
+    ic.rect(3, 7, 1, 2, "#ffd8d0")
+    return ic
+
+
 KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
 
 
@@ -387,6 +404,7 @@ def main():
         save_png(build(k), "src/assets/img/icons/%s.png" % k)
     save_png(menu_mac(), "src/assets/img/icons/menu-mac.png")
     save_png(menu_mac(blue=True), "src/assets/img/icons/menu-finder.png")
+    save_png(apple(), "src/assets/img/icons/menu-apple.png")
     # Small 16 x 16 copies for the Application menu
     from PIL import Image
     for k in ("disk", "doc", "laptop", "mini"):
