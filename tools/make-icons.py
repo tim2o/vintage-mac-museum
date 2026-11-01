@@ -355,19 +355,17 @@ def menu_mac(blue=False):
 
 
 def apple():
-    """A plain red fruit apple, 16 x 16, for the menu bar. Round, with a stem and a leaf."""
+    """A plain fruit apple, 16 x 16, for the menu bar: black outline and flat colours."""
     ic = Icon(16)
-    ic.rrect(1, 5, 14, 10, 4, dgrad(1, 5, 15, 15, "#ff6b57", "#b01a1a"))
-    ic.rrect(1, 4, 7, 7, 3, dgrad(1, 4, 8, 11, "#ff7a66", "#d83a30"))
-    ic.rrect(8, 4, 7, 7, 3, dgrad(8, 4, 15, 11, "#f2493c", "#c02a24"))
-    ic.rect(7, 4, 2, 1, "#c8352c")
+    ic.rrect(1, 6, 14, 9, 4, "#e8372c")
+    ic.rrect(1, 5, 7, 7, 3, "#e8372c")
+    ic.rrect(8, 5, 7, 7, 3, "#e8372c")
+    ic.rect(8, 2, 1, 3, "#7a4a22")
+    ic.poly([(9, 2), (12, 1), (14, 2), (13, 3), (10, 3)], "#3fae3f")
     ic.outline()
-    ic.rect(7, 3, 2, 1, "#000000")
-    ic.rect(8, 1, 1, 3, "#6b4423")
-    ic.poly([(9, 1), (13, 0), (14, 2), (10, 3)], "#3fae3f")
-    ic.line(10, 2, 13, 1, "#2a7a2a")
-    ic.rect(3, 6, 2, 1, "#ffd8d0")
-    ic.rect(3, 7, 1, 2, "#ffd8d0")
+    ic.rect(7, 4, 2, 1, "#000000")
+    ic.rect(3, 7, 2, 1, "#ffffff")
+    ic.rect(3, 8, 1, 2, "#ffffff")
     return ic
 
 
