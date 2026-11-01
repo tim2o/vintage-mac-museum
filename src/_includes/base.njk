@@ -28,7 +28,10 @@
       </div>
       <a href="{{ '/about/' | url }}">About</a>
     </nav>
-    <span class="clock" id="clock"></span>
+    <div class="menubar-right">
+      <span class="clock" id="clock"></span>
+      <span class="app-menu" aria-hidden="true"><span class="app-icon"></span>Finder</span>
+    </div>
   </header>
 
   <a class="desk-icon" href="{{ '/' | url }}">
@@ -45,12 +48,18 @@
     <p>Every machine on this site is part of a private collection. Specifications are from the machines themselves and Apple's published documentation.</p>
   </footer>
 
+  <script src="{{ '/assets/js/windows.js' | url }}" defer></script>
+
   <script>
     (function () {
       var el = document.getElementById("clock");
       if (!el) return;
       function tick() {
-        el.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+        var now = new Date();
+        // The Mac OS 8 clock shows the day of the week and the time, like "Sat 5:08 PM".
+        el.textContent =
+          now.toLocaleDateString([], { weekday: "short" }) + " " +
+          now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
       }
       tick();
       setInterval(tick, 15000);

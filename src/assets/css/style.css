@@ -1,31 +1,34 @@
 /* Design notes
    Subject: a personal shelf of classic Macintosh computers, presented the way
-   Mac OS 7.5 would show it.
-   Every page is a desktop. Content lives in windows with striped title bars,
-   a close box and a zoom box. Specs appear in a Get Info window, videos in
-   QuickTime-style windows, and the collection in a Finder icon view.
-   The one memorable thing is the blue dithered desktop pattern; everything else
-   stays black, white, and light grey. */
-
-/* Jersey 10 (SIL Open Font License), self-hosted. Its 5 and S look clearly different. */
-@font-face {
-  font-family: "Jersey 10";
-  src: url("../fonts/jersey-10-latin-400-normal.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
+   Mac OS 8.5 would show it (the "Platinum" appearance).
+   Every page is a desktop. Content lives in grey windows with a pinstriped title
+   bar, a close box on the left, and a zoom box and a collapse (windowshade) box on
+   the right. Click the collapse box, or double-click the title bar, to roll a
+   window up to its title bar. On a desktop browser, windows can be dragged by the
+   title bar, and only the window in front shows its stripes.
+   Specs appear in a Get Info window, videos in movie windows, and the collection
+   in a Finder icon view.
+   The dithered lavender desktop and the lavender scroll bar thumbs are the Platinum
+   touches; everything else stays platinum grey, black and white. */
 
 :root {
   --black: #000;
   --white: #fff;
   --grey: #ccc;
   --grey-light: #ddd;
-  --muted: #333;
-  --desk-a: #6b7db2;
-  --desk-b: #5c6ea5;
+  --plat: #ddd;
+  --muted: #444;
+  --hilite: #99c;       /* the Platinum highlight colour, for selected items */
+  --hilite-dark: #669;  /* menus and the scroll bar thumb */
+  --desk-a: #6e6eaa;
+  --desk-b: #62629f;
 
-  --chicago: "Jersey 10", "Chicago", "Geneva", "Verdana", sans-serif;
+  /* Platinum bevels: raised for buttons and frames, sunken for panes and fields */
+  --raised: inset 1px 1px 0 #fff, inset -1px -1px 0 #999;
+  --sunken: inset 1px 1px 0 #777, inset -1px -1px 0 #fff;
+
+  --charcoal: "Charcoal", "Chicago", "Lucida Grande", "Verdana", sans-serif;
+  --geneva: "Geneva", "Lucida Grande", "Verdana", sans-serif;
   --text: "EB Garamond", "Garamond", "Georgia", serif;
 }
 
@@ -37,15 +40,17 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: clip;
   font-family: var(--text);
   font-size: 1.15rem;
   line-height: 1.5;
   color: var(--black);
   background: var(--desk-a) conic-gradient(var(--desk-b) 25%, var(--desk-a) 0 50%, var(--desk-b) 0 75%, var(--desk-a) 0) 0 0 / 4px 4px;
 }
+body.is-dragging { user-select: none; -webkit-user-select: none; }
 
 a { color: inherit; }
-a:focus-visible, video:focus-visible {
+a:focus-visible, video:focus-visible, button:focus-visible {
   outline: 2px solid var(--black);
   outline-offset: 2px;
 }
@@ -54,47 +59,48 @@ a:focus-visible, video:focus-visible {
   position: absolute;
   left: -999px;
   top: 0;
-  z-index: 50;
+  z-index: 2000;
   padding: 0.4rem 0.8rem;
-  background: var(--white);
+  background: var(--plat);
   border: 1px solid var(--black);
-  font-family: var(--chicago);
+  font: 700 0.8rem var(--charcoal);
 }
 .skip:focus { left: 0.5rem; top: 0.5rem; }
 
 /* Menu bar */
 .menubar {
   position: relative;
-  z-index: 20;
+  z-index: 1000;
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-  height: 24px;
-  background: var(--white);
+  height: 22px;
+  background: linear-gradient(#fff 0 1px, #e6e6e6 1px, #d0d0d0);
   border-bottom: 1px solid var(--black);
-  font: 400 1.2rem/1 var(--chicago);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  font: 700 0.76rem/1 var(--charcoal);
 }
-.menus { display: flex; align-items: stretch; }
-.menus a, .clock {
+.menus, .menubar-right { display: flex; align-items: stretch; }
+.menus a, .clock, .app-menu {
   display: flex;
   align-items: center;
-  padding: 0 12px;
+  padding: 0 11px;
   text-decoration: none;
   color: var(--black);
 }
 .menus a:hover, .menus a:focus-visible, .menu:focus-within > a {
-  background: var(--black);
+  background: var(--hilite-dark);
   color: var(--white);
   outline: none;
 }
-.menu-logo { padding: 0 14px; }
+.menu-logo { padding: 0 13px; }
 .stripe {
-  width: 14px;
+  width: 13px;
   height: 14px;
   border: 1px solid var(--black);
+  border-radius: 3px 3px 5px 5px;
   background: linear-gradient(#61bb46 0 16.66%, #fdb827 0 33.33%, #f5821f 0 50%, #e03a3e 0 66.66%, #963d97 0 83.33%, #009ddc 0);
 }
-.menu-logo:hover .stripe, .menu-logo:focus-visible .stripe { border-color: var(--white); }
 .menu { position: relative; display: flex; }
 .dropdown {
   display: none;
@@ -102,19 +108,32 @@ a:focus-visible, video:focus-visible {
   top: 100%;
   left: 0;
   min-width: 15rem;
+  max-height: calc(100vh - 40px);
   margin: 0;
-  padding: 2px 0;
+  padding: 3px 0;
+  overflow-y: auto;
   list-style: none;
-  background: var(--white);
+  background: var(--plat);
   border: 1px solid var(--black);
   border-top: 0;
-  box-shadow: 2px 2px 0 var(--black);
+  box-shadow: inset 1px 0 0 #fff, inset -1px -1px 0 #999, 3px 3px 0 rgba(0, 0, 0, 0.35);
+  font-weight: 400;
 }
-.dropdown a { padding: 5px 16px; white-space: nowrap; }
-.dropdown .sep { margin: 3px 0; border-top: 1px dotted var(--black); }
+.dropdown a { padding: 3px 18px; white-space: nowrap; }
+.dropdown .sep { margin: 3px 0; border-top: 1px solid #999; box-shadow: 0 1px 0 #fff; }
 @media (hover: hover) {
   .menu:hover .dropdown, .menu:focus-within .dropdown { display: block; }
-  .menu:hover > a { background: var(--black); color: var(--white); }
+  .menu:hover > a { background: var(--hilite-dark); color: var(--white); }
+}
+/* The right-hand end of the menu bar: the clock, then the application menu. */
+.clock { padding: 0 10px; font-weight: 400; white-space: nowrap; }
+.app-menu { gap: 6px; padding: 0 12px 0 10px; border-left: 1px solid #aaa; box-shadow: -1px 0 0 #fff; }
+.app-icon {
+  width: 14px;
+  height: 13px;
+  background: linear-gradient(#e9e9e9, #b9b9b9);
+  border: 1px solid var(--black);
+  border-radius: 2px;
 }
 
 /* Desktop disk icon, wide screens only */
@@ -131,10 +150,10 @@ a:focus-visible, video:focus-visible {
     gap: 4px;
     text-align: center;
     text-decoration: none;
-    font: 400 1.1rem/1.2 var(--chicago);
+    font: 400 0.74rem/1.2 var(--geneva);
   }
   .desk-icon span { padding: 1px 5px; background: var(--white); color: var(--black); }
-  .desk-icon:hover span, .desk-icon:focus-visible span { background: var(--black); color: var(--white); }
+  .desk-icon:hover span, .desk-icon:focus-visible span { background: var(--hilite); }
 }
 
 main {
@@ -148,19 +167,21 @@ main {
 
 /* Windows */
 .window {
-  background: var(--white);
+  position: relative;
+  padding: 1px;
+  background: var(--plat);
   border: 1px solid var(--black);
-  box-shadow: 2px 2px 0 var(--black);
+  box-shadow: var(--raised), 1px 1px 0 rgba(0, 0, 0, 0.5), 4px 4px 6px rgba(0, 0, 0, 0.3);
+  translate: var(--dx, 0) var(--dy, 0);
 }
 .titlebar {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 22px;
-  padding: 0 28px;
-  background: var(--white);
-  border-bottom: 1px solid var(--black);
+  height: 20px;
+  padding: 0 46px;
+  background: var(--plat);
 }
 .titlebar::before {
   content: "";
@@ -168,8 +189,8 @@ main {
   left: 4px;
   right: 4px;
   top: 4px;
-  bottom: 4px;
-  background: repeating-linear-gradient(to bottom, var(--black) 0 1px, var(--white) 1px 2px);
+  bottom: 3px;
+  background: repeating-linear-gradient(to bottom, #fff 0 1px, #a6a6a6 1px 2px);
 }
 .titlebar h1, .titlebar h2 {
   position: relative;
@@ -177,32 +198,82 @@ main {
   margin: 0;
   padding: 0 10px;
   overflow: hidden;
-  background: var(--white);
-  font: 400 1.2rem/1 var(--chicago);
+  background: var(--plat);
+  font: 700 0.76rem/1.2 var(--charcoal);
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.closebox, .zoombox {
+.closebox, .zoombox, .collapsebox {
   position: absolute;
-  top: 4px;
+  top: 3px;
   z-index: 1;
-  width: 13px;
-  height: 13px;
-  background: var(--white);
-  border: 1px solid var(--black);
+  display: block;
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  background: linear-gradient(135deg, #f6f6f6, #bdbdbd);
+  border: 1px solid #444;
+  box-shadow: var(--raised), 0 0 0 2px var(--plat);
+  cursor: default;
 }
-.closebox { left: 6px; }
-.zoombox { right: 6px; }
-.zoombox::after {
+.closebox { left: 5px; }
+.zoombox { right: 23px; }
+.collapsebox { right: 5px; }
+.zoombox::before, .zoombox::after, .collapsebox::after {
   content: "";
   position: absolute;
-  left: 2px;
-  top: 2px;
-  width: 7px;
-  height: 7px;
-  border: 1px solid var(--black);
+  border: 1px solid #444;
 }
-a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: none; box-shadow: inset 0 0 0 2px var(--white); }
+.zoombox::after { left: 2px; top: 2px; width: 8px; height: 8px; }
+.zoombox::before { left: 2px; top: 2px; width: 4px; height: 4px; border-width: 1px; }
+.collapsebox::after { left: 2px; right: 2px; top: 3px; height: 3px; border-width: 0; border-top: 2px solid #444; border-bottom: 1px solid #444; }
+.closebox:active, .collapsebox:active {
+  background: linear-gradient(135deg, #aaa, #ccc);
+  box-shadow: inset 1px 1px 0 #666, 0 0 0 2px var(--plat);
+}
+a.closebox:focus-visible, .collapsebox:focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
+
+/* Only the window in front shows its stripes. Others go flat and grey. */
+.window.is-inactive .titlebar::before { display: none; }
+.window.is-inactive .titlebar h1, .window.is-inactive .titlebar h2 { color: #777; }
+.window.is-inactive .closebox, .window.is-inactive .zoombox, .window.is-inactive .collapsebox {
+  background: var(--plat);
+  border-color: #aaa;
+  box-shadow: 0 0 0 2px var(--plat);
+}
+.window.is-inactive .closebox::before, .window.is-inactive .closebox::after,
+.window.is-inactive .zoombox::before, .window.is-inactive .zoombox::after,
+.window.is-inactive .collapsebox::after { display: none; }
+
+/* The window body is a sunken pane, except in Get Info, which is flat platinum */
+.winbody {
+  position: relative;
+  margin: 0 2px 2px;
+  background: var(--white);
+  border: 1px solid;
+  border-color: #777 #fff #fff #777;
+}
+.window.info .winbody {
+  margin: 0;
+  background: var(--plat);
+  border: 0;
+  border-top: 1px solid #999;
+}
+/* A window rolled up to its title bar (windowshade) */
+.window.is-shaded .winbody { display: none; }
+.window.is-shaded .titlebar { height: 20px; }
+
+/* Dragging a window shows its outline, as Mac OS 8 did, and the window moves when you let go */
+.drag-outline {
+  position: fixed;
+  z-index: 2000;
+  pointer-events: none;
+  border: 1px solid var(--black);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+}
+@media (min-width: 52rem) and (hover: hover) and (pointer: fine) {
+  .titlebar { cursor: default; touch-action: none; user-select: none; -webkit-user-select: none; }
+}
 
 /* Documents (SimpleText-style) */
 .doc { padding: 20px 24px 24px; }
@@ -211,7 +282,7 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 .prose { max-width: 38rem; margin-top: 20px; }
 .doc.prose { margin-top: 0; }
 .prose p { margin: 0 0 1em; }
-.prose code { padding: 0 4px; background: var(--grey-light); font-size: 0.9em; }
+.prose code { padding: 0 4px; background: #eee; font-size: 0.9em; }
 
 /* Alert box */
 .alert {
@@ -220,26 +291,26 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   align-items: flex-start;
   margin: 0 0 20px;
   padding: 12px 14px;
-  background: var(--white);
+  background: var(--plat);
   border: 1px solid var(--black);
-  box-shadow: inset 0 0 0 2px var(--white), inset 0 0 0 3px var(--black);
-  font: 400 1.2rem/1.4 var(--chicago);
+  box-shadow: var(--raised), 0 0 0 1px var(--plat), 0 0 0 2px #888;
+  font: 400 0.82rem/1.45 var(--geneva);
 }
 .alert .icon { flex: none; }
 
-/* Buttons */
-.buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+/* Buttons: Platinum push buttons. The default button gets a heavier outline. */
+.buttons { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
 .btn {
-  padding: 4px 16px;
-  background: var(--white);
+  padding: 3px 16px;
+  background: linear-gradient(#fff, #e4e4e4 45%, #bfbfbf);
   border: 1px solid var(--black);
   border-radius: 6px;
-  box-shadow: 1px 1px 0 var(--black);
-  font: 400 1.2rem/1.2 var(--chicago);
+  box-shadow: var(--raised);
+  font: 700 0.76rem/1.3 var(--charcoal);
   text-decoration: none;
 }
-.btn:hover, .btn:active { background: var(--black); color: var(--white); }
-.btn-default { box-shadow: 0 0 0 2px var(--white), 0 0 0 3px var(--black); }
+.btn:active { background: linear-gradient(#a8a8a8, #c8c8c8); box-shadow: inset 1px 1px 0 #666; }
+.btn-default { box-shadow: var(--raised), 0 0 0 2px var(--white), 0 0 0 3px var(--black); }
 
 /* Machine page layout */
 .machine-layout {
@@ -249,14 +320,15 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   align-items: start;
 }
 .machine-layout .span { grid-column: 1 / -1; }
-/* Photo strip: a side-scrolling row of photos with a System 7-style scroll bar */
+/* Photo strip: a side-scrolling row of photos with a Platinum scroll bar */
 .strip {
   container-type: inline-size;
   --slide-h: min(72vh, 36rem);
   margin: 0 0 20px;
-  border: 1px solid var(--black);
+  border: 1px solid #777;
 }
-.strip .infobar { border-bottom: 1px solid var(--black); }
+.winbody > .strip { margin: 0; border: 0; }
+.strip .infobar { border-bottom: 1px solid #777; }
 .slides {
   position: relative;
   display: flex;
@@ -267,6 +339,7 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-inline: 16px;
+  background: var(--white);
 }
 @media (prefers-reduced-motion: no-preference) {
   .slides { scroll-behavior: smooth; }
@@ -305,38 +378,40 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 .movies .strip { --slide-h: min(60vh, 30rem); }
 .strip-multi .slide img, .strip-multi .slide video { max-width: calc(100cqw - 32px - 1.75rem); }
 
-/* Scroll bar: arrow boxes at each end, a dithered track, and a thumb */
+/* Scroll bar: arrow boxes at each end, a pale track, and a lavender thumb with grip lines */
 .sbar {
   display: flex;
   align-items: stretch;
-  height: 18px;
-  border-top: 1px solid var(--black);
-  background: var(--white);
+  height: 16px;
+  border-top: 1px solid #777;
+  background: var(--plat);
 }
 .sbar[hidden] { display: none; }
 .sbtn {
   flex: none;
   display: grid;
   place-items: center;
-  width: 18px;
+  width: 16px;
   padding: 0;
-  background: var(--white);
+  background: linear-gradient(135deg, #f6f6f6, #bdbdbd);
   border: 0;
-  border-right: 1px solid var(--black);
+  border-right: 1px solid #555;
+  box-shadow: var(--raised);
   color: var(--black);
-  cursor: pointer;
+  cursor: default;
 }
-.sbtn:last-child { border-right: 0; border-left: 1px solid var(--black); }
-.sbtn:active:not(:disabled) { background: var(--black); color: var(--white); }
-.sbtn:disabled { opacity: 0.3; cursor: default; }
+.sbtn:last-child { border-right: 0; border-left: 1px solid #555; }
+.sbtn:active:not(:disabled) { background: linear-gradient(135deg, #aaa, #ccc); box-shadow: inset 1px 1px 0 #666; }
+.sbtn:disabled { opacity: 0.4; }
 .sbtn:focus-visible { outline: 2px solid var(--black); outline-offset: -4px; }
-.sbtn svg { display: block; }
+.sbtn svg { display: block; width: 12px; height: 12px; }
 .track {
   position: relative;
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  background: var(--white) conic-gradient(#8c8c8c 25%, var(--white) 0 50%, #8c8c8c 0 75%, var(--white) 0) 0 0 / 2px 2px;
+  background: #e8e8f0;
+  box-shadow: inset 1px 1px 0 #777, inset -1px 0 0 #fff;
 }
 .knob {
   position: absolute;
@@ -344,13 +419,22 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   bottom: 0;
   left: 0;
   min-width: 24px;
-  background: var(--grey-light);
-  border: 1px solid var(--black);
-  box-shadow: inset 1px 1px 0 var(--white), inset -1px -1px 0 #888;
-  cursor: grab;
+  background: linear-gradient(#c8c8ee, #9c9cd2 55%, #8686c0);
+  border: 1px solid #333;
+  box-shadow: inset 1px 1px 0 #ecf, inset -1px -1px 0 #66a;
+  cursor: default;
   touch-action: none;
 }
-.knob:active { cursor: grabbing; }
+.knob::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 50%;
+  width: 9px;
+  margin-left: -5px;
+  background: repeating-linear-gradient(to right, #55a 0 1px, #eef 1px 2px);
+}
 
 /* Photo placeholder and thumbnails */
 .thumb {
@@ -374,7 +458,7 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   object-fit: cover;
   object-position: center 35%;
 }
-.thumb-empty { flex-direction: column; gap: 8px; font: 400 1.2rem/1 var(--chicago); color: var(--black); }
+.thumb-empty { flex-direction: column; gap: 8px; font: 400 0.8rem/1 var(--geneva); color: var(--black); }
 
 /* Get Info window */
 .info-head {
@@ -382,30 +466,32 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border-bottom: 1px solid var(--black);
+  border-bottom: 1px solid #999;
+  box-shadow: 0 1px 0 #fff;
 }
-.name-big { font: 400 1.35rem/1.2 var(--chicago); }
+.name-big { font: 700 0.95rem/1.2 var(--charcoal); }
 .specs { margin: 0; padding: 10px 14px; }
 .specs > div {
   display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr);
+  grid-template-columns: 8rem minmax(0, 1fr);
   gap: 8px;
   align-items: baseline;
   padding: 3px 0;
 }
-.specs dt { font: 400 1.15rem/1.35 var(--chicago); }
+.specs dt { font: 700 0.74rem/1.4 var(--geneva); }
 .specs dt::after { content: ":"; }
-.specs dd { margin: 0; font-size: 1.05rem; line-height: 1.35; }
-.comments { padding: 10px 14px 14px; border-top: 1px solid var(--black); }
-.comments .label { display: block; margin-bottom: 4px; font: 400 1.15rem/1.4 var(--chicago); }
+.specs dd { margin: 0; font: 400 0.78rem/1.4 var(--geneva); }
+.comments { padding: 10px 14px 14px; border-top: 1px solid #999; box-shadow: inset 0 1px 0 #fff; }
+.comments .label { display: block; margin-bottom: 4px; font: 700 0.74rem/1.4 var(--geneva); }
 .comments .label::after { content: ":"; }
 .comments .box {
   min-height: 3.25rem;
   padding: 6px 8px;
-  border: 1px solid var(--black);
-  box-shadow: inset 1px 1px 0 var(--black);
-  font-size: 1.05rem;
-  line-height: 1.35;
+  background: var(--white);
+  border: 1px solid;
+  border-color: #777 #fff #fff #777;
+  box-shadow: inset 1px 1px 0 #333;
+  font: 400 0.78rem/1.4 var(--geneva);
 }
 
 /* Movie windows (QuickTime-style) */
@@ -417,7 +503,7 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   background: var(--black);
   border: 0;
 }
-.movie-caption { margin: 0; padding: 10px 14px; border-top: 1px solid var(--black); font-size: 1.05rem; line-height: 1.4; }
+.movie-caption { margin: 0; padding: 10px 14px; border-top: 1px solid #777; font: 400 0.8rem/1.45 var(--geneva); }
 
 /* Finder icon view */
 .infobar {
@@ -425,8 +511,10 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   justify-content: space-between;
   gap: 12px;
   padding: 3px 10px;
-  border-bottom: 1px solid var(--black);
-  font: 400 1.1rem/1.4 var(--chicago);
+  background: var(--plat);
+  border-bottom: 1px solid #777;
+  box-shadow: inset 0 1px 0 #fff;
+  font: 400 0.72rem/1.5 var(--geneva);
 }
 .icons {
   display: grid;
@@ -446,11 +534,11 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 .icon-item:focus-visible { outline: 2px solid var(--black); outline-offset: 4px; }
 .icon-item .name {
   margin-top: 8px;
-  padding: 1px 6px;
-  font: 400 1.2rem/1.3 var(--chicago);
+  padding: 1px 5px;
+  font: 400 0.76rem/1.35 var(--geneva);
 }
-.icon-item .sub { margin-top: 2px; font: 400 1.1rem/1.2 var(--chicago); color: var(--muted); }
-.icon-item:hover .name, .icon-item:focus-visible .name { background: var(--black); color: var(--white); }
+.icon-item .sub { margin-top: 2px; font: 400 0.7rem/1.2 var(--geneva); color: var(--muted); }
+.icon-item:hover .name, .icon-item:focus-visible .name { background: var(--hilite); }
 
 /* Checklist window */
 .checks {
@@ -466,24 +554,24 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
   align-items: center;
   gap: 10px;
   padding: 4px 6px;
-  font: 400 1.2rem/1.3 var(--chicago);
+  font: 400 0.8rem/1.3 var(--geneva);
   text-decoration: none;
 }
-.check-row:hover, .check-row:focus-visible { background: var(--black); color: var(--white); }
+.check-row:hover, .check-row:focus-visible { background: var(--hilite); }
 .check-row:focus-visible { outline: 2px solid var(--black); outline-offset: 1px; }
 .check {
   flex: none;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   background-color: var(--white);
-  border: 1px solid var(--black);
+  border: 1px solid #333;
+  box-shadow: inset 1px 1px 0 #999;
 }
 .check.is-done {
   background-image:
     linear-gradient(to top right, transparent calc(50% - 1px), var(--black) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px)),
     linear-gradient(to bottom right, transparent calc(50% - 1px), var(--black) calc(50% - 1px) calc(50% + 1px), transparent calc(50% + 1px));
 }
-.check-row:hover .check { border-color: var(--white); }
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -503,9 +591,10 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 /* Footer bar */
 .footer {
   padding: 8px 12px;
-  background: var(--white);
+  background: var(--plat);
   border-top: 1px solid var(--black);
-  font: 400 1.1rem/1.4 var(--chicago);
+  box-shadow: inset 0 1px 0 #fff;
+  font: 400 0.72rem/1.45 var(--geneva);
   text-align: center;
 }
 .footer p { max-width: 70ch; margin: 0 auto; }
@@ -513,10 +602,24 @@ a.closebox:hover, a.closebox:focus-visible { background: var(--black); outline: 
 @media (max-width: 52rem) {
   .machine-layout { grid-template-columns: minmax(0, 1fr); }
 }
+/* Touch screens: bigger title bar boxes, and no dragging */
+@media (pointer: coarse) {
+  .titlebar { height: 28px; }
+  .titlebar::before { top: 6px; bottom: 6px; }
+  .closebox, .zoombox, .collapsebox { top: 4px; width: 20px; height: 20px; }
+  .closebox { left: 6px; }
+  .collapsebox { right: 6px; }
+  .zoombox { right: 32px; }
+  .titlebar { padding: 0 62px; }
+  .zoombox::after { width: 12px; height: 12px; }
+  .zoombox::before { width: 6px; height: 6px; }
+  .collapsebox::after { top: 5px; }
+}
 @media (max-width: 30rem) {
   .doc { padding: 16px; }
   .specs > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .icons { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 16px; }
   .checks { column-count: 1; }
-  .menus a, .clock { padding: 0 9px; }
+  .menus a, .clock { padding: 0 8px; }
+  .app-menu { display: none; }
 }

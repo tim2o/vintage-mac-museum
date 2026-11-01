@@ -10,6 +10,7 @@ permalink: /about/
       <h1>About This Collection</h1>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="doc prose">
 
 I collect vintage Macintosh computers and keep them running. This site is where I photograph them, record them starting up, and write down what is inside each one.
@@ -18,6 +19,7 @@ Each machine has its own page with specifications and photos. Machines are liste
 
 Edit this page in `src/about.md` to tell your own story: where you found the machines, what you are restoring, and what you are still hunting for.
 
+    </div>
     </div>
   </div>
 </div>

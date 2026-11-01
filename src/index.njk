@@ -13,9 +13,11 @@ title: Collection
       <h2>Read Me</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="doc">
       <h1 class="doc-h1">{{ site.title }}</h1>
       <p class="lede">{{ site.tagline }}</p>
+    </div>
     </div>
   </section>
 
@@ -30,6 +32,7 @@ title: Collection
       <h2 id="montage-title">PowerBook Montages</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="strip strip-multi" data-strip data-noun="video">
       <div class="infobar">
         <span data-strip-status>{{ montages.length }} videos</span>
@@ -55,6 +58,7 @@ title: Collection
         </button>
       </div>
     </div>
+    </div>
   </section>
 
   <section class="window finder" aria-labelledby="finder-title">
@@ -63,6 +67,7 @@ title: Collection
       <h2 id="finder-title">Collection</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="infobar">
       <span>{{ total }} {% if total == 1 %}item{% else %}items{% endif %}</span>
       <span>{{ documented }} documented</span>
@@ -87,6 +92,7 @@ title: Collection
       </li>
       {% endfor %}
     </ul>
+    </div>
   </section>
 
   {% if documented < total %}
@@ -96,6 +102,7 @@ title: Collection
       <h2 id="checklist-title">Checklist</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="infobar">
       <span>{{ documented }} of {{ total }} documented</span>
       <span>Checked once a machine has a photo</span>
@@ -112,6 +119,7 @@ title: Collection
       </li>
       {% endfor %}
     </ul>
+    </div>
   </section>
   {% endif %}
 

@@ -16,6 +16,7 @@ layout: base.njk
       <h1>{{ title }}</h1>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="doc">
       {% if sample %}
       <p class="alert">
@@ -89,6 +90,7 @@ layout: base.njk
         {% if next %}<a class="btn" href="{{ next.url | url }}" rel="next">Next</a>{% endif %}
       </div>
     </div>
+    </div>
   </article>
 
   {# Get Info window: the specs #}
@@ -98,6 +100,7 @@ layout: base.njk
       <h2>{{ title }} Info</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="info-head">
       {{ icon(iconKind, 32) }}
       <span class="name-big">{{ title }}</span>
@@ -116,6 +119,7 @@ layout: base.njk
       <div class="box">{{ status }}</div>
     </div>
     {% endif %}
+    </div>
   </aside>
 
   {# One QuickTime-style window per video #}
@@ -127,6 +131,7 @@ layout: base.njk
       <h2>{{ v.title }}</h2>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
+    <div class="winbody">
     <div class="movie">
       {% if v.youtube %}
       <iframe src="https://www.youtube-nocookie.com/embed/{{ v.youtube }}" title="{{ v.title }}" loading="lazy" allowfullscreen></iframe>
@@ -138,6 +143,7 @@ layout: base.njk
       {% endif %}
     </div>
     {% if v.description %}<p class="movie-caption">{{ v.description }}</p>{% endif %}
+    </div>
   </section>
   {% endfor %}
   {% endif %}
