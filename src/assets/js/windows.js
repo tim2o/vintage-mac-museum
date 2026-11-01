@@ -352,11 +352,10 @@
     });
   }
 
-  // The Videos window. It is not part of the page until it is opened from the Videos menu: then it is
-  // built from the template, so no video is fetched before that, and it is removed again when closed.
-  // On a wide screen it opens over the Collection window, offset a little.
-  var movies = null;
-  var videosTemplate = document.getElementById("videos-template");
+  // The Videos and Checklist windows. Neither is part of the page until it is opened from the menu bar (or
+  // the Checklist desktop icon): then it is built from its template, so no video is fetched before that,
+  // and it is removed again when closed. On a wide screen each opens over the Collection window, offset a
+  // little (the Checklist further in, so both can be seen when they are open together).
   var wide = window.matchMedia("(min-width: 52rem)");
   function topmostWindow() {
     var top = null;
@@ -365,20 +364,73 @@
     });
     return top;
   }
-  function placeMovies() {
+  function placeWindow(win, inset, drop) {
     if (!wide.matches) return;
     var host = document.querySelector(".finder") || document.querySelector(".stack");
     var r = host.getBoundingClientRect();
     var menu = document.querySelector(".menubar");
     var minTop = window.scrollY + (menu ? menu.offsetHeight : 22) + 24;
-    movies.style.left = r.left + window.scrollX + 44 + "px";
-    movies.style.top = Math.max(r.top + window.scrollY + 56, minTop) + "px";
-    movies.style.width = r.width - 88 + "px";
+    win.style.left = r.left + window.scrollX + inset + "px";
+    win.style.top = Math.max(r.top + window.scrollY + drop, minTop) + "px";
+    win.style.width = r.width - inset * 2 + "px";
   }
+  // A window that is built from a <template> when it is first asked for and removed when it is closed.
+  function lazyWindow(templateId, inset, drop, onBuild) {
+    var template = document.getElementById(templateId);
+    var win = null;
+    function close() {
+      if (!win) return;
+      var i = wins.indexOf(win);
+      if (i > -1) wins.splice(i, 1);
+      win.remove(); // this also stops any video that is playing
+      win = null;
+      var top = topmostWindow();
+      if (top) activate(top);
+    }
+    return {
+      available: !!template,
+      current: function () {
+        return win;
+      },
+      open: function () {
+        if (!template) return null;
+        if (!win) {
+          win = document.importNode(template.content.firstElementChild, true);
+          win.classList.add("is-open");
+          (document.querySelector(".stack") || document.body).appendChild(win);
+          wins.push(win);
+          setup(win, count++);
+          var closer = win.querySelector("button.closebox");
+          if (closer) closer.addEventListener("click", close);
+          if (onBuild) onBuild(win);
+          placeWindow(win, inset, drop);
+          activate(win);
+          win.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+        } else {
+          if (win.classList.contains("is-shaded")) {
+            var box = win.querySelector(".collapsebox");
+            if (box) box.click();
+          }
+          activate(win);
+        }
+        return win;
+      }
+    };
+  }
+  var videosWin = lazyWindow("videos-template", 44, 56, function (win) {
+    // Some browsers skip the poster of a video built from a template; setting it again loads it.
+    Array.prototype.forEach.call(win.querySelectorAll("video[poster]"), function (v) {
+      var src = v.getAttribute("poster");
+      v.removeAttribute("poster");
+      v.setAttribute("poster", src);
+    });
+    if (window.initStrips) window.initStrips(win);
+  });
+  var checklistWin = lazyWindow("checklist-template", 88, 88);
   // Scroll the strip to video i. The slides only get their real width once their posters have loaded, so
   // keep trying as the layout settles, and stop at once if you scroll the strip yourself.
-  function showVideo(i) {
-    var slides = movies.querySelector("[data-strip-slides]");
+  function showVideo(win, i) {
+    var slides = win.querySelector("[data-strip-slides]");
     var items = slides ? slides.querySelectorAll(".slide") : [];
     var item = items[i];
     if (!item || i === 0) return;
@@ -411,51 +463,24 @@
     }
     window.setTimeout(stop, 6000);
   }
-  function closeMovies() {
-    if (!movies) return;
-    var i = wins.indexOf(movies);
-    if (i > -1) wins.splice(i, 1);
-    movies.remove(); // this also stops any video that is playing
-    movies = null;
-    var top = topmostWindow();
-    if (top) activate(top);
+  function openVideos(index) {
+    var fresh = !videosWin.current();
+    var win = videosWin.open();
+    if (win && typeof index === "number") showVideo(win, index);
+    return fresh;
   }
-  function openMovies(index) {
-    if (!videosTemplate) return;
-    var fresh = !movies;
-    if (fresh) {
-      movies = document.importNode(videosTemplate.content.firstElementChild, true);
-      movies.classList.add("is-open");
-      (document.querySelector(".stack") || document.body).appendChild(movies);
-      // Some browsers skip the poster of a video built from a template; setting it again loads it.
-      Array.prototype.forEach.call(movies.querySelectorAll("video[poster]"), function (v) {
-        var src = v.getAttribute("poster");
-        v.removeAttribute("poster");
-        v.setAttribute("poster", src);
-      });
-      wins.push(movies);
-      setup(movies, count++);
-      if (window.initStrips) window.initStrips(movies);
-      var movieClose = movies.querySelector("button.closebox");
-      if (movieClose) movieClose.addEventListener("click", closeMovies);
-      placeMovies();
-    } else if (movies.classList.contains("is-shaded")) {
-      var box = movies.querySelector(".collapsebox");
-      if (box) box.click();
-    }
-    activate(movies);
-    if (typeof index === "number") showVideo(index);
-    if (fresh) movies.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
-  }
-  if (videosTemplate) {
-    Array.prototype.forEach.call(document.querySelectorAll("[data-open-window=videos]"), function (a) {
-      a.addEventListener("click", function (e) {
-        e.preventDefault();
-        var n = a.getAttribute("data-video");
-        openMovies(n === null ? undefined : parseInt(n, 10));
-      });
+  var openers = { videos: openVideos, checklist: function () { checklistWin.open(); } };
+  Array.prototype.forEach.call(document.querySelectorAll("[data-open-window]"), function (a) {
+    var name = a.getAttribute("data-open-window");
+    var open = openers[name];
+    var ready = name === "videos" ? videosWin.available : checklistWin.available;
+    if (!open || !ready) return;
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      var n = a.getAttribute("data-video");
+      open(n === null ? undefined : parseInt(n, 10));
     });
-  }
+  });
 
   // Menus other than the Apple menu: close after you pick an item, even with the pointer still over it.
   Array.prototype.forEach.call(document.querySelectorAll(".menu:not(.menu-apple)"), function (m) {
@@ -479,10 +504,16 @@
   var start = canDrag.matches ? document.querySelector(".window[data-front]") : null;
   if (wins.length) activate(start || plain[0] || wins[0]);
   var deepLink = /^#videos?(?:-(\d+))?$/.exec(window.location.hash);
-  if (deepLink && videosTemplate) openMovies(deepLink[1] ? parseInt(deepLink[1], 10) - 1 : undefined);
+  if (deepLink && videosWin.available) openVideos(deepLink[1] ? parseInt(deepLink[1], 10) - 1 : undefined);
+  else if (window.location.hash === "#checklist" && checklistWin.available) checklistWin.open();
 
   // If the screen stops allowing drags (narrow window, rotated phone), put windows back in place.
   function resetIfNeeded() {
+    if (!wide.matches) {
+      [videosWin.current(), checklistWin.current()].forEach(function (w) {
+        if (w) w.style.removeProperty("left"), w.style.removeProperty("top"), w.style.removeProperty("width");
+      });
+    }
     if (canDrag.matches) return;
     wins.forEach(function (w) {
       w.removeAttribute("data-dx");
@@ -493,4 +524,6 @@
   }
   if (canDrag.addEventListener) canDrag.addEventListener("change", resetIfNeeded);
   else if (canDrag.addListener) canDrag.addListener(resetIfNeeded);
+  if (wide.addEventListener) wide.addEventListener("change", resetIfNeeded);
+  else if (wide.addListener) wide.addListener(resetIfNeeded);
 })();

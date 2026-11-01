@@ -1,0 +1,26 @@
+{# The Checklist window. It is spawned from the Checklist menu or the desktop icon (see windows.js), so a template copy is used. #}
+<section class="window checklist" id="checklist" aria-labelledby="checklist-title">
+  <div class="titlebar">
+    <button type="button" class="closebox" aria-label="Close Checklist"></button>
+    <h2 id="checklist-title">Checklist</h2>
+    <span class="zoombox" aria-hidden="true"></span>
+  </div>
+  <div class="winbody">
+  <div class="infobar">
+    <span>{{ documented }} of {{ total }} documented</span>
+    <span>Checked once a machine has a photo</span>
+  </div>
+  <ul class="checks" role="list">
+    {% for m in collections.machines %}
+    {% set done = m.data.photos and m.data.photos.length %}
+    <li>
+      <a class="check-row" href="{{ m.url | url }}">
+        <span class="check{% if done %} is-done{% endif %}" aria-hidden="true"></span>
+        <span>{{ m.data.title }}</span>
+        <span class="visually-hidden">{% if done %}, documented{% else %}, not yet documented{% endif %}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  </div>
+</section>

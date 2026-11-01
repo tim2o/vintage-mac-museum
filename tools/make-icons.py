@@ -139,6 +139,20 @@ def build(kind):
         for y, w in ((12, 12), (15, 12), (18, 12), (21, 12), (24, 7)):
             ic.rect(10, y, w, 1, "#2a2a2a")
         ic.shadow()
+    elif kind == "checklist":
+        # A sheet of paper with three ticked boxes, for the Checklist window
+        ic.poly([(6, 2), (26, 2), (26, 29), (6, 29)], hgrad(6, 26, "#ffffff", "#c9c9c9"))
+        ic.outline()
+        for y in (6, 14, 22):
+            ic.rect(9, y, 6, 6, "#ffffff")
+            ic.line(9, y, 14, y, "#000000")
+            ic.line(9, y + 5, 14, y + 5, "#000000")
+            ic.line(9, y, 9, y + 5, "#000000")
+            ic.line(14, y, 14, y + 5, "#000000")
+            ic.line(10, y + 2, 11, y + 4, "#118811")
+            ic.line(11, y + 4, 14, y + 1, "#118811")
+            ic.rect(17, y + 2, 6, 1, "#2a2a2a")
+        ic.shadow()
     elif kind == "laptop":
         ic.rect(6, 3, 20, 15, hgrad(6, 26, "#e2e2e2", "#8a8a8a"))
         ic.rect(6, 16, 20, 2, hgrad(6, 26, "#bcbcbc", "#5e5e5e"))
@@ -369,7 +383,7 @@ def apple():
     return ic
 
 
-KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
+KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "checklist", "caution"]
 
 
 def save_png(ic, path):
@@ -405,7 +419,7 @@ def main():
     save_png(apple(), "src/assets/img/icons/menu-apple-flat.png")
     # Small 16 x 16 copies for the Application menu
     from PIL import Image
-    for k in ("disk", "doc", "laptop", "mini"):
+    for k in ("disk", "doc", "checklist", "laptop", "mini"):
         im = Image.open("src/assets/img/icons/%s.png" % k).convert("RGBA")
         im.resize((16, 16), Image.BOX).save("src/assets/img/icons/%s-16.png" % k, optimize=True)
     open("src/_includes/icons.njk", "w").write(MACRO.replace("KINDS", ", ".join(KINDS)))

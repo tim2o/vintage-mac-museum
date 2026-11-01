@@ -21,7 +21,7 @@ title: Collection
     </div>
   </section>
 
-  <section class="window cascade finder"{% if documented >= total %} data-front{% endif %} aria-labelledby="finder-title">
+  <section class="window finder" data-front aria-labelledby="finder-title">
     <div class="titlebar">
       <span class="closebox" aria-hidden="true"></span>
       <h2 id="finder-title">Collection</h2>
@@ -68,37 +68,11 @@ title: Collection
     </div>
   </section>
 
-  {% if documented < total %}
-  <section class="window cascade checklist" data-front aria-labelledby="checklist-title">
-    <div class="titlebar">
-      <span class="closebox" aria-hidden="true"></span>
-      <h2 id="checklist-title">Checklist</h2>
-      <span class="zoombox" aria-hidden="true"></span>
-    </div>
-    <div class="winbody">
-    <div class="infobar">
-      <span>{{ documented }} of {{ total }} documented</span>
-      <span>Checked once a machine has a photo</span>
-    </div>
-    <ul class="checks" role="list">
-      {% for m in collections.machines %}
-      {% set done = m.data.photos and m.data.photos.length %}
-      <li>
-        <a class="check-row" href="{{ m.url | url }}">
-          <span class="check{% if done %} is-done{% endif %}" aria-hidden="true"></span>
-          <span>{{ m.data.title }}</span>
-          <span class="visually-hidden">{% if done %}, documented{% else %}, not yet documented{% endif %}</span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
-    </div>
-  </section>
-  {% endif %}
 
-  {# The Videos window is not on the page until it is opened from the Videos menu: the browser only builds it, and starts loading videos, then. Without JavaScript it is simply shown here. #}
+  {# The Videos and Checklist windows are not on the page until they are opened from the menu bar (or the Checklist desktop icon): the browser only builds them, and starts loading videos, then. Without JavaScript they are simply shown here. #}
   <template id="videos-template">{% include "videos-window.njk" %}</template>
-  <noscript>{% include "videos-window.njk" %}</noscript>
+  <template id="checklist-template">{% include "checklist-window.njk" %}</template>
+  <noscript>{% include "checklist-window.njk" %}{% include "videos-window.njk" %}</noscript>
 
 </div>
 

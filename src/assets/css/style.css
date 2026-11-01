@@ -795,18 +795,10 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   white-space: nowrap;
 }
 
-/* The Videos window is built when it is opened from the menu bar; on a wide screen it opens over the
-   Collection window. Without JavaScript it is simply the last window on the page. */
+/* The Videos and Checklist windows are built when they are opened from the menu bar; on a wide screen
+   they open over the Collection window. Without JavaScript they are simply the last windows on the page. */
 @media (min-width: 52rem) {
-  .movies.is-open { position: absolute; margin: 0; }
-}
-
-/* On a desktop browser the home page windows overlap a little, like windows left on a desktop.
-   The window above gets a bit of extra frame for the next one to slide over, so nothing is hidden. */
-@media (min-width: 52rem) and (hover: hover) and (pointer: fine) {
-  .stack > .cascade + .cascade { margin-top: -22px; }
-  .cascade:has(+ .cascade) { padding-bottom: 23px; }
-  .checklist { margin-left: 4rem; }
+  .movies.is-open, .checklist.is-open { position: absolute; margin: 0; }
 }
 
 /* Footer bar */
