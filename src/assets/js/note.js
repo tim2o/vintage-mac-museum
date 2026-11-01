@@ -6,6 +6,11 @@
     var status = form.querySelector("[data-note-status]");
     var send = form.querySelector("[data-note-send]");
     var busy = false;
+    function sent() {
+      say("Thanks, your note is on its way.");
+      // Lets the window that holds the form close itself shortly after (see windows.js).
+      form.dispatchEvent(new CustomEvent("note-sent", { bubbles: true }));
+    }
     function say(text, bad) {
       status.textContent = text;
       status.classList.toggle("is-bad", !!bad);
@@ -22,7 +27,7 @@
       // A person takes longer than a few seconds to write a note; a hidden field filled in means a bot.
       if (data.get("website") || Date.now() - opened < 3000) {
         if (data.get("website")) {
-          say("Thanks, your note is on its way.");
+          sent();
           return;
         }
         say("One moment, then press Send again.", true);
@@ -52,7 +57,7 @@
         .then(function (res) {
           if (res.ok) {
             form.querySelector("textarea").value = "";
-            say("Thanks, your note is on its way.");
+            sent();
           } else {
             say("Sorry, that did not send. Please try again later.", true);
           }

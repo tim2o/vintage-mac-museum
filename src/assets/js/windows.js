@@ -479,6 +479,14 @@
     var cancel = win.querySelector("[data-note-cancel]");
     var closer = win.querySelector("button.closebox");
     if (cancel && closer) cancel.addEventListener("click", function () { closer.click(); });
+    // After a note is sent, leave the thank-you showing for a moment and then close the window.
+    win.addEventListener("note-sent", function () {
+      var send = win.querySelector("[data-note-send]");
+      if (send) send.disabled = true;
+      window.setTimeout(function () {
+        if (closer && closer.isConnected) closer.click();
+      }, 1800);
+    });
     var field = win.querySelector("textarea");
     if (field) field.focus({ preventScroll: true });
   });
