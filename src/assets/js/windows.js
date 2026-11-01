@@ -474,7 +474,16 @@
     if (win && typeof index === "number") showVideo(win, index);
     return fresh;
   }
+  var noteWin = lazyWindow("note-template", 250, 70, function (win) {
+    if (window.initNotes) window.initNotes(win);
+    var cancel = win.querySelector("[data-note-cancel]");
+    var closer = win.querySelector("button.closebox");
+    if (cancel && closer) cancel.addEventListener("click", function () { closer.click(); });
+    var field = win.querySelector("textarea");
+    if (field) field.focus({ preventScroll: true });
+  });
   var spawn = {
+    note: { win: noteWin, open: function () { noteWin.open(); } },
     videos: { win: videosWin, open: openVideos },
     checklist: { win: checklistWin, open: function () { checklistWin.open(); } },
     about: { win: aboutWin, open: function () { aboutWin.open(); } },
@@ -526,6 +535,7 @@
     if (desktop && deepLink && videosWin.available) openVideos(deepLink[1] ? parseInt(deepLink[1], 10) - 1 : undefined);
     else if (desktop && hash === "#checklist" && checklistWin.available) checklistWin.open();
     else if (desktop && hash === "#about" && aboutWin.available) aboutWin.open();
+    else if (desktop && hash === "#note" && noteWin.available) noteWin.open();
     else if (deepLink && deepLink[1]) {
       // The Videos page itself, opened at one video.
       var page = document.getElementById("videos");

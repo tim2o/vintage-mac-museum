@@ -646,6 +646,31 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   }
 }
 
+/* Leave Me a Note */
+.note-form { padding: 14px 18px 16px; background: var(--plat); font: 400 0.8rem/1.4 var(--geneva); }
+.note-form p { margin: 0 0 10px; }
+.note-privacy { font-size: 0.72rem; color: var(--muted); }
+.note-field { display: block; margin: 0 0 10px; }
+.note-field > span { display: block; margin-bottom: 3px; }
+.note-field input[type="text"], .note-field input[type="email"], .note-field textarea {
+  display: block;
+  width: 100%;
+  padding: 3px 5px;
+  background: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+  border-radius: 0;
+  box-shadow: inset 1px 1px 0 #999;
+  font: 400 0.85rem/1.4 var(--geneva);
+}
+.note-field textarea { resize: vertical; min-height: 6rem; }
+.note-field input:focus-visible, .note-field textarea:focus-visible { outline: 2px solid var(--black); outline-offset: 1px; }
+.note-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.note-status { min-height: 1.4em; }
+.note-status.is-bad { font-weight: 700; }
+.note-actions { display: flex; justify-content: flex-end; gap: 12px; }
+.note-actions a.btn { text-decoration: none; display: inline-flex; align-items: center; }
+
 /* Photo placeholder and thumbnails */
 .thumb {
   position: relative;

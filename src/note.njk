@@ -1,0 +1,10 @@
+---
+layout: base.njk
+title: Leave Me a Note
+permalink: /note/
+---
+{% set static = true %}
+<div class="stack">
+{% include "note-window.njk" %}
+</div>
+<script src="{{ '/assets/js/note.js' | url }}?v={{ build }}" defer></script>

@@ -1,0 +1,36 @@
+{# The "Leave Me a Note" window. On a desktop browser it is spawned from the Apple menu (see windows.js), so a template copy is used; on a phone it is the page at /note/. The note is delivered by Web3Forms; the access key below is public and the address it goes to is held by that service. #}
+{% set hl = "h1" if static else "h2" %}
+<section class="window notewin" id="note" aria-labelledby="note-title">
+  <div class="titlebar">
+    {% if static %}<span class="closebox" aria-hidden="true"></span>{% else %}<button type="button" class="closebox" aria-label="Close Leave Me a Note"></button>{% endif %}
+    <{{ hl }} id="note-title">Leave Me a Note</{{ hl }}>
+    <span class="zoombox" aria-hidden="true"></span>
+  </div>
+  <div class="winbody">
+    <form class="note-form" data-note-form action="https://api.web3forms.com/submit" method="post">
+      <input type="hidden" name="access_key" value="{{ site.noteKey }}">
+      <input type="hidden" name="subject" value="A note from the Macintosh Shelf">
+      <input type="hidden" name="from_name" value="Macintosh Shelf">
+      <p class="note-intro">Leave a message about a machine, a fix, or anything else. Your name and email are optional, so you can stay anonymous. Add an email only if you would like a reply.</p>
+      <label class="note-field"><span>Name (optional)</span>
+        <input type="text" name="name" maxlength="80" autocomplete="off">
+      </label>
+      <label class="note-field"><span>Email, for a reply (optional)</span>
+        <input type="email" name="email" maxlength="120" autocomplete="off">
+      </label>
+      <label class="note-field note-trap" aria-hidden="true"><span>Leave this empty</span>
+        <input type="text" name="website" tabindex="-1" autocomplete="off">
+      </label>
+      <label class="note-field"><span>Your note</span>
+        <textarea name="message" rows="6" maxlength="2000" required></textarea>
+      </label>
+      <p class="note-privacy">Notes are delivered through Web3Forms, a form service, so they pass through it on the way to me.</p>
+      <p class="note-status" data-note-status role="status" aria-live="polite"></p>
+      <div class="note-actions">
+        {% if static %}<a class="btn" href="{{ '/' | url }}">Cancel</a>{% else %}<button type="button" class="btn" data-note-cancel>Cancel</button>{% endif %}
+        <button type="submit" class="btn btn-default" data-note-send>Send</button>
+      </div>
+      <noscript><p class="note-status">Sending a note needs JavaScript.</p></noscript>
+    </form>
+  </div>
+</section>
