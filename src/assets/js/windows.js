@@ -169,7 +169,14 @@
   }
 
   wins.forEach(setup);
-  activate(wins[0]);
+  // The window in front at the start: the one marked data-front, or the first.
+  // On a desktop browser the windows overlap and the topmost one starts in front. Elsewhere the first
+  // window below the sticky note starts in front, so the top of the page is not all grey.
+  var plain = wins.filter(function (w) {
+    return !w.classList.contains("sticky");
+  });
+  var start = canDrag.matches ? document.querySelector(".window[data-front]") : null;
+  activate(start || plain[0] || wins[0]);
 
   // If the screen stops allowing drags (narrow window, rotated phone), put windows back in place.
   function resetIfNeeded() {
