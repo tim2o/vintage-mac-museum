@@ -32,6 +32,8 @@ title: Collection
       <span>{{ total }} {% if total == 1 %}item{% else %}items{% endif %}</span>
       <span>{{ documented }} documented</span>
     </div>
+    <div class="vscroll" data-vscroll>
+    <div class="vs-view" data-vs-view tabindex="0" role="region" aria-label="Collection, {{ total }} machines">
     <ul class="icons" role="list">
       {% for m in collections.machines %}
       <li>
@@ -53,9 +55,20 @@ title: Collection
       {% endfor %}
     </ul>
     </div>
+    <div class="vbar" data-vs-bar hidden>
+      <button type="button" class="vbtn" data-dir="-1" aria-label="Scroll up" tabindex="-1">
+        <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="8,4 13,10 3,10" fill="currentColor"/></svg>
+      </button>
+      <div class="vtrack" data-vs-track><span class="vknob" data-vs-knob></span></div>
+      <button type="button" class="vbtn" data-dir="1" aria-label="Scroll down" tabindex="-1">
+        <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="8,12 13,6 3,6" fill="currentColor"/></svg>
+      </button>
+    </div>
+    </div>
+    </div>
   </section>
 
-    {% if documented < total %}
+  {% if documented < total %}
   <section class="window cascade checklist" data-front aria-labelledby="checklist-title">
     <div class="titlebar">
       <span class="closebox" aria-hidden="true"></span>
@@ -90,3 +103,4 @@ title: Collection
 </div>
 
 <script src="{{ '/assets/js/strip.js' | url }}" defer></script>
+<script src="{{ '/assets/js/vscroll.js' | url }}" defer></script>

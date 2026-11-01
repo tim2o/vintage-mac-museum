@@ -594,6 +594,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
     background: #eee;
   }
   .vbar[hidden] { display: none; }
+  .finder .vs-view { max-height: min(66vh, 38rem); }
   .vbtn {
     order: 1; /* after the track, so the two arrows sit together at the bottom */
     flex: none;
