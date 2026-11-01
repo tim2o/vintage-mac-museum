@@ -510,6 +510,9 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 /* The home page montages mix wide and tall videos, so keep the row a little shorter */
 .movies .strip { --slide-h: min(60vh, 30rem); }
 .strip-multi .slide img, .strip-multi .slide video { max-width: calc(100cqw - 32px - 1.75rem); }
+/* The Videos window is built before its videos have loaded, so give each video its space up front
+   (16:9, letterboxed in black if a video is another shape) and the window does not jump as it fills. */
+.movies .slide video { height: var(--slide-h); aspect-ratio: 16 / 9; object-fit: contain; }
 
 /* Scroll bars, as in Mac OS 9: a black line round the bar, both arrow boxes together at the
    end, a grey track, and a lavender thumb with grip lines. The track goes pale when there is
@@ -791,9 +794,8 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   white-space: nowrap;
 }
 
-/* The Videos window is spawned from the menu bar. With JavaScript it starts closed; on a wide screen
-   it opens over the Collection window. Without JavaScript it is simply the last window on the page. */
-.js .movies:not(.is-open) { display: none; }
+/* The Videos window is built when it is opened from the menu bar; on a wide screen it opens over the
+   Collection window. Without JavaScript it is simply the last window on the page. */
 @media (min-width: 52rem) {
   .movies.is-open { position: absolute; margin: 0; }
 }

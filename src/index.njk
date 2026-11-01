@@ -55,12 +55,7 @@ title: Collection
     </div>
   </section>
 
-  {# Video montages of the PowerBooks, in the same scrolling strip as the machine pages #}
-  {% set montages = [
-    { video: "powerbook-montage-1.mp4", poster: "powerbook-montage-1-poster.jpg", alt: "Video montage 1 of the PowerBooks in the collection" },
-    { video: "powerbook-montage-2.mp4", poster: "powerbook-montage-2-poster.jpg", alt: "Video montage 2 of the PowerBooks in the collection" }
-  ] %}
-  {% if documented < total %}
+    {% if documented < total %}
   <section class="window cascade checklist" data-front aria-labelledby="checklist-title">
     <div class="titlebar">
       <span class="closebox" aria-hidden="true"></span>
@@ -88,40 +83,9 @@ title: Collection
   </section>
   {% endif %}
 
-  <section class="window movies" id="videos" aria-labelledby="montage-title">
-    <div class="titlebar">
-      <button type="button" class="closebox" aria-label="Close Videos"></button>
-      <h2 id="montage-title">Videos</h2>
-      <span class="zoombox" aria-hidden="true"></span>
-    </div>
-    <div class="winbody">
-    <div class="strip strip-multi" data-strip data-noun="video">
-      <div class="infobar">
-        <span data-strip-status>{{ montages.length }} videos</span>
-        <span>Swipe or use the scroll bar</span>
-      </div>
-      <div class="slides" data-strip-slides tabindex="0" role="group" aria-label="Video montages of the PowerBooks">
-        {% for v in montages %}
-        <figure class="slide slide-video">
-          <video controls playsinline preload="metadata" poster="{{ ('/assets/montages/' ~ v.poster) | url }}" aria-label="{{ v.alt }}">
-            <source src="{{ ('/assets/montages/' ~ v.video) | url }}" type="video/mp4">
-            Your browser can't play this video.
-          </video>
-        </figure>
-        {% endfor %}
-      </div>
-      <div class="sbar" data-strip-bar hidden>
-        <button type="button" class="sbtn" data-dir="-1" aria-label="Previous video">
-          <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="10,3 10,13 4,8" fill="currentColor"/></svg>
-        </button>
-        <div class="track" data-strip-track><span class="knob" data-strip-knob></span></div>
-        <button type="button" class="sbtn" data-dir="1" aria-label="Next video">
-          <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="6,3 6,13 12,8" fill="currentColor"/></svg>
-        </button>
-      </div>
-    </div>
-    </div>
-  </section>
+  {# The Videos window is not on the page until it is opened from the Videos menu: the browser only builds it, and starts loading videos, then. Without JavaScript it is simply shown here. #}
+  <template id="videos-template">{% include "videos-window.njk" %}</template>
+  <noscript>{% include "videos-window.njk" %}</noscript>
 
 </div>
 

@@ -20,8 +20,6 @@
         <button type="button" class="menu-logo" aria-haspopup="menu" aria-expanded="false" aria-label="Apple menu"><img class="menu-mac" src="{{ '/assets/img/icons/menu-apple-flat.png' | url }}" width="16" height="16" alt=""></button>
         <ul class="dropdown" role="list">
           <li><a href="{{ '/about/' | url }}">About This Collection</a></li>
-          <li class="sep" aria-hidden="true"></li>
-          <li><a href="{{ '/' | url }}#videos" data-open-window="videos">Videos</a></li>
         </ul>
       </div>
       <div class="menu">
@@ -31,6 +29,16 @@
           <li class="sep" aria-hidden="true"></li>
           {% for m in collections.machines %}
           <li><a href="{{ m.url | url }}">{{ m.data.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="menu">
+        <a href="{{ '/' | url }}#videos" data-open-window="videos">Videos</a>
+        <ul class="dropdown" role="list">
+          <li><a href="{{ '/' | url }}#videos" data-open-window="videos">All videos</a></li>
+          <li class="sep" aria-hidden="true"></li>
+          {% for v in videos %}
+          <li><a href="{{ '/' | url }}#video-{{ loop.index }}" data-open-window="videos" data-video="{{ loop.index0 }}">{{ v.title }}</a></li>
           {% endfor %}
         </ul>
       </div>

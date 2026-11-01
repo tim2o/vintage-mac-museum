@@ -38,6 +38,7 @@
     }
     // The slide whose resting position is nearest the current scroll position.
     function currentIndex() {
+      if (maxScroll() <= 1) return 0; // nothing to scroll yet (still loading): the first one
       var x = slides.scrollLeft;
       var best = 0;
       var bestDist = Infinity;
@@ -150,5 +151,10 @@
     update();
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll("[data-strip]"), init);
+  // Set up every strip under root. Strips built later (the Videos window) call this themselves.
+  function initAll(root) {
+    Array.prototype.forEach.call((root || document).querySelectorAll("[data-strip]"), init);
+  }
+  window.initStrips = initAll;
+  initAll(document);
 })();
