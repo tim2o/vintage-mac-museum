@@ -1,8 +1,9 @@
-{# The Checklist window. It is spawned from the Checklist menu or the desktop icon (see windows.js), so a template copy is used. #}
+{# The Checklist window. On a desktop browser it is spawned from the Checklist menu, the desktop icon or the Application menu (see windows.js), so a template copy is used; on a phone it is the page at /checklist/. #}
+{% set hl = "h1" if static else "h2" %}
 <section class="window checklist" id="checklist" aria-labelledby="checklist-title">
   <div class="titlebar">
-    <button type="button" class="closebox" aria-label="Close Checklist"></button>
-    <h2 id="checklist-title">Checklist</h2>
+    {% if static %}<span class="closebox" aria-hidden="true"></span>{% else %}<button type="button" class="closebox" aria-label="Close Checklist"></button>{% endif %}
+    <{{ hl }} id="checklist-title">Checklist</{{ hl }}>
     <span class="zoombox" aria-hidden="true"></span>
   </div>
   <div class="winbody">

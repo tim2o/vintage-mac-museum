@@ -1,8 +1,9 @@
-{# The Videos window. Built from src/_data/montages.json. It is spawned from the Videos menu (see windows.js), so a template copy is used. #}
+{# The Videos window, built from src/_data/montages.json. On a desktop browser it is spawned from the Videos menu (see windows.js), so a template copy is used; on a phone it is the page at /videos/. #}
+{% set hl = "h1" if static else "h2" %}
 <section class="window movies" id="videos" aria-labelledby="montage-title">
   <div class="titlebar">
-    <button type="button" class="closebox" aria-label="Close Videos"></button>
-    <h2 id="montage-title">Videos</h2>
+    {% if static %}<span class="closebox" aria-hidden="true"></span>{% else %}<button type="button" class="closebox" aria-label="Close Videos"></button>{% endif %}
+    <{{ hl }} id="montage-title">Videos</{{ hl }}>
     <span class="zoombox" aria-hidden="true"></span>
   </div>
   <div class="winbody">

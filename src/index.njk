@@ -69,10 +69,10 @@ title: Collection
   </section>
 
 
-  {# The Videos and Checklist windows are not on the page until they are opened from the menu bar (or the Checklist desktop icon): the browser only builds them, and starts loading videos, then. Without JavaScript they are simply shown here. #}
-  <template id="videos-template">{% include "videos-window.njk" %}</template>
+  {# The About, Checklist and Videos windows are not on the page until they are opened from the menu bar or a desktop icon (on a desktop browser): the browser only builds them, and starts loading videos, then. On a phone, and without JavaScript, those links go to pages of their own. #}
+  <template id="about-template">{% include "about-window.njk" %}</template>
   <template id="checklist-template">{% include "checklist-window.njk" %}</template>
-  <noscript>{% include "checklist-window.njk" %}{% include "videos-window.njk" %}</noscript>
+  <template id="videos-template">{% include "videos-window.njk" %}</template>
 
 </div>
 

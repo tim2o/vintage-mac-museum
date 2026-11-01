@@ -1,0 +1,10 @@
+---
+layout: base.njk
+title: Videos
+permalink: /videos/
+---
+{% set static = true %}
+<div class="stack">
+{% include "videos-window.njk" %}
+</div>
+<script src="{{ '/assets/js/strip.js' | url }}?v={{ build }}" defer></script>

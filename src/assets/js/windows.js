@@ -3,6 +3,8 @@
 //  - The collapse box, or a double-click on the title bar, rolls the window up to its title bar (windowshade).
 //  - On a desktop browser, drag a window by its title bar. An outline moves with the pointer and the
 //    window follows when you let go, like Mac OS 8.
+// This is all for a desktop browser (a wide screen with a mouse or trackpad). On a phone or tablet the windows
+// are plain, fixed boxes and the About, Checklist and Videos links go to pages of their own.
 // Without JavaScript the windows simply stay put and open.
 (function () {
   var reduceMotion =
@@ -27,6 +29,7 @@
   }
 
   function setup(win, index) {
+    if (!canDrag.matches) return;
     var bar = win.querySelector(":scope > .titlebar");
     var body = win.querySelector(":scope > .winbody");
     if (!bar || !body) return;
@@ -278,7 +281,7 @@
 
   Array.prototype.forEach.call(document.querySelectorAll("[data-popup]"), function (t) {
     t.addEventListener("click", function () {
-      openPopup(t);
+      if (canDrag.matches) openPopup(t);
     });
   });
 
@@ -352,11 +355,10 @@
     });
   }
 
-  // The Videos and Checklist windows. Neither is part of the page until it is opened from the menu bar (or
-  // the Checklist desktop icon): then it is built from its template, so no video is fetched before that,
-  // and it is removed again when closed. On a wide screen each opens over the Collection window, offset a
-  // little (the Checklist further in, so both can be seen when they are open together).
-  var wide = window.matchMedia("(min-width: 52rem)");
+  // The About, Checklist and Videos windows. None is part of the page until it is opened from the menu bar
+  // or a desktop icon: then it is built from its template, so no video is fetched before that, and it is
+  // removed again when closed. Each opens over the Collection window, offset a little differently so that
+  // several can be seen when they are open together.
   function topmostWindow() {
     var top = null;
     wins.forEach(function (w) {
@@ -365,7 +367,7 @@
     return top;
   }
   function placeWindow(win, inset, drop) {
-    if (!wide.matches) return;
+    if (!canDrag.matches) return;
     var host = document.querySelector(".finder") || document.querySelector(".stack");
     var r = host.getBoundingClientRect();
     var menu = document.querySelector(".menubar");
@@ -427,6 +429,9 @@
     if (window.initStrips) window.initStrips(win);
   });
   var checklistWin = lazyWindow("checklist-template", 88, 88);
+  var aboutWin = lazyWindow("about-template", 120, 40, function (win) {
+    if (window.initVScrolls) window.initVScrolls(win);
+  });
   // Scroll the strip to video i. The slides only get their real width once their posters have loaded, so
   // keep trying as the layout settles, and stop at once if you scroll the strip yourself.
   function showVideo(win, i) {
@@ -469,16 +474,27 @@
     if (win && typeof index === "number") showVideo(win, index);
     return fresh;
   }
-  var openers = { videos: openVideos, checklist: function () { checklistWin.open(); } };
+  var spawn = {
+    videos: { win: videosWin, open: openVideos },
+    checklist: { win: checklistWin, open: function () { checklistWin.open(); } },
+    about: { win: aboutWin, open: function () { aboutWin.open(); } },
+  };
+  // Menu items and desktop icons are ordinary links to pages (what a phone uses). On a desktop browser a
+  // click spawns the window instead; from a page that has no templates, it goes to the home page to do so.
   Array.prototype.forEach.call(document.querySelectorAll("[data-open-window]"), function (a) {
     var name = a.getAttribute("data-open-window");
-    var open = openers[name];
-    var ready = name === "videos" ? videosWin.available : checklistWin.available;
-    if (!open || !ready) return;
+    var item = spawn[name];
+    if (!item) return;
     a.addEventListener("click", function (e) {
+      if (!canDrag.matches || e.metaKey || e.ctrlKey || e.shiftKey || e.button > 0) return;
       e.preventDefault();
       var n = a.getAttribute("data-video");
-      open(n === null ? undefined : parseInt(n, 10));
+      var index = n === null ? undefined : parseInt(n, 10);
+      if (item.win.available) item.open(index);
+      else {
+        var home = document.body.getAttribute("data-home") || "/";
+        window.location.href = home + "#" + (typeof index === "number" ? "video-" + (index + 1) : name);
+      }
     });
   });
 
@@ -496,34 +512,34 @@
   });
 
   wins.forEach(setup);
+  var desktop = canDrag.matches;
   // On a desktop browser the windows overlap and the topmost one starts in front. Elsewhere the first
   // window below the sticky note starts in front, so the top of the page is not all grey.
   var plain = wins.filter(function (w) {
     return !w.classList.contains("sticky");
   });
   var start = canDrag.matches ? document.querySelector(".window[data-front]") : null;
-  if (wins.length) activate(start || plain[0] || wins[0]);
-  var deepLink = /^#videos?(?:-(\d+))?$/.exec(window.location.hash);
-  if (deepLink && videosWin.available) openVideos(deepLink[1] ? parseInt(deepLink[1], 10) - 1 : undefined);
-  else if (window.location.hash === "#checklist" && checklistWin.available) checklistWin.open();
-
-  // If the screen stops allowing drags (narrow window, rotated phone), put windows back in place.
-  function resetIfNeeded() {
-    if (!wide.matches) {
-      [videosWin.current(), checklistWin.current()].forEach(function (w) {
-        if (w) w.style.removeProperty("left"), w.style.removeProperty("top"), w.style.removeProperty("width");
-      });
+  if (wins.length && desktop) activate(start || plain[0] || wins[0]);
+  function openFromHash() {
+    var hash = window.location.hash;
+    var deepLink = /^#videos?(?:-(\d+))?$/.exec(hash);
+    if (desktop && deepLink && videosWin.available) openVideos(deepLink[1] ? parseInt(deepLink[1], 10) - 1 : undefined);
+    else if (desktop && hash === "#checklist" && checklistWin.available) checklistWin.open();
+    else if (desktop && hash === "#about" && aboutWin.available) aboutWin.open();
+    else if (deepLink && deepLink[1]) {
+      // The Videos page itself, opened at one video.
+      var page = document.getElementById("videos");
+      if (page) showVideo(page, parseInt(deepLink[1], 10) - 1);
     }
-    if (canDrag.matches) return;
-    wins.forEach(function (w) {
-      w.removeAttribute("data-dx");
-      w.removeAttribute("data-dy");
-      w.style.removeProperty("--dx");
-      w.style.removeProperty("--dy");
-    });
   }
-  if (canDrag.addEventListener) canDrag.addEventListener("change", resetIfNeeded);
-  else if (canDrag.addListener) canDrag.addListener(resetIfNeeded);
-  if (wide.addEventListener) wide.addEventListener("change", resetIfNeeded);
-  else if (wide.addListener) wide.addListener(resetIfNeeded);
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
+
+  // Windows are built differently for a desktop browser and for a phone. If the browser crosses over
+  // (a resized window, a rotated tablet), start the page again so it is built the right way.
+  function modeChanged() {
+    if (canDrag.matches !== desktop) window.location.reload();
+  }
+  if (canDrag.addEventListener) canDrag.addEventListener("change", modeChanged);
+  else if (canDrag.addListener) canDrag.addListener(modeChanged);
 })();

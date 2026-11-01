@@ -1,0 +1,11 @@
+---
+layout: base.njk
+title: Checklist
+permalink: /checklist/
+---
+{% set static = true %}
+{% set total = collections.machines.length %}
+{% set documented = collections.machines | documentedCount %}
+<div class="stack">
+{% include "checklist-window.njk" %}
+</div>

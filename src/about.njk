@@ -1,0 +1,10 @@
+---
+layout: base.njk
+title: About
+permalink: /about/
+---
+{% set static = true %}
+<div class="stack">
+{% include "about-window.njk" %}
+</div>
+<script src="{{ '/assets/js/vscroll.js' | url }}?v={{ build }}" defer></script>

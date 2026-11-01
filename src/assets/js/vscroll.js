@@ -121,5 +121,10 @@
     update();
   }
 
-  Array.prototype.forEach.call(document.querySelectorAll("[data-vscroll]"), init);
+  // Set up every scroll box under root. Boxes built later (the About window) call this themselves.
+  function initAll(root) {
+    Array.prototype.forEach.call((root || document).querySelectorAll("[data-vscroll]"), init);
+  }
+  window.initVScrolls = initAll;
+  initAll(document);
 })();

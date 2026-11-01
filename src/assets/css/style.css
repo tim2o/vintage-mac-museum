@@ -131,7 +131,8 @@ a:focus-visible, video:focus-visible, button:focus-visible {
 }
 /* The right-hand end of the menu bar: the clock, then the application menu. */
 .clock { padding: 0 10px; font-weight: 400; white-space: nowrap; }
-.app-menu { position: relative; display: flex; border-left: 1px solid #aaa; box-shadow: -1px 0 0 #fff; }
+.app-menu { position: relative; display: none; border-left: 1px solid #aaa; box-shadow: -1px 0 0 #fff; }
+@media (min-width: 52rem) and (hover: hover) and (pointer: fine) { .app-menu { display: flex; } }
 .app-menu-button {
   display: flex;
   align-items: center;
@@ -795,10 +796,10 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   white-space: nowrap;
 }
 
-/* The Videos and Checklist windows are built when they are opened from the menu bar; on a wide screen
-   they open over the Collection window. Without JavaScript they are simply the last windows on the page. */
-@media (min-width: 52rem) {
-  .movies.is-open, .checklist.is-open { position: absolute; margin: 0; }
+/* The About, Videos and Checklist windows are built when they are opened on a desktop browser, and open
+   over the Collection window. On a phone they are pages of their own. */
+@media (min-width: 52rem) and (hover: hover) and (pointer: fine) {
+  .window.is-open { position: absolute; margin: 0; }
 }
 
 /* Footer bar */
@@ -839,5 +840,4 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   .icons { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 16px; }
   .checks { column-count: 1; }
   .menus a, .clock { padding: 0 8px; }
-  .app-menu { display: none; }
 }
