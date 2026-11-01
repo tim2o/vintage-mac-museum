@@ -315,6 +315,19 @@ def build(kind):
         ic.outline()
         ic.line(4, 3, 26, 3, "#ffffff")
         ic.shadow()
+    elif kind == "mini":
+        ic.rrect(3, 14, 26, 12, 4, hgrad(3, 29, "#dedede", "#8a8a8a"))
+        ic.rrect(3, 8, 26, 13, 5, dgrad(3, 8, 29, 21, "#ffffff", "#c2c2c2"))
+        ic.rect(8, 27, 16, 1, hgrad(8, 24, "#6a6a6a", "#2a2a2a"))
+        ic.outline()
+        ic.line(8, 10, 21, 10, "#ffffff")
+        ic.line(5, 13, 5, 16, "#ffffff")
+        ic.line(5, 21, 27, 21, "#7a7a7a")
+        ic.rect(8, 23, 2, 1, "#2a2a2a")
+        ic.rect(21, 23, 2, 1, "#4a4a4a")
+        ic.rect(24, 23, 2, 1, "#4a4a4a")
+        ic.rect(15, 24, 3, 1, "#7ac2ff")
+        ic.shadow()
     elif kind == "caution":
         ic.poly([(16, 2), (30, 28), (2, 28)], dgrad(2, 2, 30, 28, "#fff58a", "#d49e00"))
         ic.outline()
@@ -338,7 +351,7 @@ def menu_mac():
     return ic
 
 
-KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
+KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
 
 
 def save_png(ic, path):
