@@ -38,20 +38,20 @@
   {% from "icons.njk" import icon %}
   <nav class="desk-icons" aria-label="Desktop">
     <a class="desk-icon" href="{{ '/' | url }}">
-      {{ icon("disk", 48) }}
+      {{ icon("disk", 64) }}
       <span>{{ site.title }}</span>
     </a>
     <a class="desk-icon" href="{{ '/about/' | url }}">
-      {{ icon("doc", 48) }}
+      {{ icon("doc", 64) }}
       <span>About This Collection</span>
     </a>
     {# Placeholders: each opens a "coming soon" window (see windows.js) #}
     <button type="button" class="desk-icon" data-popup="intel" data-popup-title="Intel Macs" aria-haspopup="dialog">
-      {{ icon("laptop", 48) }}
+      {{ icon("laptop", 64) }}
       <span>Intel Macs</span>
     </button>
     <button type="button" class="desk-icon" data-popup="m-series" data-popup-title="Modern M-Series Macs" aria-haspopup="dialog">
-      {{ icon("imac", 48) }}
+      {{ icon("imac", 64) }}
       <span>Modern M-Series Macs</span>
     </button>
   </nav>

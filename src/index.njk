@@ -83,7 +83,7 @@ title: Collection
             {% elif m.data.still %}
             <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ m.data.still) | url }}" alt="" loading="lazy">
             {% else %}
-            {{ icon(m.data.glyph or "compact", 48) }}
+            {{ icon(m.data.glyph or "compact", 64) }}
             {% endif %}
           </span>
           <span class="name">{{ m.data.title }}</span>
