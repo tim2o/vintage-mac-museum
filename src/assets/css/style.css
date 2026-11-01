@@ -304,7 +304,7 @@ a.closebox:focus-visible, .collapsebox:focus-visible { outline: 2px solid var(--
   padding: 3px 16px;
   background: linear-gradient(#fff, #e4e4e4 45%, #bfbfbf);
   border: 1px solid var(--black);
-  border-radius: 3px;
+  border-radius: 0;
   box-shadow: var(--raised);
   font: 700 0.76rem/1.3 var(--charcoal);
   text-decoration: none;
