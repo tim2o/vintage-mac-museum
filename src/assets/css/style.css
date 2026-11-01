@@ -8,8 +8,8 @@
    title bar, and only the window in front shows its stripes.
    Specs appear in a Get Info window, videos in movie windows, and the collection
    in a Finder icon view.
-   The dithered lavender desktop and the lavender scroll bar thumbs are the Platinum
-   touches; everything else stays platinum grey, black and white. */
+   The tiled Finder-face desktop picture and the lavender scroll bar thumbs are the
+   Platinum touches; everything else stays platinum grey, black and white. */
 
 :root {
   --black: #000;
@@ -20,8 +20,7 @@
   --muted: #444;
   --hilite: #99c;       /* the Platinum highlight colour, for selected items */
   --hilite-dark: #669;  /* menus and the scroll bar thumb */
-  --desk-a: #6e6eaa;
-  --desk-b: #62629f;
+  --desk-a: #6464a0; /* the desktop picture's colour, shown while it loads */
 
   /* Platinum bevels: raised for buttons and frames, sunken for panes and fields */
   --raised: inset 1px 1px 0 #fff, inset -1px -1px 0 #999;
@@ -45,7 +44,7 @@ body {
   font-size: 1.15rem;
   line-height: 1.5;
   color: var(--black);
-  background: var(--desk-a) conic-gradient(var(--desk-b) 25%, var(--desk-a) 0 50%, var(--desk-b) 0 75%, var(--desk-a) 0) 0 0 / 4px 4px;
+  background: var(--desk-a) url("../img/desktop-tile.png") 0 0 / 127px 127px repeat;
 }
 body.is-dragging { user-select: none; -webkit-user-select: none; }
 
