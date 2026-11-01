@@ -513,6 +513,74 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   background: repeating-linear-gradient(to right, #55a 0 1px, #eef 1px 2px);
 }
 
+/* Vertical scroll bar for a window's contents (same parts as the horizontal one).
+   On narrow screens the page itself scrolls and the window just grows. */
+.vscroll { display: flex; align-items: stretch; }
+.vs-view { flex: 1; min-width: 0; background: var(--white); }
+.vs-view:focus-visible { outline: 2px solid var(--black); outline-offset: -4px; }
+.vbar { display: none; }
+@media (min-width: 52rem) {
+  .vs-view { max-height: min(62vh, 34rem); overflow-y: auto; overscroll-behavior: contain; }
+  .vscroll.has-js .vs-view { scrollbar-width: none; }
+  .vscroll.has-js .vs-view::-webkit-scrollbar { display: none; }
+  .vbar {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    width: 16px;
+    border-left: 1px solid #777;
+    background: var(--plat);
+  }
+  .vbar[hidden] { display: none; }
+  .vbtn {
+    flex: none;
+    display: grid;
+    place-items: center;
+    height: 16px;
+    padding: 0;
+    background: linear-gradient(135deg, #f6f6f6, #bdbdbd);
+    border: 0;
+    border-bottom: 1px solid #555;
+    box-shadow: var(--raised);
+    color: var(--black);
+    cursor: default;
+  }
+  .vbtn:last-child { border-bottom: 0; border-top: 1px solid #555; }
+  .vbtn:active:not(:disabled) { background: linear-gradient(135deg, #aaa, #ccc); box-shadow: inset 1px 1px 0 #666; }
+  .vbtn:disabled { opacity: 0.4; }
+  .vbtn svg { display: block; width: 12px; height: 12px; }
+  .vtrack {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: #e8e8f0;
+    box-shadow: inset 1px 1px 0 #777, inset 0 -1px 0 #fff;
+  }
+  .vknob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 24px;
+    background: linear-gradient(to right, #c8c8ee, #9c9cd2 55%, #8686c0);
+    border: 1px solid #333;
+    box-shadow: inset 1px 1px 0 #ecf, inset -1px -1px 0 #66a;
+    cursor: default;
+    touch-action: none;
+  }
+  .vknob::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    right: 3px;
+    top: 50%;
+    height: 9px;
+    margin-top: -5px;
+    background: repeating-linear-gradient(to bottom, #55a 0 1px, #eef 1px 2px);
+  }
+}
+
 /* Photo placeholder and thumbnails */
 .thumb {
   position: relative;

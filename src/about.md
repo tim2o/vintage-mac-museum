@@ -10,8 +10,10 @@ permalink: /about/
       <h1>About This Collection</h1>
       <span class="zoombox" aria-hidden="true"></span>
     </div>
-    <div class="winbody">
-    <div class="doc prose">
+<div class="winbody">
+<div class="vscroll" data-vscroll>
+<div class="vs-view" data-vs-view tabindex="0" role="region" aria-label="About This Collection">
+<div class="doc prose">
 
 I collect vintage Macintosh computers, keep them running, and write down what they are. This site is the shelf where all of it lives. It has three jobs: preserving the machines, archiving what they look like and what is inside them, and having fun with them.
 
@@ -26,9 +28,23 @@ Every machine gets its own page, listed from oldest to newest in [the collection
 ## Having fun
 
 These machines were built to be used, and a lot of the joy is in using them: bringing one back to life, seeing it run the software of its own era, and filming it. The montage videos on the home page come from that.
+
 If you collect, restore, or just remember these computers, I hope you find something here worth looking at.
 
-    </div>
-    </div>
+</div>
+</div>
+<div class="vbar" data-vs-bar hidden>
+  <button type="button" class="vbtn" data-dir="-1" aria-label="Scroll up" tabindex="-1">
+    <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="8,4 13,10 3,10" fill="currentColor"/></svg>
+  </button>
+  <div class="vtrack" data-vs-track><span class="vknob" data-vs-knob></span></div>
+  <button type="button" class="vbtn" data-dir="1" aria-label="Scroll down" tabindex="-1">
+    <svg viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><polygon points="8,12 13,6 3,6" fill="currentColor"/></svg>
+  </button>
+</div>
+</div>
+</div>
   </div>
 </div>
+
+<script src="{{ '/assets/js/vscroll.js' | url }}" defer></script>
