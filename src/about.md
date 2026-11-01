@@ -25,8 +25,7 @@ Every machine gets its own page, listed from oldest to newest in [the collection
 
 ## Having fun
 
-These machines were built to be used, and a lot of the joy is in using them: bringing one back to life, seeing it run the software of its own era, and filming it. The montage videos on the home page come from that. The site is also dressed in the Mac OS 8.5 look on purpose. Collapse a window with its box in the corner, double-click a title bar, or drag the windows around on a desktop computer. They behave the way they used to.
-
+These machines were built to be used, and a lot of the joy is in using them: bringing one back to life, seeing it run the software of its own era, and filming it. The montage videos on the home page come from that.
 If you collect, restore, or just remember these computers, I hope you find something here worth looking at.
 
     </div>
