@@ -781,9 +781,9 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   white-space: nowrap;
 }
 
-.finder { margin-left: 0; }
+.movies { margin-left: 0; }
 @media (min-width: 52rem) {
-  .finder { margin-left: 4rem; }
+  .movies { margin-left: 4rem; }
 }
 
 /* On a desktop browser the home page windows overlap a little, like windows left on a desktop.

@@ -21,6 +21,40 @@ title: Collection
     </div>
   </section>
 
+  <section class="window cascade finder"{% if documented >= total %} data-front{% endif %} aria-labelledby="finder-title">
+    <div class="titlebar">
+      <span class="closebox" aria-hidden="true"></span>
+      <h2 id="finder-title">Collection</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="winbody">
+    <div class="infobar">
+      <span>{{ total }} {% if total == 1 %}item{% else %}items{% endif %}</span>
+      <span>{{ documented }} documented</span>
+    </div>
+    <ul class="icons" role="list">
+      {% for m in collections.machines %}
+      <li>
+        <a class="icon-item" href="{{ m.url | url }}">
+          {% set cover = m.data.photos[0] if m.data.photos and m.data.photos.length else null %}
+          <span class="thumb">
+            {% if cover %}
+            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ (cover.poster if cover.video else cover.file)) | url }}" alt="" loading="lazy">
+            {% elif m.data.still %}
+            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ m.data.still) | url }}" alt="" loading="lazy">
+            {% else %}
+            {{ icon(m.data.glyph or "compact", 64) }}
+            {% endif %}
+          </span>
+          <span class="name">{{ m.data.title }}</span>
+          <span class="sub">{{ m.data.year }}{% if m.data.sample %}, sample{% endif %}</span>
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+    </div>
+  </section>
+
   {# Video montages of the PowerBooks, in the same scrolling strip as the machine pages #}
   {% set montages = [
     { video: "powerbook-montage-1.mp4", poster: "powerbook-montage-1-poster.jpg", alt: "Video montage 1 of the PowerBooks in the collection" },
@@ -58,40 +92,6 @@ title: Collection
         </button>
       </div>
     </div>
-    </div>
-  </section>
-
-  <section class="window cascade finder"{% if documented >= total %} data-front{% endif %} aria-labelledby="finder-title">
-    <div class="titlebar">
-      <span class="closebox" aria-hidden="true"></span>
-      <h2 id="finder-title">Collection</h2>
-      <span class="zoombox" aria-hidden="true"></span>
-    </div>
-    <div class="winbody">
-    <div class="infobar">
-      <span>{{ total }} {% if total == 1 %}item{% else %}items{% endif %}</span>
-      <span>{{ documented }} documented</span>
-    </div>
-    <ul class="icons" role="list">
-      {% for m in collections.machines %}
-      <li>
-        <a class="icon-item" href="{{ m.url | url }}">
-          {% set cover = m.data.photos[0] if m.data.photos and m.data.photos.length else null %}
-          <span class="thumb">
-            {% if cover %}
-            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ (cover.poster if cover.video else cover.file)) | url }}" alt="" loading="lazy">
-            {% elif m.data.still %}
-            <img src="{{ ('/assets/machines/' ~ m.fileSlug ~ '/' ~ m.data.still) | url }}" alt="" loading="lazy">
-            {% else %}
-            {{ icon(m.data.glyph or "compact", 64) }}
-            {% endif %}
-          </span>
-          <span class="name">{{ m.data.title }}</span>
-          <span class="sub">{{ m.data.year }}{% if m.data.sample %}, sample{% endif %}</span>
-        </a>
-      </li>
-      {% endfor %}
-    </ul>
     </div>
   </section>
 
