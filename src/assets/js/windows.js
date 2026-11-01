@@ -209,10 +209,14 @@
     body.className = "winbody";
     var inner = document.createElement("div");
     inner.className = "popup-body";
-    var svg = trigger.querySelector("svg, img");
-    if (svg) {
-      var pic = svg.cloneNode(true);
-      pic.setAttribute("aria-hidden", "true");
+    var iconSrc = trigger.getAttribute("data-popup-icon");
+    if (iconSrc) {
+      var pic = document.createElement("img");
+      pic.className = "icon";
+      pic.src = iconSrc;
+      pic.width = 64;
+      pic.height = 64;
+      pic.alt = "";
       inner.appendChild(pic);
     }
     var text = document.createElement("div");
@@ -261,7 +265,8 @@
         if (!topmost || (parseInt(w.style.zIndex, 10) || 0) >= (parseInt(topmost.style.zIndex, 10) || 0)) topmost = w;
       });
       if (topmost) activate(topmost);
-      trigger.focus();
+      var back = trigger.closest(".app-menu") ? document.querySelector(".app-menu-button") : trigger;
+      if (back) back.focus();
     }
     close.addEventListener("click", dismiss);
     ok.addEventListener("click", dismiss);
@@ -276,6 +281,43 @@
       openPopup(t);
     });
   });
+
+  // The Application menu in the menu bar: click to open, click outside or press Esc to close.
+  var appMenu = document.querySelector(".app-menu");
+  if (appMenu) {
+    var appBtn = appMenu.querySelector(".app-menu-button");
+    var appList = appMenu.querySelector(".app-list");
+    var setOpen = function (open) {
+      appList.hidden = !open;
+      appBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    var items = function () {
+      return Array.prototype.slice.call(appList.querySelectorAll("a, button"));
+    };
+    appBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      setOpen(appList.hidden);
+    });
+    document.addEventListener("click", function (e) {
+      if (!appMenu.contains(e.target)) setOpen(false);
+    });
+    appList.addEventListener("click", function (e) {
+      if (e.target.closest("a, button")) setOpen(false);
+    });
+    appMenu.addEventListener("keydown", function (e) {
+      var list = items();
+      var i = list.indexOf(document.activeElement);
+      if (e.key === "Escape" && !appList.hidden) {
+        setOpen(false);
+        appBtn.focus();
+      } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (appList.hidden) setOpen(true);
+        var next = e.key === "ArrowDown" ? i + 1 : i - 1;
+        list[(next + list.length) % list.length].focus();
+      }
+    });
+  }
 
   wins.forEach(setup);
   // On a desktop browser the windows overlap and the topmost one starts in front. Elsewhere the first

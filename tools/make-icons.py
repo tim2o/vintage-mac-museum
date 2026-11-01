@@ -339,14 +339,17 @@ def build(kind):
     return ic
 
 
-def menu_mac():
+def menu_mac(blue=False):
     """A tiny Macintosh with a rainbow-striped screen, 16 x 16, for the menu bar."""
     ic = Icon(16)
     ic.rect(3, 1, 10, 12, hgrad(3, 13, "#f0f0f0", "#a4a4a4"))
     ic.rect(2, 13, 12, 1, hgrad(2, 14, "#c8c8c8", "#6a6a6a"))
     ic.outline()
-    for i, c in enumerate(("#61bb46", "#fdb827", "#f5821f", "#e03a3e", "#963d97", "#009ddc")):
-        ic.rect(5, 3 + i, 6, 1, c)
+    if blue:
+        ic.rect(5, 3, 6, 6, dgrad(5, 3, 11, 9, "#dcecff", "#4d73b0"))
+    else:
+        for i, c in enumerate(("#61bb46", "#fdb827", "#f5821f", "#e03a3e", "#963d97", "#009ddc")):
+            ic.rect(5, 3 + i, 6, 1, c)
     ic.rect(5, 11, 4, 1, "#262626")
     return ic
 
@@ -383,6 +386,12 @@ def main():
     for k in KINDS:
         save_png(build(k), "src/assets/img/icons/%s.png" % k)
     save_png(menu_mac(), "src/assets/img/icons/menu-mac.png")
+    save_png(menu_mac(blue=True), "src/assets/img/icons/menu-finder.png")
+    # Small 16 x 16 copies for the Application menu
+    from PIL import Image
+    for k in ("disk", "doc", "laptop", "mini"):
+        im = Image.open("src/assets/img/icons/%s.png" % k).convert("RGBA")
+        im.resize((16, 16), Image.BOX).save("src/assets/img/icons/%s-16.png" % k, optimize=True)
     open("src/_includes/icons.njk", "w").write(MACRO.replace("KINDS", ", ".join(KINDS)))
     print("wrote", len(KINDS), "icons")
 

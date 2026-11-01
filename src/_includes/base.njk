@@ -30,7 +30,20 @@
     </nav>
     <div class="menubar-right">
       <span class="clock" id="clock"></span>
-      <span class="app-menu" aria-hidden="true"><span class="app-icon"></span>Finder</span>
+      {# The Application menu: Finder, then the same places as the desktop icons #}
+      <div class="app-menu">
+        <button type="button" class="app-menu-button" aria-haspopup="menu" aria-expanded="false" aria-controls="app-list">
+          <img class="app-icon" src="{{ '/assets/img/icons/menu-finder.png' | url }}" width="16" height="16" alt="">Finder
+        </button>
+        <ul class="app-list" id="app-list" role="menu" hidden>
+          <li class="is-front" role="none"><button type="button" role="menuitem"><img src="{{ '/assets/img/icons/menu-finder.png' | url }}" width="16" height="16" alt="">Finder</button></li>
+          <li class="sep" role="separator"></li>
+          <li role="none"><a role="menuitem" href="{{ '/' | url }}"><img src="{{ '/assets/img/icons/disk-16.png' | url }}" width="16" height="16" alt="">{{ site.title }}</a></li>
+          <li role="none"><a role="menuitem" href="{{ '/about/' | url }}"><img src="{{ '/assets/img/icons/doc-16.png' | url }}" width="16" height="16" alt="">About This Collection</a></li>
+          <li role="none"><button type="button" role="menuitem" data-popup="intel" data-popup-title="Intel Macs" data-popup-icon="{{ '/assets/img/icons/laptop.png' | url }}"><img src="{{ '/assets/img/icons/laptop-16.png' | url }}" width="16" height="16" alt="">Intel Macs</button></li>
+          <li role="none"><button type="button" role="menuitem" data-popup="m-series" data-popup-title="Modern M-Series Macs" data-popup-icon="{{ '/assets/img/icons/mini.png' | url }}"><img src="{{ '/assets/img/icons/mini-16.png' | url }}" width="16" height="16" alt="">Modern M-Series Macs</button></li>
+        </ul>
+      </div>
     </div>
   </header>
 
@@ -46,11 +59,11 @@
       <span>About This Collection</span>
     </a>
     {# Placeholders: each opens a "coming soon" window (see windows.js) #}
-    <button type="button" class="desk-icon" data-popup="intel" data-popup-title="Intel Macs" aria-haspopup="dialog">
+    <button type="button" class="desk-icon" data-popup="intel" data-popup-title="Intel Macs" data-popup-icon="{{ '/assets/img/icons/laptop.png' | url }}" aria-haspopup="dialog">
       {{ icon("laptop", 64) }}
       <span>Intel Macs</span>
     </button>
-    <button type="button" class="desk-icon" data-popup="m-series" data-popup-title="Modern M-Series Macs" aria-haspopup="dialog">
+    <button type="button" class="desk-icon" data-popup="m-series" data-popup-title="Modern M-Series Macs" data-popup-icon="{{ '/assets/img/icons/mini.png' | url }}" aria-haspopup="dialog">
       {{ icon("mini", 64) }}
       <span>Modern M-Series Macs</span>
     </button>

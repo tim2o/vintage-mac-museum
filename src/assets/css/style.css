@@ -81,7 +81,7 @@ a:focus-visible, video:focus-visible, button:focus-visible {
   font: 700 0.76rem/1 var(--charcoal);
 }
 .menus, .menubar-right { display: flex; align-items: stretch; }
-.menus a, .clock, .app-menu {
+.menus a, .clock {
   display: flex;
   align-items: center;
   padding: 0 11px;
@@ -121,14 +121,62 @@ a:focus-visible, video:focus-visible, button:focus-visible {
 }
 /* The right-hand end of the menu bar: the clock, then the application menu. */
 .clock { padding: 0 10px; font-weight: 400; white-space: nowrap; }
-.app-menu { gap: 6px; padding: 0 12px 0 10px; border-left: 1px solid #aaa; box-shadow: -1px 0 0 #fff; }
-.app-icon {
-  width: 14px;
-  height: 13px;
-  background: linear-gradient(#e9e9e9, #b9b9b9);
-  border: 1px solid var(--black);
-  border-radius: 2px;
+.app-menu { position: relative; display: flex; border-left: 1px solid #aaa; box-shadow: -1px 0 0 #fff; }
+.app-menu-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px 0 10px;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: var(--black);
+  cursor: default;
 }
+.app-menu-button:hover, .app-menu-button[aria-expanded="true"], .app-menu-button:focus-visible {
+  background: var(--hilite-dark);
+  color: var(--white);
+  outline: none;
+}
+.app-icon, .app-list img { display: block; width: 16px; height: 16px; image-rendering: pixelated; }
+.app-list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 15rem;
+  margin: 0;
+  padding: 3px 0;
+  list-style: none;
+  background: var(--plat);
+  border: 1px solid var(--black);
+  border-top: 0;
+  box-shadow: inset 1px 0 0 #fff, inset -1px -1px 0 #999, 3px 3px 0 rgba(0, 0, 0, 0.35);
+  font-weight: 400;
+}
+.app-list[hidden] { display: none; }
+.app-list li { position: relative; }
+.app-list a, .app-list button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 3px 18px 3px 24px;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: var(--black);
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: default;
+}
+.app-list a:hover, .app-list button:hover, .app-list a:focus-visible, .app-list button:focus-visible {
+  background: var(--hilite-dark);
+  color: var(--white);
+  outline: none;
+}
+.app-list .is-front::before { content: "\2713"; position: absolute; left: 8px; top: 3px; z-index: 1; pointer-events: none; }
+.app-list .sep { margin: 3px 0; border-top: 1px solid #999; box-shadow: 0 1px 0 #fff; }
 
 /* Desktop icons down the right-hand side, one for each page. They show on desktop-sized screens,
    and the page makes room for them so nothing sits on top of an icon. */
@@ -291,7 +339,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   padding: 20px 22px;
   background: var(--plat);
 }
-.popup-body svg { flex: none; }
+.popup-body svg, .popup-body .icon { flex: none; }
 .popup-text h3 { margin: 0 0 4px; font: 700 0.9rem/1.3 var(--charcoal); }
 .popup-text p { margin: 0; font: 400 0.8rem/1.4 var(--geneva); }
 .popup-actions { display: flex; justify-content: flex-end; padding: 0 22px 18px; background: var(--plat); }
