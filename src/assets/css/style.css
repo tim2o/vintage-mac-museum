@@ -282,6 +282,8 @@ a.closebox:focus-visible, .collapsebox:focus-visible { outline: 2px solid var(--
 .prose { max-width: 38rem; margin-top: 20px; }
 .doc.prose { margin-top: 0; }
 .prose p { margin: 0 0 1em; }
+.prose h2 { margin: 1.4em 0 0.4em; font: 600 1.45rem/1.2 var(--text); }
+.prose h2:first-child { margin-top: 0; }
 .prose code { padding: 0 4px; background: #eee; font-size: 0.9em; }
 
 /* Alert box */
