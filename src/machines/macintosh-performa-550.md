@@ -2,7 +2,7 @@
 title: "Macintosh Performa 550"
 year: 1993
 family: Macintosh Performa
-glyph: compact
+glyph: crt
 status: Working, upgraded
 summary: A Performa 550 upgraded with a recapped LC 575 logic board and a full 68040 at 33 MHz, with 128 MB of RAM, a BlueSCSI v2 with WiFi, and four bootable system partitions.
 specs:

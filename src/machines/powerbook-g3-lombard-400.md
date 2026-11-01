@@ -2,7 +2,7 @@
 title: "PowerBook G3 \"Lombard\" 400"
 year: 1999
 family: PowerBook G3
-glyph: laptop
+glyph: laptop-round
 status: Working
 summary: A 400 MHz PowerBook G3 Lombard with 384 MB of memory, running Mac OS X 10.2.8.
 specs:

@@ -2,7 +2,7 @@
 title: "PowerBook 5300cs"
 year: 1995
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working, with a delaminating display
 summary: A PowerBook 5300cs that works, apart from a delaminating display, with 40 MB of memory and Mac OS 8.6.
 specs:

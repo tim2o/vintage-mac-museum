@@ -2,7 +2,7 @@
 title: "PowerBook 5300ce"
 year: 1995
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 5300ce with a 117 MHz PowerPC 603e, 64 MB of memory and an 800 x 600 color screen, running a Mac OS 8.7 beta.
 specs:

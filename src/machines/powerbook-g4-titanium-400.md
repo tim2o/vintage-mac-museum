@@ -2,7 +2,7 @@
 title: "PowerBook G4 Titanium 400"
 year: 2001
 family: PowerBook G4
-glyph: laptop
+glyph: laptop-silver
 status: Working
 summary: A Titanium PowerBook G4 at 400 MHz with 384 MB of memory, with volumes for Mac OS 9.2.2, Panther and Sorbet Leopard.
 specs:

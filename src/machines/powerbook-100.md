@@ -2,7 +2,7 @@
 title: "PowerBook 100"
 year: 1991
 family: PowerBook (68k)
-glyph: laptop
+glyph: laptop-small
 status: Not booting
 summary: A PowerBook 100 that does not boot. It is thought to need an LCD recap and possibly a new logic board.
 specs:

@@ -2,7 +2,7 @@
 title: "eMate 300"
 year: 1997
 family: Newton
-glyph: laptop
+glyph: emate
 status: Working
 summary: A Newton eMate 300 in its translucent green-blue clamshell case, with the stylus in its slot.
 specs:

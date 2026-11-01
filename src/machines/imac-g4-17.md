@@ -2,7 +2,7 @@
 title: "iMac G4 (17-inch)"
 year: 2002
 family: iMac
-glyph: flatpanel
+glyph: imac-g4
 status: Working
 summary: An iMac G4 17-inch shown running Windows XP in Virtual PC.
 photos:

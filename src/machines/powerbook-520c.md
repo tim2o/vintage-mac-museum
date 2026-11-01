@@ -2,7 +2,7 @@
 title: "PowerBook 520c"
 year: 1994
 family: PowerBook (68k)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 520c with a 25 MHz 68040-family processor and 12 MB of memory, running System Software 7.5.5.
 specs:

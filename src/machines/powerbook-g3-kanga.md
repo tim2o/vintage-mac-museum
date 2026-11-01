@@ -2,7 +2,7 @@
 title: "PowerBook G3 \"Kanga\""
 year: 1997
 family: PowerBook G3
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A 250 MHz PowerBook G3 Kanga with 96 MB of memory, running Mac OS 9.1.
 specs:

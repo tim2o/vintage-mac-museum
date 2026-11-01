@@ -2,7 +2,7 @@
 title: "PowerBook Duo 270c"
 year: 1993
 family: PowerBook Duo
-glyph: laptop
+glyph: laptop-small
 status: Needs recapped LCD
 summary: A stock PowerBook Duo 270c with a mechanical SCSI hard drive, shown running Escape Velocity. The LCD needs to be recapped.
 specs:

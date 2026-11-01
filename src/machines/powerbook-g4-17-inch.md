@@ -2,7 +2,7 @@
 title: "PowerBook G4 (17-inch)"
 year: 2003
 family: PowerBook G4
-glyph: laptop
+glyph: laptop-silver
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

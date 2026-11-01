@@ -2,7 +2,7 @@
 title: "PowerBook 3400c/180"
 year: 1997
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 3400c at 180 MHz with 48 MB of RAM, running Mac OS 9.1.
 specs:

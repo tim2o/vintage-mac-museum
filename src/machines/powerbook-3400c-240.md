@@ -2,7 +2,7 @@
 title: "PowerBook 3400c/240"
 year: 1997
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Not booting
 summary: A PowerBook 3400c/240 that currently makes a whine when power is turned on and does not start up.
 specs:

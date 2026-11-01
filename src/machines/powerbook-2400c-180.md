@@ -2,7 +2,7 @@
 title: "PowerBook 2400c/180"
 year: 1997
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 2400c/180 with a Japanese keyboard and an IDE to SD card adapter in place of a hard drive, running Mac OS 9.1.
 specs:

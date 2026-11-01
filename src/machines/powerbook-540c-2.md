@@ -2,7 +2,7 @@
 title: "PowerBook 540c (second unit)"
 year: 1994
 family: PowerBook (68k)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A second PowerBook 540c, with a "Ready for PowerPC upgrade" sticker, 36 MB of memory and a British System 7.6.1.
 specs:

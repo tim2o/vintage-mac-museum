@@ -2,7 +2,7 @@
 title: "eMac 1.25 GHz"
 year: 2004
 family: eMac
-glyph: imac
+glyph: emac
 status: Not yet documented
 summary: Placeholder for a machine in the collection.
 ---

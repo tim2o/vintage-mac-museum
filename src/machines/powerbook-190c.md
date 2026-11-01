@@ -2,7 +2,7 @@
 title: "PowerBook 190c"
 year: 1995
 family: PowerBook (68k)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 190cs with its screen swapped for one from a PowerBook 5300c, which makes it a "190c" that Apple never made. It has a 33 MHz 68LC040 and 32 MB of memory, and runs Mac OS 8.1.
 specs:

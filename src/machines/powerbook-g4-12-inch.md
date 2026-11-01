@@ -2,7 +2,7 @@
 title: "PowerBook G4 1.33 GHz (12-inch)"
 year: 2004
 family: PowerBook G4
-glyph: laptop
+glyph: laptop-silver
 status: Working
 summary: A 12-inch PowerBook G4 at 1.33 GHz with 768 MB of memory, running Mac OS X 10.5.9.
 specs:

@@ -2,7 +2,7 @@
 title: "PowerBook 1400cs"
 year: 1996
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A working PowerBook 1400cs with no hard drive installed at the moment, so it shows a floppy disk icon at startup.
 specs:

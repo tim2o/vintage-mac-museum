@@ -607,7 +607,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   object-position: center 35%;
 }
 /* A drawn icon standing in for a photo is shown at its own size, not stretched */
-.thumb img.icon { position: static; inset: auto; width: auto; height: auto; object-fit: none; }
+.thumb img.icon { position: static; inset: auto; width: 64px; height: 64px; object-fit: contain; }
 .thumb-empty { flex-direction: column; gap: 8px; font: 400 0.8rem/1 var(--geneva); color: var(--black); }
 
 /* Get Info window */

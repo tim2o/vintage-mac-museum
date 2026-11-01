@@ -2,7 +2,7 @@
 title: "PowerBook 5300c"
 year: 1995
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 5300c with a 100 MHz PowerPC 603e and 48 MB of memory, running a Mac OS 8.7 beta.
 specs:

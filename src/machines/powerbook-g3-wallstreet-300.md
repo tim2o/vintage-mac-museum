@@ -2,7 +2,7 @@
 title: "PowerBook G3 \"Wallstreet PDQ\" 300"
 year: 1998
 family: PowerBook G3
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A 300 MHz PowerBook G3 Wallstreet PDQ with 512 MB of memory, running Mac OS 9.2.2.
 specs:

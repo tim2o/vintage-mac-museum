@@ -2,7 +2,7 @@
 title: "PowerBook G4 1.67 GHz (15-inch)"
 year: 2005
 family: PowerBook G4
-glyph: laptop
+glyph: laptop-silver
 status: Working
 summary: A 15-inch PowerBook G4 at 1.67 GHz with 2 GB of memory and an SSD on an IDE to SATA adapter, running Mac OS X 10.5.9.
 specs:

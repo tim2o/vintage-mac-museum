@@ -2,7 +2,7 @@
 title: "PowerBook G3 \"Pismo\" 500"
 year: 2000
 family: PowerBook G3
-glyph: laptop
+glyph: laptop-round
 status: Not booting
 summary: A PowerBook G3 Pismo that does not boot at the moment, for reasons still to be investigated.
 photos:

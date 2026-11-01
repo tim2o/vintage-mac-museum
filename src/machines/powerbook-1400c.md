@@ -2,7 +2,7 @@
 title: "PowerBook 1400c"
 year: 1996
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 1400c with a 133 MHz PowerPC 603e and 40 MB of memory, running System 7.6.1.
 specs:

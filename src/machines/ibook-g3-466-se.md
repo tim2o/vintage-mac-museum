@@ -2,7 +2,7 @@
 title: "iBook G3 466 Special Edition"
 year: 2000
 family: iBook
-glyph: laptop
+glyph: ibook
 status: Working
 summary: An iBook G3 466 Special Edition with graphite trim, a 467 MHz PowerPC 750 and 576 MB of memory, running Mac OS X.
 specs:

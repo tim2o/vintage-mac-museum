@@ -2,7 +2,7 @@
 title: "PowerBook 540c"
 year: 1994
 family: PowerBook (68k)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 540c with a 33 MHz 68LC040 and 20 MB of memory, running Mac OS 8.1 from a SCSI volume named CBE BlackBird.
 specs:

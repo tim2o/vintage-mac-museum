@@ -107,6 +107,18 @@ def glass(ic, x, y, w, h):
     ic.put(x + 1, y + 2, "#f2f8ff")
 
 
+def lcd(ic, x, y, w, h):
+    """A pale grey-green backlit LCD, as on the early portables."""
+    ic.rect(x, y, w, h, "#2a2f26")
+    ic.rect(x + 1, y + 1, w - 2, h - 2, dgrad(x, y, x + w, y + h, "#e2e8d6", "#98a48c"))
+    ic.put(x + 1, y + 1, "#ffffff")
+
+
+def keys(ic, pts_rows, color="#9a9a9a"):
+    for (x0, x1, y) in pts_rows:
+        ic.line(x0, y, x1, y, color)
+
+
 def build(kind):
     ic = Icon()
     if kind == "disk":
@@ -210,6 +222,99 @@ def build(kind):
         ic.line(20, 7, 20, 27, "#2a2a2a")
         ic.rect(16, 25, 2, 1, "#10b010")
         ic.shadow()
+    elif kind == "laptop-small":
+        ic.rect(7, 4, 18, 14, hgrad(7, 25, "#a4a4a4", "#4c4c4c"))
+        ic.rect(7, 16, 18, 2, hgrad(7, 25, "#7a7a7a", "#363636"))
+        lcd(ic, 10, 6, 12, 9)
+        ic.poly([(5, 18), (26, 18), (29, 26), (2, 26)], hgrad(2, 29, "#8e8e8e", "#3c3c3c"))
+        ic.poly([(8, 19), (23, 19), (25, 22), (6, 22)], hgrad(6, 25, "#5c5c5c", "#2a2a2a"))
+        keys(ic, [(8, 23, 20), (7, 24, 21)], "#8a8a8a")
+        ic.rect(2, 26, 28, 1, hgrad(2, 30, "#6a6a6a", "#2c2c2c"))
+        ic.outline()
+        ic.line(6, 18, 25, 18, "#1a1a1a")
+        ic.rect(14, 24, 3, 2, hgrad(14, 17, "#d0d0d0", "#7a7a7a"))
+        ic.shadow()
+    elif kind == "laptop-dark":
+        ic.rect(5, 3, 22, 16, hgrad(5, 27, "#b0b0b0", "#4e4e4e"))
+        ic.rect(5, 17, 22, 2, hgrad(5, 27, "#808080", "#383838"))
+        glass(ic, 8, 5, 16, 11)
+        ic.poly([(3, 19), (28, 19), (31, 27), (0, 27)], hgrad(0, 31, "#929292", "#3a3a3a"))
+        ic.poly([(7, 20), (24, 20), (27, 24), (4, 24)], hgrad(4, 27, "#5e5e5e", "#262626"))
+        keys(ic, [(8, 23, 21), (6, 25, 23)], "#8c8c8c")
+        ic.rect(0, 27, 31, 2, hgrad(0, 31, "#707070", "#2a2a2a"))
+        ic.outline()
+        ic.line(4, 19, 27, 19, "#1a1a1a")
+        ic.rect(13, 25, 6, 1, "#6e6e6e")
+        ic.shadow()
+    elif kind == "laptop-round":
+        ic.rrect(5, 3, 22, 16, 3, hgrad(5, 27, "#7c7c7c", "#2e2e2e"))
+        glass(ic, 8, 6, 16, 10)
+        ic.rrect(2, 19, 28, 9, 3, hgrad(2, 30, "#6a6a6a", "#242424"))
+        ic.rect(6, 21, 20, 4, hgrad(6, 26, "#3a3a3a", "#161616"))
+        keys(ic, [(7, 25, 22), (7, 25, 24)], "#7e7e7e")
+        ic.outline()
+        ic.line(6, 4, 24, 4, "#a8a8a8")
+        ic.line(3, 20, 28, 20, "#9a9a9a")
+        ic.rect(13, 26, 6, 1, "#8a8a8a")
+        ic.shadow()
+    elif kind == "laptop-silver":
+        ic.rect(3, 5, 26, 13, hgrad(3, 29, "#f8f8f8", "#a4a4a4"))
+        glass(ic, 5, 7, 22, 9)
+        ic.poly([(2, 18), (30, 18), (31, 24), (1, 24)], hgrad(1, 31, "#f0f0f0", "#9a9a9a"))
+        ic.rect(6, 19, 20, 3, hgrad(6, 26, "#d4d4d4", "#848484"))
+        keys(ic, [(7, 25, 20), (7, 25, 21)], "#5e5e5e")
+        ic.rect(1, 24, 30, 1, hgrad(1, 31, "#c0c0c0", "#6a6a6a"))
+        ic.outline()
+        ic.line(3, 18, 28, 18, "#3a3a3a")
+        ic.shadow()
+    elif kind == "ibook":
+        ic.rrect(6, 3, 20, 14, 3, dgrad(6, 3, 26, 17, "#bfe6fa", "#3d86c4"))
+        glass(ic, 9, 5, 14, 10)
+        ic.rrect(3, 17, 26, 10, 4, dgrad(3, 17, 29, 27, "#f4f9fd", "#6ea6d4"))
+        ic.rect(7, 19, 18, 4, hgrad(7, 25, "#dfe9f2", "#9ab4cc"))
+        keys(ic, [(8, 24, 20), (8, 24, 22)], "#6a7e92")
+        ic.outline()
+        ic.line(7, 4, 22, 4, "#ffffff")
+        ic.rect(13, 25, 6, 1, "#4f84b0")
+        ic.shadow()
+    elif kind == "emate":
+        ic.rrect(7, 5, 18, 12, 2, dgrad(7, 5, 25, 17, "#9fe0cf", "#2b8a78"))
+        lcd(ic, 10, 7, 12, 8)
+        ic.rrect(11, 1, 10, 4, 1, hgrad(11, 21, "#8cd6c4", "#2b8a78"))
+        ic.rrect(3, 17, 26, 9, 3, dgrad(3, 17, 29, 26, "#a8e4d4", "#2b8a78"))
+        ic.rect(7, 19, 18, 4, hgrad(7, 25, "#7cc4b2", "#2f6f62"))
+        keys(ic, [(8, 24, 20), (8, 24, 22)], "#d2f2ea")
+        ic.outline()
+        ic.shadow()
+    elif kind == "crt":
+        ic.rrect(4, 2, 22, 24, 3, hgrad(4, 26, "#e6e6e6", "#a0a0a0"))
+        ic.poly([(26, 4), (29, 6), (29, 28), (26, 26)], hgrad(26, 29, "#7a7a7a", "#4a4a4a"))
+        glass(ic, 7, 5, 16, 13)
+        ic.rect(8, 21, 10, 1, "#262626")
+        ic.rect(8, 22, 10, 1, "#ffffff")
+        ic.rect(21, 21, 2, 2, "#8a8a8a")
+        ic.poly([(3, 26), (26, 26), (29, 29), (6, 29)], hgrad(3, 29, "#b8b8b8", "#5a5a5a"))
+        ic.outline()
+        ic.line(26, 5, 26, 25, "#2a2a2a")
+        ic.shadow()
+    elif kind == "emac":
+        ic.rrect(3, 2, 26, 21, 7, dgrad(3, 2, 29, 23, "#ffffff", "#bdbdbd"))
+        glass(ic, 7, 5, 18, 14)
+        for x in (9, 12, 15, 18, 21):
+            ic.rect(x, 21, 2, 1, "#6a6a6a")
+        ic.poly([(11, 23), (21, 23), (23, 27), (9, 27)], hgrad(9, 23, "#d0d0d0", "#7e7e7e"))
+        ic.rrect(7, 27, 18, 3, 1, hgrad(7, 25, "#e0e0e0", "#808080"))
+        ic.outline()
+        ic.line(8, 3, 22, 3, "#ffffff")
+        ic.shadow()
+    elif kind == "imac-g4":
+        ic.rrect(6, 22, 20, 8, 4, dgrad(6, 22, 26, 30, "#ffffff", "#9c9c9c"))
+        ic.rect(14, 17, 4, 6, hgrad(14, 18, "#d8d8d8", "#7a7a7a"))
+        ic.rrect(2, 2, 28, 17, 3, dgrad(2, 2, 30, 19, "#ffffff", "#bcbcbc"))
+        glass(ic, 5, 5, 22, 12)
+        ic.outline()
+        ic.line(4, 3, 26, 3, "#ffffff")
+        ic.shadow()
     elif kind == "caution":
         ic.poly([(16, 2), (30, 28), (2, 28)], dgrad(2, 2, 30, 28, "#fff58a", "#d49e00"))
         ic.outline()
@@ -233,7 +338,7 @@ def menu_mac():
     return ic
 
 
-KINDS = ["compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
+KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "caution"]
 
 
 def save_png(ic, path):

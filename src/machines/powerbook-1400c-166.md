@@ -2,7 +2,7 @@
 title: "PowerBook 1400c/166"
 year: 1997
 family: PowerBook (PowerPC)
-glyph: laptop
+glyph: laptop-dark
 status: Working
 summary: A PowerBook 1400c/166 with a custom decal on the lid, and Mac OS 9, 8.7b and 8.1 volumes on its desktop.
 specs:
