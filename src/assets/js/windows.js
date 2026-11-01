@@ -209,7 +209,7 @@
     body.className = "winbody";
     var inner = document.createElement("div");
     inner.className = "popup-body";
-    var svg = trigger.querySelector("svg");
+    var svg = trigger.querySelector("svg, img");
     if (svg) {
       var pic = svg.cloneNode(true);
       pic.setAttribute("aria-hidden", "true");

@@ -145,7 +145,7 @@ a:focus-visible, video:focus-visible, button:focus-visible {
     top: 38px;
     right: 14px;
     z-index: 1;
-    width: 6.75rem;
+    width: 6.25rem;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -166,7 +166,7 @@ a:focus-visible, video:focus-visible, button:focus-visible {
     color: inherit;
     cursor: default;
   }
-  .desk-icon span { padding: 1px 5px; background: var(--white); color: var(--black); }
+  .desk-icon span { padding: 1px 5px; background: rgba(255, 255, 255, 0.7); color: var(--black); }
   .desk-icon:hover span, .desk-icon:focus-visible span { background: var(--hilite); }
   .desk-icon:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
   main {
@@ -602,6 +602,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   border: 1px solid var(--black);
 }
 /* The photo fills the fixed 4:3 box without changing its size. Tall photos show the screen and front of the machine; the full photo opens on click. */
+.icon { image-rendering: pixelated; }
 .thumb img {
   position: absolute;
   inset: 0;
@@ -611,6 +612,8 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   object-fit: cover;
   object-position: center 35%;
 }
+/* A drawn icon standing in for a photo is shown at its own size, not stretched */
+.thumb img.icon { position: static; inset: auto; width: auto; height: auto; object-fit: none; }
 .thumb-empty { flex-direction: column; gap: 8px; font: 400 0.8rem/1 var(--geneva); color: var(--black); }
 
 /* Get Info window */
