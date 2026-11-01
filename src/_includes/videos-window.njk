@@ -1,4 +1,4 @@
-{# The Videos window. Built from src/_data/videos.json. It is spawned from the Videos menu (see windows.js), so a template copy is used. #}
+{# The Videos window. Built from src/_data/montages.json. It is spawned from the Videos menu (see windows.js), so a template copy is used. #}
 <section class="window movies" id="videos" aria-labelledby="montage-title">
   <div class="titlebar">
     <button type="button" class="closebox" aria-label="Close Videos"></button>
@@ -8,11 +8,11 @@
   <div class="winbody">
   <div class="strip strip-multi" data-strip data-noun="video">
     <div class="infobar">
-      <span data-strip-status>{{ videos | length }} {% if videos | length == 1 %}video{% else %}videos{% endif %}</span>
+      <span data-strip-status>{{ montages | length }} {% if montages | length == 1 %}video{% else %}videos{% endif %}</span>
       <span>Swipe or use the scroll bar</span>
     </div>
     <div class="slides" data-strip-slides tabindex="0" role="group" aria-label="Video montages of the PowerBooks">
-      {% for v in videos %}
+      {% for v in montages %}
       <figure class="slide slide-video">
         <video controls playsinline preload="metadata" poster="{{ ('/assets/montages/' ~ v.poster) | url }}" aria-label="{{ v.alt }}">
           <source src="{{ ('/assets/montages/' ~ v.video) | url }}" type="video/mp4">

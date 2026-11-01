@@ -51,4 +51,4 @@ The look of this site was guided by the Mac OS 9 screenshots on [GUIdebook](http
   </div>
 </div>
 
-<script src="{{ '/assets/js/vscroll.js' | url }}" defer></script>
+<script src="{{ '/assets/js/vscroll.js' | url }}?v={{ build }}" defer></script>

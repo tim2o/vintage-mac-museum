@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <script>document.documentElement.classList.add("js")</script>
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}?v={{ build }}">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -37,7 +37,7 @@
         <ul class="dropdown" role="list">
           <li><a href="{{ '/' | url }}#videos" data-open-window="videos">All videos</a></li>
           <li class="sep" aria-hidden="true"></li>
-          {% for v in videos %}
+          {% for v in montages %}
           <li><a href="{{ '/' | url }}#video-{{ loop.index }}" data-open-window="videos" data-video="{{ loop.index0 }}">{{ v.title }}</a></li>
           {% endfor %}
         </ul>
@@ -100,7 +100,7 @@
     <p>Every machine on this site is part of a private collection. Specifications are from the machines themselves and Apple's published documentation.</p>
   </footer>
 
-  <script src="{{ '/assets/js/windows.js' | url }}" defer></script>
+  <script src="{{ '/assets/js/windows.js' | url }}?v={{ build }}" defer></script>
 
   <script>
     (function () {
