@@ -17,9 +17,11 @@
   <header class="menubar">
     <nav class="menus" aria-label="Main">
       <div class="menu menu-apple">
-        <button type="button" class="menu-logo" aria-haspopup="menu" aria-expanded="false" aria-label="Apple menu"><img class="menu-mac" src="{{ '/assets/img/icons/menu-apple-dark.png' | url }}" width="16" height="16" alt=""></button>
+        <button type="button" class="menu-logo" aria-haspopup="menu" aria-expanded="false" aria-label="Apple menu"><img class="menu-mac" src="{{ '/assets/img/icons/menu-apple-flat.png' | url }}" width="16" height="16" alt=""></button>
         <ul class="dropdown" role="list">
           <li><a href="{{ '/about/' | url }}">About This Collection</a></li>
+          <li class="sep" aria-hidden="true"></li>
+          <li><a href="{{ '/' | url }}#videos" data-open-window="videos">Videos</a></li>
         </ul>
       </div>
       <div class="menu">
@@ -32,7 +34,6 @@
           {% endfor %}
         </ul>
       </div>
-      <a href="{{ '/' | url }}#videos" data-open-window="videos">Videos</a>
     </nav>
     <div class="menubar-right">
       <span class="clock" id="clock"></span>

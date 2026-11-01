@@ -297,6 +297,16 @@
     document.addEventListener("click", function (e) {
       if (!appleMenu.contains(e.target)) setApple(false);
     });
+    appleMenu.addEventListener("click", function (e) {
+      var item = e.target.closest(".dropdown a");
+      if (!item) return;
+      item.blur(); // so the menu does not stay open through :focus-within
+      setApple(false);
+      appleMenu.classList.add("is-dismissed");
+    });
+    appleMenu.addEventListener("mouseleave", function () {
+      appleMenu.classList.remove("is-dismissed");
+    });
     appleMenu.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
         setApple(false);

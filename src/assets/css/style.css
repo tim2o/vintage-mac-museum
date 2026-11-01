@@ -103,6 +103,7 @@ a:focus-visible, video:focus-visible, button:focus-visible {
 }
 .menu:hover > .menu-logo, .menu.is-open > .menu-logo, .menu-logo:focus-visible { background: var(--hilite-dark); outline: none; }
 .menu.is-open .dropdown { display: block; }
+.menu.is-dismissed .dropdown { display: none !important; }
 .menu-mac { display: block; width: 16px; height: 16px; image-rendering: pixelated; }
 .menu { position: relative; display: flex; }
 .dropdown {
