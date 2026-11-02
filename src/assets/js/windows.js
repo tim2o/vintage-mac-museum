@@ -376,8 +376,28 @@
     win.style.top = Math.max(r.top + window.scrollY + drop, minTop) + "px";
     win.style.width = r.width - inset * 2 + "px";
   }
+  // A movie window is sized to its video (16:9) so the whole picture fits on screen under the menu bar, and
+  // sits centred over the Collection window. Each movie is stepped down and across a little from the last
+  // so that several can be seen when they are open together.
+  function placeMovie(win, step) {
+    if (!canDrag.matches) return;
+    var host = document.querySelector(".finder") || document.querySelector(".stack");
+    var r = host.getBoundingClientRect();
+    var menu = document.querySelector(".menubar");
+    var menuH = menu ? menu.offsetHeight : 22;
+    var bar = win.querySelector(":scope > .titlebar");
+    var chrome = (bar ? bar.offsetHeight : 22) + 6; // title bar and window frame
+    var maxVideoH = window.innerHeight - menuH - 24 - chrome - 32;
+    var width = Math.min(r.width - 88, Math.max(320, maxVideoH * 16 / 9 + 6));
+    var offset = step * 28;
+    var minTop = window.scrollY + menuH + 24;
+    win.style.width = width + "px";
+    win.style.left = r.left + window.scrollX + (r.width - width) / 2 + offset + "px";
+    win.style.top = Math.max(r.top + window.scrollY + 40 + offset, minTop + offset) + "px";
+  }
   // A window that is built from a <template> when it is first asked for and removed when it is closed.
-  function lazyWindow(templateId, inset, drop, onBuild) {
+  // place, if given, positions the new window in place of placeWindow.
+  function lazyWindow(templateId, inset, drop, onBuild, place) {
     var template = document.getElementById(templateId);
     var win = null;
     function close() {
@@ -405,7 +425,8 @@
           var closer = win.querySelector("button.closebox");
           if (closer) closer.addEventListener("click", close);
           if (onBuild) onBuild(win);
-          placeWindow(win, inset, drop);
+          if (place) place(win);
+          else placeWindow(win, inset, drop);
           activate(win);
           win.scrollIntoView({ block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
         } else {
@@ -419,15 +440,32 @@
       }
     };
   }
-  var videosWin = lazyWindow("videos-template", 44, 56, function (win) {
-    // Some browsers skip the poster of a video built from a template; setting it again loads it.
+  // Some browsers skip the poster of a video built from a template; setting it again loads it.
+  function reloadPosters(win) {
     Array.prototype.forEach.call(win.querySelectorAll("video[poster]"), function (v) {
       var src = v.getAttribute("poster");
       v.removeAttribute("poster");
       v.setAttribute("poster", src);
     });
+  }
+  // "All videos": every montage in one window, side by side.
+  var videosWin = lazyWindow("videos-template", 44, 56, function (win) {
+    reloadPosters(win);
     if (window.initStrips) window.initStrips(win);
   });
+  // One movie window per video, titled with its name, each opened from its own item in the Videos menu.
+  var movieWins = Array.prototype.map.call(document.querySelectorAll("template[data-movie-template]"), function (t, i) {
+    return lazyWindow(t.id, 0, 0, reloadPosters, function (win) {
+      placeMovie(win, i);
+    });
+  });
+  function openMovie(index) {
+    var movie = movieWins[index];
+    if (!movie) return openVideos();
+    var win = movie.open();
+    var video = win && win.querySelector("video");
+    if (video) video.focus({ preventScroll: true });
+  }
   var checklistWin = lazyWindow("checklist-template", 88, 88);
   var aboutWin = lazyWindow("about-template", 120, 40, function (win) {
     if (window.initVScrolls) window.initVScrolls(win);
@@ -492,7 +530,8 @@
   });
   var spawn = {
     note: { win: noteWin, open: function () { noteWin.open(); } },
-    videos: { win: videosWin, open: openVideos },
+    videos: { win: videosWin, open: function () { openVideos(); } },
+    movie: { win: { available: movieWins.length > 0 }, open: openMovie },
     checklist: { win: checklistWin, open: function () { checklistWin.open(); } },
     about: { win: aboutWin, open: function () { aboutWin.open(); } },
   };
@@ -512,6 +551,14 @@
         var home = document.body.getAttribute("data-home") || "/";
         window.location.href = home + "#" + (typeof index === "number" ? "video-" + (index + 1) : name);
       }
+    });
+  });
+
+  // On a desktop browser a menu title such as Videos only shows its menu, as in Mac OS; you choose what to
+  // open from the menu. On a phone, where there are no drop-down menus, the title is still a link.
+  Array.prototype.forEach.call(document.querySelectorAll("[data-menu-title]"), function (a) {
+    a.addEventListener("click", function (e) {
+      if (canDrag.matches) e.preventDefault();
     });
   });
 
@@ -540,7 +587,8 @@
   function openFromHash() {
     var hash = window.location.hash;
     var deepLink = /^#videos?(?:-(\d+))?$/.exec(hash);
-    if (desktop && deepLink && videosWin.available) openVideos(deepLink[1] ? parseInt(deepLink[1], 10) - 1 : undefined);
+    if (desktop && deepLink && deepLink[1] && movieWins.length) openMovie(parseInt(deepLink[1], 10) - 1);
+    else if (desktop && deepLink && videosWin.available) openVideos();
     else if (desktop && hash === "#checklist" && checklistWin.available) checklistWin.open();
     else if (desktop && hash === "#about" && aboutWin.available) aboutWin.open();
     else if (desktop && hash === "#note" && noteWin.available) noteWin.open();

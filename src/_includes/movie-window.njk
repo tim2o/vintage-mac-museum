@@ -1,0 +1,19 @@
+{# One QuickTime-style movie window for a single video from src/_data/montages.json (v, numbered n from 1).
+   On a desktop browser it is spawned from that video's item in the Videos menu (see windows.js), so a
+   template copy is used; on a phone it is the page at /videos/<name>/. #}
+{% set hl = "h1" if static else "h2" %}
+<section class="window movie-window" data-movie-window aria-labelledby="movie-title-{{ n }}">
+  <div class="titlebar">
+    {% if static %}<span class="closebox" aria-hidden="true"></span>{% else %}<button type="button" class="closebox" aria-label="Close {{ v.title }}"></button>{% endif %}
+    <{{ hl }} id="movie-title-{{ n }}">{{ v.title }}</{{ hl }}>
+    <span class="zoombox" aria-hidden="true"></span>
+  </div>
+  <div class="winbody">
+    <div class="movie">
+      <video controls playsinline preload="metadata" poster="{{ ('/assets/montages/' ~ v.poster) | url }}" aria-label="{{ v.alt }}">
+        <source src="{{ ('/assets/montages/' ~ v.video) | url }}" type="video/mp4">
+        Your browser can't play this video.
+      </video>
+    </div>
+  </div>
+</section>

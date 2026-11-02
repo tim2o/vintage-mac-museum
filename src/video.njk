@@ -1,0 +1,16 @@
+---
+layout: base.njk
+pagination:
+  data: montages
+  size: 1
+  alias: v
+permalink: "/videos/{{ v.video | replace('.mp4', '') }}/"
+eleventyComputed:
+  title: "{{ v.title | safe }}"
+---
+{# One page per montage video: where a video's menu item goes on a phone, or without JavaScript. #}
+{% set static = true %}
+{% set n = pagination.pageNumber + 1 %}
+<div class="stack">
+{% include "movie-window.njk" %}
+</div>

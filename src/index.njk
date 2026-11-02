@@ -73,6 +73,10 @@ title: Collection
   <template id="about-template">{% include "about-window.njk" %}</template>
   <template id="checklist-template">{% include "checklist-window.njk" %}</template>
   <template id="videos-template">{% include "videos-window.njk" %}</template>
+  {# One movie window per video, each opened from its own item in the Videos menu #}
+  {% for v in montages %}{% set n = loop.index %}
+  <template id="movie-template-{{ n }}" data-movie-template>{% include "movie-window.njk" %}</template>
+  {% endfor %}
   <template id="note-template">{% include "note-window.njk" %}</template>
 
 </div>
