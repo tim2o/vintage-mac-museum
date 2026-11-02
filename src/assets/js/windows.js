@@ -47,6 +47,14 @@
     box.setAttribute("aria-label", "Collapse " + title);
     bar.appendChild(box);
 
+    // In Mac OS, rolling a window up leaves every other window where it is. A window that sits in the page's
+    // layout (not one floating over it) keeps the space it had while it is rolled up: the room its body
+    // took is held as a bottom margin, grown and shrunk in step with the roll so nothing below it moves.
+    var reserved = 0; // the space being held, in px
+    function inFlow() {
+      return window.getComputedStyle(win).position !== "absolute";
+    }
+
     var busy = false;
     function toggle() {
       if (busy) return;
@@ -57,36 +65,46 @@
         pauseVideos(body);
         box.setAttribute("aria-expanded", "false");
         box.setAttribute("aria-label", "Expand " + title);
+        var flow = inFlow();
+        var before = win.offsetHeight;
+        win.classList.add("is-shaded"); // measured only; nothing is drawn in between
+        reserved = flow ? before - win.offsetHeight : 0;
         if (!animate) {
-          win.classList.add("is-shaded");
+          if (reserved) win.style.marginBottom = reserved + "px";
           return;
         }
+        win.classList.remove("is-shaded");
         busy = true;
         var h = body.offsetHeight;
         body.style.overflow = "hidden";
-        var roll = body.animate([{ height: h + "px" }, { height: "0px" }], {
-          duration: 180,
-          easing: "ease-in",
-          fill: "forwards",
-        });
+        var timing = { duration: 180, easing: "ease-in", fill: "forwards" };
+        var roll = body.animate([{ height: h + "px" }, { height: "0px" }], timing);
+        var hold = reserved
+          ? win.animate([{ marginBottom: "0px" }, { marginBottom: reserved + "px" }], timing)
+          : null;
         roll.onfinish = function () {
           win.classList.add("is-shaded");
+          if (reserved) win.style.marginBottom = reserved + "px";
           roll.cancel();
+          if (hold) hold.cancel();
           body.style.overflow = "";
           busy = false;
         };
       } else {
         box.setAttribute("aria-expanded", "true");
         box.setAttribute("aria-label", "Collapse " + title);
+        var held = reserved;
+        reserved = 0;
         win.classList.remove("is-shaded");
+        win.style.marginBottom = "";
         if (!animate) return;
         busy = true;
         var full = body.offsetHeight;
         body.style.overflow = "hidden";
-        var unroll = body.animate([{ height: "0px" }, { height: full + "px" }], {
-          duration: 180,
-          easing: "ease-out",
-        });
+        var timing2 = { duration: 180, easing: "ease-out" };
+        var unroll = body.animate([{ height: "0px" }, { height: full + "px" }], timing2);
+        // Give back the held space in step with the unroll.
+        if (held) win.animate([{ marginBottom: held + "px" }, { marginBottom: "0px" }], timing2);
         unroll.onfinish = function () {
           body.style.overflow = "";
           busy = false;

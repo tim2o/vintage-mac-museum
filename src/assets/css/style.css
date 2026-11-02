@@ -236,6 +236,9 @@ main {
   margin: 0 auto;
   padding: 24px 16px 40px;
 }
+/* A column, not plain blocks, so that the space a rolled-up window keeps (a bottom margin, see windows.js)
+   adds to the gap below it instead of merging with it. */
+.stack { display: flex; flex-direction: column; }
 .stack > * + * { margin-top: 24px; }
 
 /* Windows */
