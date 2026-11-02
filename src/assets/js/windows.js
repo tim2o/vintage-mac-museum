@@ -376,9 +376,9 @@
     win.style.top = Math.max(r.top + window.scrollY + drop, minTop) + "px";
     win.style.width = r.width - inset * 2 + "px";
   }
-  // A movie window is sized to its video (16:9) so the whole picture fits on screen under the menu bar, and
-  // sits centred over the Collection window. Each movie is stepped down and across a little from the last
-  // so that several can be seen when they are open together.
+  // A movie window is sized to its video (wide or tall, from the video's data-aspect) so the whole picture
+  // fits on screen under the menu bar, and sits centred over the Collection window. Each movie is stepped
+  // down and across a little from the last so that several can be seen when they are open together.
   function placeMovie(win, step) {
     if (!canDrag.matches) return;
     var host = document.querySelector(".finder") || document.querySelector(".stack");
@@ -387,13 +387,16 @@
     var menuH = menu ? menu.offsetHeight : 22;
     var bar = win.querySelector(":scope > .titlebar");
     var chrome = (bar ? bar.offsetHeight : 22) + 6; // title bar and window frame
-    var maxVideoH = window.innerHeight - menuH - 24 - chrome - 32;
-    var width = Math.min(r.width - 88, Math.max(320, maxVideoH * 16 / 9 + 6));
+    var video = win.querySelector("video");
+    var aspect = (video && parseFloat(video.getAttribute("data-aspect"))) || 16 / 9;
     var offset = step * 28;
-    var minTop = window.scrollY + menuH + 24;
+    // Top of the window in the viewport; the video then gets the height left below it.
+    var topInView = Math.min(Math.max(r.top + 40, menuH + 24), window.innerHeight * 0.3) + offset;
+    var maxVideoH = window.innerHeight - topInView - chrome - 24;
+    var width = Math.min(r.width - 88, Math.max(240, maxVideoH * aspect + 6));
     win.style.width = width + "px";
     win.style.left = r.left + window.scrollX + (r.width - width) / 2 + offset + "px";
-    win.style.top = Math.max(r.top + window.scrollY + 40 + offset, minTop + offset) + "px";
+    win.style.top = topInView + window.scrollY + "px";
   }
   // A window that is built from a <template> when it is first asked for and removed when it is closed.
   // place, if given, positions the new window in place of placeWindow.

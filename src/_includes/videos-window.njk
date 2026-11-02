@@ -12,11 +12,12 @@
       <span data-strip-status>{{ montages | length }} {% if montages | length == 1 %}video{% else %}videos{% endif %}</span>
       <span>Swipe or use the scroll bar</span>
     </div>
-    <div class="slides" data-strip-slides tabindex="0" role="group" aria-label="Video montages of the PowerBooks">
+    <div class="slides" data-strip-slides tabindex="0" role="group" aria-label="Videos of the collection">
       {% for v in montages %}
+      {% set mediaDir = v.dir or "/assets/montages/" %}
       <figure class="slide slide-video">
-        <video controls playsinline preload="metadata" poster="{{ ('/assets/montages/' ~ v.poster) | url }}" aria-label="{{ v.alt }}">
-          <source src="{{ ('/assets/montages/' ~ v.video) | url }}" type="video/mp4">
+        <video controls playsinline preload="metadata" poster="{{ (mediaDir ~ v.poster) | url }}" aria-label="{{ v.alt }}" style="aspect-ratio: {{ v.width }} / {{ v.height }}">
+          <source src="{{ (mediaDir ~ v.video) | url }}" type="video/mp4">
           Your browser can't play this video.
         </video>
       </figure>

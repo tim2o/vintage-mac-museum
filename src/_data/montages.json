@@ -3,12 +3,25 @@
     "title": "PowerBook Duo 270c – PowerBook G3 \"Kanga\"",
     "video": "powerbook-montage-1.mp4",
     "poster": "powerbook-montage-1-poster.jpg",
+    "width": 1280,
+    "height": 720,
     "alt": "Video montage of the PowerBooks in the collection, from the PowerBook Duo 270c to the PowerBook G3 \"Kanga\""
   },
   {
     "title": "PowerBook G3 \"Kanga\" – PowerBook G3 \"Lombard\"",
     "video": "powerbook-montage-2.mp4",
     "poster": "powerbook-montage-2-poster.jpg",
+    "width": 1280,
+    "height": 720,
     "alt": "Video montage of the PowerBooks in the collection, from the PowerBook G3 \"Kanga\" to the PowerBook G3 \"Lombard\""
+  },
+  {
+    "title": "eMate 300 Starting Up",
+    "dir": "/assets/machines/emate-300/",
+    "video": "emate-300-boot.mp4",
+    "poster": "emate-300-boot-poster.jpg",
+    "width": 720,
+    "height": 1280,
+    "alt": "A short video of the eMate 300 starting up, with the Newton logo on the screen and its boot chime playing"
   }
 ]
