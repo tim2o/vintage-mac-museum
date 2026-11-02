@@ -2,7 +2,7 @@
    On a desktop browser it is spawned from that video's item in the Videos menu (see windows.js), so a
    template copy is used; on a phone it is the page at /videos/<name>/. #}
 {% set hl = "h1" if static else "h2" %}
-{% set mediaDir = v.dir or "/assets/montages/" %}
+{% set mediaDir = v.dir or "/assets/videos/" %}
 <section class="window movie-window" data-movie-window aria-labelledby="movie-title-{{ n }}">
   <div class="titlebar">
     {% if static %}<span class="closebox" aria-hidden="true"></span>{% else %}<button type="button" class="closebox" aria-label="Close {{ v.title }}"></button>{% endif %}

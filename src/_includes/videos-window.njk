@@ -1,9 +1,9 @@
 {# The Videos window, built from src/_data/montages.json. On a desktop browser it is spawned from the Videos menu (see windows.js), so a template copy is used; on a phone it is the page at /videos/. #}
 {% set hl = "h1" if static else "h2" %}
-<section class="window movies" id="videos" aria-labelledby="montage-title">
+<section class="window movies" id="videos" aria-labelledby="videos-title">
   <div class="titlebar">
     {% if static %}<span class="closebox" aria-hidden="true"></span>{% else %}<button type="button" class="closebox" aria-label="Close Videos"></button>{% endif %}
-    <{{ hl }} id="montage-title">Videos</{{ hl }}>
+    <{{ hl }} id="videos-title">Videos</{{ hl }}>
     <span class="zoombox" aria-hidden="true"></span>
   </div>
   <div class="winbody">
@@ -14,7 +14,7 @@
     </div>
     <div class="slides" data-strip-slides tabindex="0" role="group" aria-label="Videos of the collection">
       {% for v in montages %}
-      {% set mediaDir = v.dir or "/assets/montages/" %}
+      {% set mediaDir = v.dir or "/assets/videos/" %}
       <figure class="slide slide-video">
         <video controls playsinline preload="metadata" poster="{{ (mediaDir ~ v.poster) | url }}" aria-label="{{ v.alt }}" style="aspect-ratio: {{ v.width }} / {{ v.height }}">
           <source src="{{ (mediaDir ~ v.video) | url }}" type="video/mp4">

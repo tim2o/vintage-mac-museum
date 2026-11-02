@@ -1,22 +1,25 @@
 [
   {
     "title": "PowerBook Duo 270c – PowerBook G3 \"Kanga\"",
-    "video": "powerbook-montage-1.mp4",
-    "poster": "powerbook-montage-1-poster.jpg",
+    "page": "powerbook-duo-270c-to-kanga",
+    "video": "powerbook-duo-270c-to-kanga.mp4",
+    "poster": "powerbook-duo-270c-to-kanga-poster.jpg",
     "width": 1280,
     "height": 720,
-    "alt": "Video montage of the PowerBooks in the collection, from the PowerBook Duo 270c to the PowerBook G3 \"Kanga\""
+    "alt": "Video of the PowerBooks in the collection, from the PowerBook Duo 270c to the PowerBook G3 \"Kanga\""
   },
   {
     "title": "PowerBook G3 \"Kanga\" – PowerBook G3 \"Lombard\"",
-    "video": "powerbook-montage-2.mp4",
-    "poster": "powerbook-montage-2-poster.jpg",
+    "page": "powerbook-kanga-to-lombard",
+    "video": "powerbook-kanga-to-lombard.mp4",
+    "poster": "powerbook-kanga-to-lombard-poster.jpg",
     "width": 1280,
     "height": 720,
-    "alt": "Video montage of the PowerBooks in the collection, from the PowerBook G3 \"Kanga\" to the PowerBook G3 \"Lombard\""
+    "alt": "Video of the PowerBooks in the collection, from the PowerBook G3 \"Kanga\" to the PowerBook G3 \"Lombard\""
   },
   {
     "title": "eMate 300 Starting Up",
+    "page": "emate-300-starting-up",
     "dir": "/assets/machines/emate-300/",
     "video": "emate-300-boot.mp4",
     "poster": "emate-300-boot-poster.jpg",

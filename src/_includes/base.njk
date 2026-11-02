@@ -40,7 +40,7 @@
           <li><a href="{{ '/videos/' | url }}" data-open-window="videos">All videos</a></li>
           <li class="sep" aria-hidden="true"></li>
           {% for v in montages %}
-          <li><a href="{{ ('/videos/' ~ (v.video | replace('.mp4', '')) ~ '/') | url }}" data-open-window="movie" data-video="{{ loop.index0 }}">{{ v.title }}</a></li>
+          <li><a href="{{ ('/videos/' ~ v.page ~ '/') | url }}" data-open-window="movie" data-video="{{ loop.index0 }}">{{ v.title }}</a></li>
           {% endfor %}
         </ul>
       </div>
