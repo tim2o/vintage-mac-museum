@@ -187,6 +187,56 @@
       bar.addEventListener("pointerup", up);
       bar.addEventListener("pointercancel", up);
     });
+
+    // Size box: drag the bottom-right corner to resize the window. As in Mac OS 8, an outline shows the
+    // new size while you drag and the window takes it when you let go. The scrolling list inside takes
+    // up the change in height.
+    var grow = win.querySelector("[data-growbox]");
+    var view = win.querySelector("[data-vs-view]");
+    if (grow && view) {
+      grow.classList.add("is-live");
+      grow.addEventListener("pointerdown", function (e) {
+        if (!canDrag.matches || e.button !== 0) return;
+        e.preventDefault();
+        e.stopPropagation();
+        activate(win);
+        var rect = win.getBoundingClientRect();
+        var viewH = view.clientHeight;
+        var minW = 320;
+        var maxW = document.documentElement.clientWidth - rect.left - 8;
+        var minH = rect.height - viewH + 120; // keep a few rows of icons showing
+        var outline = document.createElement("div");
+        outline.className = "drag-outline";
+        outline.style.cssText =
+          "left:" + rect.left + "px;top:" + rect.top + "px;width:" + rect.width + "px;height:" + rect.height + "px";
+        document.body.appendChild(outline);
+        document.body.classList.add("is-dragging");
+        grow.setPointerCapture(e.pointerId);
+        var startX = e.clientX;
+        var startY = e.clientY;
+        var w = rect.width;
+        var h = rect.height;
+        function move(ev) {
+          w = Math.min(maxW, Math.max(minW, rect.width + ev.clientX - startX));
+          h = Math.max(minH, rect.height + ev.clientY - startY);
+          outline.style.width = w + "px";
+          outline.style.height = h + "px";
+        }
+        function up() {
+          grow.removeEventListener("pointermove", move);
+          grow.removeEventListener("pointerup", up);
+          grow.removeEventListener("pointercancel", up);
+          outline.remove();
+          document.body.classList.remove("is-dragging");
+          win.style.width = w + "px";
+          view.style.maxHeight = "none";
+          view.style.height = Math.max(120, viewH + h - rect.height) + "px";
+        }
+        grow.addEventListener("pointermove", move);
+        grow.addEventListener("pointerup", up);
+        grow.addEventListener("pointercancel", up);
+      });
+    }
   }
 
   // "Coming soon" windows, opened from the desktop icons. Each one is built here, joins the other

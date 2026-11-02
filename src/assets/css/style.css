@@ -637,6 +637,23 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
     cursor: default;
     touch-action: none;
   }
+  /* Size box, in the bottom-right corner under the scroll arrows: Platinum's diagonal grip */
+  .growbox {
+    order: 2;
+    flex: none;
+    display: none;
+    height: 16px;
+    background:
+      linear-gradient(135deg, transparent 0 45%, #fff 45% 50%, #777 50% 55%, transparent 55%) 5px 5px / 9px 9px no-repeat,
+      linear-gradient(135deg, transparent 0 45%, #fff 45% 50%, #777 50% 55%, transparent 55%) 8px 8px / 6px 6px no-repeat,
+      linear-gradient(135deg, transparent 0 45%, #fff 45% 50%, #777 50% 55%, transparent 55%) 11px 11px / 3px 3px no-repeat,
+      #eee;
+    border-top: 1px solid #444;
+    box-shadow: inset 1px 1px 0 #fff;
+    cursor: nwse-resize;
+    touch-action: none;
+  }
+  .growbox.is-live { display: block; }
   .vknob::after {
     content: "";
     position: absolute;
