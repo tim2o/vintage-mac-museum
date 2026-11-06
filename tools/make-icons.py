@@ -342,6 +342,25 @@ def build(kind):
         ic.rect(24, 23, 2, 1, "#4a4a4a")
         ic.rect(15, 24, 3, 1, "#7ac2ff")
         ic.shadow()
+    elif kind == "trash":
+        # A wire-mesh trash can, wider at the top than the bottom, with a rolled rim, a lid and a handle
+        def edge(y, top, bottom):  # x of the can's side at row y (top at y=8, bottom at y=29)
+            return top + (bottom - top) * (y - 8) / 21.0
+        ic.rect(12, 2, 8, 2, hgrad(12, 20, "#d8d8d8", "#8a8a8a"))      # handle
+        ic.rrect(4, 4, 24, 4, 2, hgrad(4, 28, "#f2f2f2", "#9a9a9a"))   # lid
+        ic.poly([(6, 8), (26, 8), (24, 29), (8, 29)], hgrad(6, 26, "#e6e6e6", "#7c7c7c"))
+        for i in range(1, 6):  # vertical wires, leaning in with the sides
+            t = i / 6.0
+            for y in range(9, 29):
+                x = round(edge(y, 6 + 20 * t, 8 + 16 * t))
+                ic.put(x, y, "#5a5a5a" if i % 2 else "#6c6c6c")
+        for y in (13, 18, 23):  # the rings round the can
+            for x in range(int(edge(y, 6, 8)) + 1, int(edge(y, 26, 24)) + 1):
+                ic.put(x, y, lerp("#bcbcbc", "#4a4a4a", (x - 6) / 20.0))
+        ic.rect(8, 28, 16, 1, "#3c3c3c")                              # the base
+        ic.outline()
+        ic.line(5, 5, 26, 5, "#ffffff")                               # light along the lid
+        ic.shadow()
     elif kind == "caution":
         ic.poly([(16, 2), (30, 28), (2, 28)], dgrad(2, 2, 30, 28, "#fff58a", "#d49e00"))
         ic.outline()
@@ -383,7 +402,7 @@ def apple():
     return ic
 
 
-KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "checklist", "caution"]
+KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "checklist", "trash", "caution"]
 
 
 def save_png(ic, path):

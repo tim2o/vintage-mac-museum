@@ -4,7 +4,7 @@
   They are drawn for this site as generic computer shapes and are not copies of any Apple icon.
   The pictures are generated: edit tools/make-icons.py and run  python3 -I tools/make-icons.py
   Use: {% from "icons.njk" import icon %}{{ icon("compact", 64) }}
-  Kinds: laptop-small, laptop-dark, laptop-round, laptop-silver, ibook, emate, crt, emac, imac-g4, mini, compact, desktop, imac, laptop, cube, flatpanel, tower, disk, doc, checklist, caution.
+  Kinds: laptop-small, laptop-dark, laptop-round, laptop-silver, ibook, emate, crt, emac, imac-g4, mini, compact, desktop, imac, laptop, cube, flatpanel, tower, disk, doc, checklist, trash, caution.
   Draw them at 32 or 64 pixels so every drawn pixel lands on a whole screen pixel.
 #}
 {% macro icon(kind, size) %}<img class="icon icon-{{ kind }}" src="{{ ('/assets/img/icons/' ~ kind ~ '.png') | url }}" width="{{ size or 32 }}" height="{{ size or 32 }}" alt="" decoding="async">{% endmacro %}

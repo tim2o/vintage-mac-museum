@@ -417,11 +417,16 @@
     var text = document.createElement("div");
     text.className = "popup-text";
     var h3 = document.createElement("h3");
-    h3.textContent = "Coming soon";
-    var p = document.createElement("p");
-    p.textContent = title + " aren't on the shelf yet. Check back later.";
+    // The words come from the icon (data-popup-heading, data-popup-text); an empty text leaves out the second line.
+    h3.textContent = trigger.getAttribute("data-popup-heading") || "Coming soon";
     text.appendChild(h3);
-    text.appendChild(p);
+    var more = trigger.getAttribute("data-popup-text");
+    if (more === null) more = title + " aren't on the shelf yet. Check back later.";
+    if (more) {
+      var p = document.createElement("p");
+      p.textContent = more;
+      text.appendChild(p);
+    }
     inner.appendChild(text);
     var actions = document.createElement("div");
     actions.className = "popup-actions";

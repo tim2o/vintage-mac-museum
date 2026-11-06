@@ -92,6 +92,11 @@
       {{ icon("mini", 64) }}
       <span>Modern M-Series Macs</span>
     </button>
+    {# The Trash, lower right as on the Mac OS desktop. For now it only says it is empty (see windows.js). #}
+    <button type="button" class="desk-icon desk-trash" data-popup="trash" data-popup-title="Trash" data-popup-heading="The Trash is empty." data-popup-text="" data-popup-icon="{{ '/assets/img/icons/trash.png' | url }}" aria-haspopup="dialog">
+      {{ icon("trash", 64) }}
+      <span>Trash</span>
+    </button>
   </nav>
 
   <main id="main">

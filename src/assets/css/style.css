@@ -226,6 +226,8 @@ a:focus-visible, video:focus-visible, button:focus-visible {
   .desk-icon span { padding: 1px 5px; background: rgba(255, 255, 255, 0.7); color: var(--black); }
   .desk-icon:hover span, .desk-icon:focus-visible span { background: var(--hilite); }
   .desk-icon:focus-visible { outline: 2px solid var(--black); outline-offset: 2px; }
+  /* The Trash sits at the bottom of the right-hand side, clear of the Control Strip */
+  .desk-trash { position: fixed; right: 14px; bottom: 42px; width: 6.25rem; }
   main {
     width: calc(100% - 7.5rem);
     margin-left: max(0px, calc((100% - 68rem - 7.5rem) / 2));
