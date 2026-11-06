@@ -1110,3 +1110,17 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 }
 .loupe[hidden] { display: none; }
 @media (hover: none), (pointer: coarse) { .btn-mag, .loupe { display: none; } }
+
+/* Control Strip help tags, in the pale yellow of Mac OS Balloon Help */
+.cs-tip {
+  position: fixed;
+  z-index: 1950;
+  max-width: 17rem;
+  padding: 4px 8px;
+  background: #ffffc8;
+  border: 1px solid var(--black);
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.35);
+  font: 400 11px/1.35 var(--geneva);
+  pointer-events: none;
+}
+.cs-tip[hidden] { display: none; }

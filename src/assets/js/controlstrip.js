@@ -190,24 +190,24 @@
 
   var openMod = null; // the module button whose popup is showing
 
-  function addModule(id, label, icon) {
+  function addModule(id, label, icon, tip) {
     var b = document.createElement("button");
     b.type = "button";
     b.className = "cs-mod";
     b.setAttribute("data-mod", id);
     b.setAttribute("aria-label", label);
-    b.title = label;
+    b.setAttribute("data-tip", tip);
     b.innerHTML = icon;
     modules.appendChild(b);
     return b;
   }
 
-  var bSound = addModule("sound", "Sound", ICONS.sound);
-  var bDesk = addModule("desk", "Desktop Pattern", ICONS.desk);
-  var bRandom = addModule("random", "Random Machine", ICONS.random);
-  var bView = addModule("view", "Collection View", ICONS.view);
-  var bDate = addModule("date", "Date", ICONS.date);
-  var bLook = addModule("look", "Highlight Color", ICONS.look);
+  var bSound = addModule("sound", "Sound", ICONS.sound, "Sound: set the volume of the videos and window sounds");
+  var bDesk = addModule("desk", "Desktop Pattern", ICONS.desk, "Desktop Pattern: change the picture behind the windows");
+  var bRandom = addModule("random", "Random Machine", ICONS.random, "Random Machine: jump to a machine picked at random");
+  var bView = addModule("view", "Collection View", ICONS.view, "Collection View: show the Collection as icons or as a list");
+  var bDate = addModule("date", "Date", ICONS.date, "Date and Time: today's date and the time");
+  var bLook = addModule("look", "Highlight Color", ICONS.look, "Highlight Color: change the color of highlights and scroll bars");
   [bSound, bDesk, bView, bDate, bLook].forEach(function (b) {
     b.setAttribute("aria-haspopup", "true");
     b.setAttribute("aria-expanded", "false");
@@ -216,7 +216,7 @@
   function soundIcon() {
     var svg = bSound.querySelector("svg");
     svg.setAttribute("data-level", level === 0 ? "mute" : level <= 4 ? "low" : "high");
-    bSound.title = level === 0 ? "Sound: muted" : "Sound: volume " + level;
+    bSound.setAttribute("data-tip", "Sound: " + (level === 0 ? "muted" : "volume " + level) + ". Click to set the volume of the videos and window sounds");
   }
   soundIcon();
 
@@ -427,6 +427,7 @@
     strip.classList.toggle("is-collapsed", c);
     tab.setAttribute("aria-expanded", c ? "false" : "true");
     tab.setAttribute("aria-label", c ? "Show the Control Strip" : "Hide the Control Strip");
+    tab.setAttribute("data-tip", c ? "Show the Control Strip" : "Hide the Control Strip. Drag to move it to the other side");
     set("cs-collapsed", c ? "1" : "0");
     if (c) closePop(false);
   }
@@ -474,14 +475,57 @@
     setCollapsed(!strip.classList.contains("is-collapsed"));
   });
 
+  tab.setAttribute("data-tip", "Hide the Control Strip. Drag to move it to the other side");
   setDock(get("cs-dock") === "right" ? "right" : "left");
   strip.classList.toggle("is-collapsed", get("cs-collapsed") === "1");
   if (strip.classList.contains("is-collapsed")) {
     tab.setAttribute("aria-expanded", "false");
     tab.setAttribute("aria-label", "Show the Control Strip");
+    tab.setAttribute("data-tip", "Show the Control Strip");
   }
 
+  /* ---------- Help tags: a pale yellow note that names a module and says what it does ---------- */
+
+  var tip = document.createElement("div");
+  tip.className = "cs-tip";
+  tip.setAttribute("role", "tooltip");
+  tip.hidden = true;
+  var tipTimer = null;
+  function hideTip() {
+    window.clearTimeout(tipTimer);
+    tip.hidden = true;
+  }
+  function showTip(el) {
+    var text = el.getAttribute("data-tip");
+    if (!text || openMod || drag) return;
+    tip.textContent = text;
+    tip.hidden = false;
+    var r = el.getBoundingClientRect();
+    var w = tip.offsetWidth;
+    tip.style.left = Math.max(4, Math.min(r.left + r.width / 2 - w / 2, window.innerWidth - w - 4)) + "px";
+    tip.style.bottom = window.innerHeight - r.top + 6 + "px";
+  }
+  strip.addEventListener("pointerover", function (e) {
+    if (e.pointerType !== "mouse") return;
+    var el = e.target.closest("[data-tip]");
+    if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return;
+    hideTip();
+    tipTimer = window.setTimeout(function () { showTip(el); }, 350);
+  });
+  strip.addEventListener("pointerout", function (e) {
+    var el = e.target.closest("[data-tip]");
+    if (el && !(e.relatedTarget && el.contains(e.relatedTarget))) hideTip();
+  });
+  strip.addEventListener("pointerdown", hideTip);
+  strip.addEventListener("focusin", function (e) {
+    var el = e.target.closest("[data-tip]");
+    if (el && el.matches(":focus-visible")) showTip(el);
+  });
+  strip.addEventListener("focusout", hideTip);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideTip(); });
+
   document.body.appendChild(strip);
+  document.body.appendChild(tip);
   document.body.appendChild(pop);
 
   var savedView = get("cs-view");
