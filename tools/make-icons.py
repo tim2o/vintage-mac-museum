@@ -384,112 +384,128 @@ def apple():
 
 
 def trash_hd(path):
-    """The Trash: a silver wire-mesh can, drawn smoothly (not as 32 x 32 pixel art) at 128 x 128, shown at 64.
+    """The Trash: a silver wire-mesh can with a lid, drawn smoothly (not as 32 x 32 pixel art) at 128 x 128, shown at 64.
 
-    Drawn at four times the size and shrunk with a good filter so the edges are clean. Light comes from the
-    top left: a bright band down the can, dark at the right edge, wires with a light edge beside each dark one,
-    rings that curve round the can, a rolled rim and a dark inside.
+    The can is nearly square, a little narrower at the bottom, with a domed lid and a knob. Drawn at four times the
+    size and shrunk with a good filter so the edges are clean. Light comes from the top left: a bright band down the
+    can, dark at the right edge, wires with a light edge beside each dark one, rings that curve round the can.
     """
     import numpy as np
-    from PIL import Image, ImageDraw, ImageFilter
+    from PIL import Image, ImageFilter
     S, W = 4, 128
     n = W * S
     yy, xx = np.mgrid[0:n, 0:n].astype(np.float64) / S      # coordinates in 128-unit space
     cx = 64.0
-    TOP_Y, BOT_Y = 30.0, 112.0
-    RX_T, RX_B = 44.0, 32.0
-    RY_T, RY_B = 11.0, 8.0
 
-    def rx(y): return RX_T + (RX_B - RX_T) * (y - TOP_Y) / (BOT_Y - TOP_Y)
-    def ry(y): return RY_T + (RY_B - RY_T) * (y - TOP_Y) / (BOT_Y - TOP_Y)
-
-    # Shapes, as masks
-    yc = np.clip(yy, TOP_Y, BOT_Y)
+    # The can
+    B_TOP, B_BOT = 38.0, 108.0
+    RX_T, RX_B = 40.0, 35.0
+    RY_T, RY_B = 10.0, 8.5
+    def rx(y): return RX_T + (RX_B - RX_T) * (y - B_TOP) / (B_BOT - B_TOP)
+    def ry(y): return RY_T + (RY_B - RY_T) * (y - B_TOP) / (B_BOT - B_TOP)
+    yc = np.clip(yy, B_TOP, B_BOT)
     half = rx(yc)
     u = (xx - (cx - half)) / (2 * half)                       # 0 at the left edge of the can, 1 at the right
     inside_x = (u >= 0) & (u <= 1)
     uu = np.clip(2 * u - 1, -1, 1)
-    bottom_arc = BOT_Y + RY_B * np.sqrt(1 - uu ** 2)
-    body = inside_x & (yy >= TOP_Y) & (yy <= bottom_arc)
-    rim_out = ((xx - cx) / RX_T) ** 2 + ((yy - TOP_Y) / RY_T) ** 2 <= 1
-    rim_in = ((xx - cx) / 39.0) ** 2 + ((yy - (TOP_Y - 0.5)) / 8.0) ** 2 <= 1
-    sil = body | rim_out
+    bottom_arc = B_BOT + RY_B * np.sqrt(1 - uu ** 2)
+    body = inside_x & (yy >= B_TOP) & (yy <= bottom_arc)
 
-    # The can's metal: a bright band left of centre, falling away to the right edge
-    v = 0.30 + 0.62 * np.exp(-((u - 0.27) / 0.30) ** 2) + 0.10 * np.exp(-((u - 0.92) / 0.06) ** 2)
-    v = np.clip(v, 0, 1)
-    g = 70 + 185 * v
+    # The lid: a flat disc a little wider than the can, with a thick edge, and a knob on top
+    L_Y, L_RX, L_RY, L_T = 31.0, 45.0, 10.0, 6.0
+    lu = (xx - cx) / L_RX
+    lroot = np.sqrt(np.clip(1 - lu ** 2, 0, 1))
+    lid_top = lu ** 2 + ((yy - L_Y) / L_RY) ** 2 <= 1
+    arc_top = L_Y + L_RY * lroot                              # the front edge of the lid's top face
+    arc_low = arc_top + L_T                                   # the bottom of the lid's edge
+    lid_band = (np.abs(lu) <= 1) & (yy >= L_Y) & (yy <= arc_low)
+    lid = lid_top | lid_band
+    K_Y, K_RX, K_RY, K_H = 17.0, 10.0, 3.2, 9.0
+    ku = (xx - cx) / K_RX
+    kroot = np.sqrt(np.clip(1 - ku ** 2, 0, 1))
+    knob_top = ku ** 2 + ((yy - K_Y) / K_RY) ** 2 <= 1
+    knob_base = K_Y + K_H + K_RY * kroot
+    knob_body = (np.abs(ku) <= 1) & (yy >= K_Y) & (yy <= knob_base)
+    knob = knob_top | knob_body
+    sil = body | lid | knob
+
+    def cyl(t, peak=0.27, width=0.30):
+        """Light across a cylinder: t runs 0 (left edge) to 1 (right edge)."""
+        v = 0.30 + 0.62 * np.exp(-((t - peak) / width) ** 2) + 0.10 * np.exp(-((t - 0.92) / 0.06) ** 2)
+        return np.clip(v, 0, 1)
+
+    # The can's metal
+    g = 70 + 185 * cyl(u)
     rgb = np.stack([g, g, g + 7], axis=-1)
-
-    # Vertical wires: a dark line with a light line just right of it
-    for i in range(1, 9):
-        ui = i / 9.0
-        xw = (cx - half) + 2 * half * ui
+    for i in range(1, 9):  # vertical wires: a dark line with a light line just right of it
+        xw = (cx - half) + 2 * half * (i / 9.0)
         d = xx - xw
         dark = np.clip(1 - np.abs(d) / 1.1, 0, 1)
         light = np.clip(1 - np.abs(d - 1.5) / 0.9, 0, 1)
-        m = body & (yy > TOP_Y + 3)
-        rgb = rgb * (1 - 0.55 * dark * m)[..., None]
-        rgb = rgb + (255 - rgb) * (0.55 * light * m * (v > 0.2))[..., None]
-
-    # Rings round the can, curving down at the front
-    for y0 in (47.0, 67.0, 87.0, 104.0):
+        rgb = rgb * (1 - 0.55 * dark * body)[..., None]
+        rgb = rgb + (255 - rgb) * (0.55 * light * body * (cyl(u) > 0.2))[..., None]
+    for y0 in (56.0, 72.0, 88.0, 101.0):  # rings round the can, curving down at the front
         arc = y0 + ry(y0) * np.sqrt(1 - uu ** 2)
         dark = np.clip(1 - np.abs(yy - arc) / 1.2, 0, 1)
         light = np.clip(1 - np.abs(yy - arc - 1.7) / 0.9, 0, 1)
-        m = body & (yy > TOP_Y + 3)
-        rgb = rgb * (1 - 0.5 * dark * m)[..., None]
-        rgb = rgb + (255 - rgb) * (0.45 * light * m)[..., None]
-
-    # The base: a darker ring near the bottom, with a light line above it
-    base = body & (yy > bottom_arc - 7)
+        rgb = rgb * (1 - 0.5 * dark * body)[..., None]
+        rgb = rgb + (255 - rgb) * (0.45 * light * body)[..., None]
+    base = body & (yy > bottom_arc - 7)                       # the darker ring at the bottom, with a light line above
     rgb = np.where(base[..., None], rgb * 0.72, rgb)
     edge = body & (np.abs(yy - (bottom_arc - 7)) < 0.8)
     rgb = np.where(edge[..., None], 255 - (255 - rgb) * 0.45, rgb)
+    shade = np.clip((yy - arc_low) / 9.0, 0, 1)               # the shadow of the lid on the can just below it
+    rgb = rgb * (0.5 + 0.5 * shade)[..., None] * body[..., None] + rgb * (~body)[..., None]
 
-    # Under the rim: the shadow of the rolled lip across the front of the can
-    lip = np.clip(1 - np.abs(yy - (TOP_Y + 9.5 * np.sqrt(np.clip(1 - ((xx - cx) / 43.0) ** 2, 0, 1)) + 1.5)) / 2.2, 0, 1)
-    rgb = rgb * (1 - 0.45 * lip * (body & ~rim_out))[..., None]
+    # The lid's edge: silver with the same light across it
+    ul = (xx - (cx - L_RX)) / (2 * L_RX)
+    lg = 95 + 165 * cyl(ul, 0.30, 0.34)
+    band_rgb = np.stack([lg, lg, lg + 6], axis=-1)
+    rgb = np.where(lid_band[..., None], band_rgb, rgb)
+    # Its top face: brighter, lightest at the back left, with a fine ring a little in from the edge
+    tv = 0.72 + 0.28 * np.exp(-((xx - 48.0) / 24.0) ** 2) - 0.22 * np.clip((yy - (L_Y - L_RY)) / (2 * L_RY), 0, 1)
+    tg = np.clip(125 + 135 * tv, 0, 255)
+    top_rgb = np.stack([tg, tg, tg + 6], axis=-1)
+    e2 = ((xx - cx) / 38.0) ** 2 + ((yy - L_Y) / 7.6) ** 2
+    ring = np.clip(1 - np.abs(e2 - 1) / 0.07, 0, 1)
+    top_rgb = top_rgb * (1 - 0.35 * ring)[..., None]
+    ring_hi = np.clip(1 - np.abs(e2 - 0.86) / 0.06, 0, 1)
+    top_rgb = top_rgb + (255 - top_rgb) * (0.5 * ring_hi)[..., None]
+    rgb = np.where(lid_top[..., None], top_rgb, rgb)
+    # The line where the top face meets the edge, and the bottom edge of the lid
+    seam = lid_band & (np.abs(yy - arc_top) < 0.9)
+    rgb = rgb * (1 - 0.45 * seam)[..., None]
+    under = lid_band & (np.abs(yy - arc_low) < 1.1)
+    rgb = rgb * (1 - 0.65 * under)[..., None]
 
-    # The rim: a light metal band, brightest at the back left
-    rv = 0.62 + 0.38 * np.exp(-((xx - 48.0) / 20.0) ** 2) - 0.25 * np.clip((yy - TOP_Y) / RY_T, 0, 1)
-    rg = np.clip(110 + 150 * rv, 0, 255)
-    rim_rgb = np.stack([rg, rg, rg + 6], axis=-1)
-    rgb = np.where((rim_out & ~rim_in)[..., None], rim_rgb, rgb)
-    # The dark inside, a little lighter towards the front wall
-    iv = np.clip((yy - (TOP_Y - 8.5)) / 16.5, 0, 1)
-    ig = 28 + 52 * iv
-    inner = np.stack([ig, ig, ig + 6], axis=-1)
-    back_wall = np.clip(1 - np.abs(xx - 44.0) / 9.0, 0, 1) * (1 - iv) * 22
-    inner = inner + back_wall[..., None]
-    rgb = np.where(rim_in[..., None], inner, rgb)
+    # The knob: a short cylinder with a bright top
+    kg = 70 + 185 * cyl((ku + 1) / 2)
+    knob_rgb = np.stack([kg, kg, kg + 7], axis=-1)
+    rgb = np.where(knob_body[..., None], knob_rgb, rgb)
+    ktv = 0.8 + 0.2 * np.exp(-((xx - 60.0) / 6.0) ** 2)
+    kt = np.clip(150 + 105 * ktv, 0, 255)
+    rgb = np.where(knob_top[..., None], np.stack([kt, kt, kt + 5], axis=-1), rgb)
+    kbase = knob_body & (np.abs(yy - knob_base) < 0.9)
+    rgb = rgb * (1 - 0.55 * kbase)[..., None]
+    kring = knob & (np.abs(((xx - cx) / K_RX) ** 2 + ((yy - K_Y) / K_RY) ** 2 - 1) < 0.16) & (yy < K_Y + 1.5)
+    rgb = rgb * (1 - 0.5 * kring)[..., None]
 
-    # Black outline round everything, and a fine one round the opening
+    # Black outline round everything
     mask_img = Image.fromarray((sil * 255).astype(np.uint8))
     grown = mask_img.filter(ImageFilter.MaxFilter(2 * int(1.7 * S) + 1))
     outline = np.array(grown) > 127
-    ring = np.array(rim_in)
-    ring_edge = np.array(Image.fromarray((ring * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(2 * int(1.1 * S) + 1))) > 127
-    ring_edge &= ~ring
-    ring_edge &= rim_out
 
     out = np.zeros((n, n, 4), dtype=np.float64)
-    # Soft drop shadow, to the lower right
-    sh = Image.fromarray((np.array(grown) * 1).astype(np.uint8)).transform((n, n), Image.AFFINE, (1, 0, -5 * S, 0, 1, -5 * S))
+    sh = Image.fromarray(np.array(grown).astype(np.uint8)).transform((n, n), Image.AFFINE, (1, 0, -5 * S, 0, 1, -5 * S))
     sh = np.array(sh.filter(ImageFilter.GaussianBlur(2.6 * S))) / 255.0
-    out[..., 3] = 0.34 * sh
-    # Outline, then the can over it
-    o = outline[..., None]
-    out[..., :3] = np.where(o, 0, out[..., :3])
+    out[..., 3] = 0.34 * sh                                   # a soft drop shadow, to the lower right
+    out[..., :3] = np.where(outline[..., None], 0, out[..., :3])
     out[..., 3] = np.where(outline, 1.0, out[..., 3])
-    body_m = sil[..., None]
-    out[..., :3] = np.where(body_m, np.clip(rgb, 0, 255), out[..., :3])
+    out[..., :3] = np.where(sil[..., None], np.clip(rgb, 0, 255), out[..., :3])
     out[..., 3] = np.where(sil, 1.0, out[..., 3])
-    out[..., :3] = np.where(ring_edge[..., None], 40, out[..., :3])
-    # Premultiply before shrinking, so the soft shadow stays clean at the edges
+    # Shrink with premultiplied colour, so the soft shadow stays clean at the edges
     pre = out.copy()
     pre[..., :3] *= pre[..., 3:4]
-    im = Image.fromarray(np.clip(pre, 0, 255).astype(np.uint8), "RGBA") if False else None
     chans = [Image.fromarray(np.clip(pre[..., i], 0, 255).astype(np.uint8)).resize((W, W), Image.LANCZOS) for i in range(3)]
     alpha = Image.fromarray(np.clip(out[..., 3] * 255, 0, 255).astype(np.uint8)).resize((W, W), Image.LANCZOS)
     a = np.array(alpha).astype(np.float64) / 255.0
