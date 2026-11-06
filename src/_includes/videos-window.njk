@@ -34,4 +34,8 @@
     </div>
   </div>
   </div>
+  {% if not static %}
+  {# Size box: drag to resize the window, keeping the pictures in proportion (desktop browsers; see windows.js) #}
+  <div class="movie-foot"><span class="growbox" data-growbox aria-hidden="true"></span></div>
+  {% endif %}
 </section>

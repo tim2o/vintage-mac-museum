@@ -313,6 +313,65 @@
       bar.addEventListener("pointercancel", up);
     });
 
+    // Movie windows and the Videos window have a size box in the bottom frame. Dragging it changes the width,
+    // and the height follows so the picture keeps its shape (an outline shows the size, as below).
+    var movieGrow = win.querySelector(".movie-foot [data-growbox]");
+    var movieVideo = win.querySelector("video");
+    if (movieGrow && movieVideo) {
+      movieGrow.classList.add("is-live");
+      movieGrow.addEventListener("pointerdown", function (e) {
+        if (!canDrag.matches || e.button !== 0) return;
+        e.preventDefault();
+        e.stopPropagation();
+        activate(win);
+        var rect = win.getBoundingClientRect();
+        var vr = movieVideo.getBoundingClientRect();
+        if (!vr.width || !vr.height) return;
+        var aspect = vr.width / vr.height;
+        var extraW = rect.width - vr.width; // everything in the window that is not the picture
+        var extraH = rect.height - vr.height;
+        var isVideos = win.classList.contains("movies");
+        var minW = isVideos ? 380 : 260;
+        var maxW = Math.min(
+          document.documentElement.clientWidth - rect.left - 8,
+          (window.innerHeight - clearOfStrip() - rect.top - extraH) * aspect + extraW
+        );
+        maxW = Math.max(minW, maxW);
+        var outline = document.createElement("div");
+        outline.className = "drag-outline";
+        outline.style.cssText =
+          "left:" + rect.left + "px;top:" + rect.top + "px;width:" + rect.width + "px;height:" + rect.height + "px";
+        document.body.appendChild(outline);
+        document.body.classList.add("is-dragging");
+        movieGrow.setPointerCapture(e.pointerId);
+        var startX = e.clientX;
+        var startY = e.clientY;
+        var w = rect.width;
+        function move(ev) {
+          var dx = ev.clientX - startX;
+          var dy = ev.clientY - startY;
+          var dw = Math.abs(dy * aspect) > Math.abs(dx) ? dy * aspect : dx; // follow whichever way you pull further
+          w = Math.min(maxW, Math.max(minW, rect.width + dw));
+          outline.style.width = w + "px";
+          outline.style.height = (w - extraW) / aspect + extraH + "px";
+        }
+        function up() {
+          movieGrow.removeEventListener("pointermove", move);
+          movieGrow.removeEventListener("pointerup", up);
+          movieGrow.removeEventListener("pointercancel", up);
+          outline.remove();
+          document.body.classList.remove("is-dragging");
+          win.style.width = w + "px";
+          var strip = win.querySelector(".strip");
+          if (isVideos && strip) strip.style.setProperty("--slide-h", (w - extraW) / aspect + "px");
+          window.dispatchEvent(new Event("resize")); // so the scroll bars measure again
+        }
+        movieGrow.addEventListener("pointermove", move);
+        movieGrow.addEventListener("pointerup", up);
+        movieGrow.addEventListener("pointercancel", up);
+      });
+    }
+
     // Size box: drag the bottom-right corner to resize the window. As in Mac OS 8, an outline shows the
     // new size while you drag and the window takes it when you let go. The scrolling list inside takes
     // up the change in height.

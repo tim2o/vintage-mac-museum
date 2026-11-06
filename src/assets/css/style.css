@@ -1254,3 +1254,11 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 
 /* A closed Collection window (its close box), until it is opened again from the menu or the desktop icon */
 .window.is-closed { display: none; }
+
+/* The bottom frame of a movie window or the Videos window, with a size box at the right (desktop browsers) */
+.movie-foot { display: none; }
+@media (min-width: 52rem) and (hover: hover) and (pointer: fine) {
+  .movie-foot { display: flex; justify-content: flex-end; height: 16px; background: var(--frame); }
+  .movie-foot .growbox { display: none; width: 16px; height: 16px; margin: 0; border-top: 0; border-left: 1px solid #000; box-shadow: none; }
+  .movie-foot .growbox.is-live { display: block; }
+}
