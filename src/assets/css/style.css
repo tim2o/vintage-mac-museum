@@ -397,7 +397,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 /* A hand-written greeting at the top of About This Collection */
 .prose .hello {
   margin: 0 0 0.35em;
-  font: 400 clamp(4.375rem, 11.25vw, 6.5625rem)/1 "Sacramento", cursive;
+  font: 400 clamp(6.5625rem, 16.875vw, 9.84375rem)/1 "Sacramento", cursive;
   letter-spacing: 0.01em;
   color: var(--black);
 }
