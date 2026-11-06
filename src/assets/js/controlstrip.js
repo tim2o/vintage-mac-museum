@@ -81,6 +81,55 @@
     teeth.stop(t + length);
   }
 
+  // A hard drive at work: a soft spin-up hum, then little seek clicks at uneven gaps. Short bursts of filtered noise,
+  // so it costs next to nothing, and it follows the volume in the Control Strip.
+  function hd(ms) {
+    if (!level) return;
+    var c = context();
+    if (!c) return;
+    var t0 = c.currentTime;
+    var total = Math.max(0.3, ms / 1000);
+    var vol = 0.5 * (level / MAX);
+    var out = c.createGain();
+    out.gain.value = vol;
+    out.connect(c.destination);
+
+    var hum = c.createOscillator();
+    var humGain = c.createGain();
+    hum.type = "triangle";
+    hum.frequency.setValueAtTime(48, t0);
+    hum.frequency.linearRampToValueAtTime(96, t0 + 0.25);
+    humGain.gain.setValueAtTime(0.0001, t0);
+    humGain.gain.linearRampToValueAtTime(0.05, t0 + 0.12);
+    humGain.gain.linearRampToValueAtTime(0.03, t0 + total * 0.8);
+    humGain.gain.exponentialRampToValueAtTime(0.0001, t0 + total);
+    hum.connect(humGain);
+    humGain.connect(out);
+    hum.start(t0);
+    hum.stop(t0 + total + 0.05);
+
+    var len = Math.ceil(c.sampleRate * 0.05);
+    var buf = c.createBuffer(1, len, c.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.18));
+    var t = t0 + 0.06;
+    while (t < t0 + total - 0.05) {
+      var src = c.createBufferSource();
+      src.buffer = buf;
+      var f = c.createBiquadFilter();
+      f.type = "bandpass";
+      f.frequency.value = 700 + Math.random() * 2200;
+      f.Q.value = 3 + Math.random() * 3;
+      var g = c.createGain();
+      g.gain.value = 0.35 + Math.random() * 0.65;
+      src.connect(f);
+      f.connect(g);
+      g.connect(out);
+      src.start(t);
+      t += 0.035 + Math.random() * Math.random() * 0.13; // mostly quick runs of clicks, now and then a pause
+    }
+  }
+
   function applyVolume(video) {
     video.volume = level / MAX;
     video.muted = level === 0;
@@ -95,6 +144,7 @@
 
   window.macSound = {
     zip: zip,
+    hd: hd,
     get level() { return level; }
   };
 

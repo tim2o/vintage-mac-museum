@@ -1292,3 +1292,20 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 @media (prefers-reduced-motion: reduce) {
   .desk-icons.is-free .desk-icon { transition: none !important; }
 }
+
+/* The busy cursor: a black-and-white wheel at the pointer, turning in eighths like the old Mac OS one */
+.busy-wheel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3000;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  will-change: transform;
+}
+.busy-wheel[hidden] { display: none; }
+.busy-wheel svg { display: block; animation: busy-turn 0.64s steps(8) infinite; }
+.busy-wheel.is-still svg { animation: none; }
+@keyframes busy-turn { to { transform: rotate(360deg); } }
+body.is-busy, body.is-busy * { cursor: none !important; }
