@@ -7,7 +7,6 @@
   var desktop = window.matchMedia("(min-width: 52rem) and (hover: hover) and (pointer: fine)");
   var root = document.documentElement;
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var audioBase = document.currentScript && document.currentScript.src ? document.currentScript.src.replace(/js\/[^\/]*$/, "audio/") : "";
 
   function get(key) {
     try { return window.localStorage.getItem(key); } catch (e) { return null; }
@@ -82,49 +81,6 @@
     teeth.stop(t + length);
   }
 
-  // The hard drive: three short recordings of a real drive (made by the site's owner), about two seconds each, which
-  // fade out after the busy wheel is gone. They are fetched quietly once the page has loaded (under 50 KB together),
-  // decoded the first time one plays, and follow the volume in the Control Strip.
-  var HD_FILES = ["hd1.mp3", "hd2.mp3", "hd3.mp3"];
-  var hdData = [], hdBuffers = [], hdLast = -1;
-  function hdFetch() {
-    if (!audioBase || !window.fetch || hdData.length) return;
-    HD_FILES.forEach(function (name, i) {
-      hdData[i] = null;
-      window.fetch(audioBase + name).then(function (r) { return r.ok ? r.arrayBuffer() : null; })
-        .then(function (b) { hdData[i] = b; }, function () { /* no sound then, which is fine */ });
-    });
-  }
-  if (document.readyState === "complete") window.setTimeout(hdFetch, 800);
-  else window.addEventListener("load", function () { window.setTimeout(hdFetch, 800); }, { once: true });
-
-  function hd(skip) {
-    if (!level) return;
-    var c = context();
-    if (!c) return;
-    var i;
-    do { i = Math.floor(Math.random() * HD_FILES.length); } while (i === hdLast && HD_FILES.length > 1);
-    hdLast = i;
-    function play(buffer) {
-      if (!buffer || !level) return;
-      var src = c.createBufferSource();
-      src.buffer = buffer;
-      var g = c.createGain();
-      g.gain.value = 0.8 * (level / MAX);
-      src.connect(g);
-      g.connect(c.destination);
-      src.start(0, Math.min(skip || 0, buffer.duration - 0.2));
-    }
-    if (hdBuffers[i]) { play(hdBuffers[i]); return; }
-    if (!hdData[i]) return; // not fetched yet: stay quiet this once
-    var copy = hdData[i].slice(0);
-    var done = function (b) { hdBuffers[i] = b; play(b); };
-    try {
-      var p = c.decodeAudioData(copy, done, function () { /* undecodable: no sound */ });
-      if (p && p.catch) p.catch(function () { /* same */ });
-    } catch (e) { /* no sound */ }
-  }
-
   function applyVolume(video) {
     video.volume = level / MAX;
     video.muted = level === 0;
@@ -139,7 +95,6 @@
 
   window.macSound = {
     zip: zip,
-    hd: hd,
     get level() { return level; }
   };
 

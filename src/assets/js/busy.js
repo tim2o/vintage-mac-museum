@@ -1,5 +1,5 @@
 // The busy cursor: after you click a link, an icon or a button, a black-and-white wheel turns at the pointer for a
-// moment, with hard drive sounds (see macSound.hd in controlstrip.js, recordings in assets/audio), as the old Mac OS did while it worked.
+// moment, as the old Mac OS did while it worked. (No sound for now: the hard drive sound is parked, see commit 30f3c95.)
 // Going to another page keeps the wheel turning until that page has loaded. Desktop browsers with a mouse only,
 // and it adds no delay to anything: it is drawn over the page, and only while it is showing.
 (function () {
@@ -67,7 +67,6 @@
     var leaving = link && !e.defaultPrevented && !e.metaKey && !e.ctrlKey && !e.shiftKey &&
       link.target !== "_blank" && link.origin === window.location.origin &&
       (link.pathname !== window.location.pathname || link.search !== window.location.search);
-    if (window.macSound && window.macSound.hd) window.macSound.hd(0);
     if (leaving) {
       try { window.sessionStorage.setItem("busy-xy", nx + "," + ny); } catch (err) { /* then the next page just starts quietly */ }
       show(nx, ny);
@@ -83,8 +82,6 @@
     var xy = carried.split(",");
     show(parseFloat(xy[0]) || 0, parseFloat(xy[1]) || 0);
     var done = function () { window.setTimeout(hide, 350); };
-    // Leaving the page cut the sound off, so the new page carries it on from a little way in (if the browser allows).
-    if (window.macSound && window.macSound.hd) window.macSound.hd(0.5);
     if (document.readyState === "complete") done(); else window.addEventListener("load", done, { once: true });
     window.setTimeout(hide, 4000); // never leave it up if something is slow
   }
