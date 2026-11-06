@@ -1068,3 +1068,43 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 .icons.is-list .thumb img.icon { width: 22px; height: 22px; }
 .icons.is-list .name { margin: 0; padding: 0; background: transparent !important; font-size: 0.8rem; }
 .icons.is-list .sub { margin: 0; }
+
+/* Magnifier (machine pages, desktop browsers with a mouse): a button in the info bar and a square lens */
+.btn-mag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  font: 700 0.68rem/1.6 var(--charcoal);
+  cursor: default;
+}
+.btn-mag svg { display: block; }
+.btn-mag[aria-pressed="true"] { background: #999; box-shadow: inset 1px 1px 0 #555, inset 2px 2px 0 #777; }
+.strip.is-magnifying .slide img { cursor: none; }
+.loupe {
+  position: fixed;
+  z-index: 1700;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  border: 1px solid var(--black);
+  box-shadow: 0 0 0 3px #ddd, 0 0 0 4px var(--black), 5px 5px 0 4px rgba(0, 0, 0, 0.3);
+}
+.loupe::after { /* cross hairs at the middle, so you can see exactly what is under the pointer */
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 11px;
+  height: 11px;
+  margin: -5px 0 0 -5px;
+  background:
+    linear-gradient(#000, #000) center / 1px 100% no-repeat,
+    linear-gradient(#000, #000) center / 100% 1px no-repeat;
+  mix-blend-mode: difference;
+  filter: invert(1);
+}
+.loupe[hidden] { display: none; }
+@media (hover: none), (pointer: coarse) { .btn-mag, .loupe { display: none; } }
