@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
-  <script>document.documentElement.classList.add("js")</script>
+  <script>document.documentElement.classList.add("js");try{var d=localStorage.getItem("cs-desk"),h=localStorage.getItem("cs-hilite");if(d)document.documentElement.setAttribute("data-desk",d);if(h)document.documentElement.setAttribute("data-hilite",h)}catch(e){}</script>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}?v={{ build }}">
 </head>
 <body data-home="{{ '/' | url }}">
@@ -98,7 +98,10 @@
     {{ content | safe }}
   </main>
 
+  {# The pages of the machines, for the Control Strip's random-machine module (see controlstrip.js) #}
+  <script type="application/json" id="machine-urls">[{% for m in collections.machines %}"{{ m.url | url }}"{% if not loop.last %},{% endif %}{% endfor %}]</script>
   <script src="{{ '/assets/js/windows.js' | url }}?v={{ build }}" defer></script>
+  <script src="{{ '/assets/js/controlstrip.js' | url }}?v={{ build }}" defer></script>
 
   <script>
     (function () {

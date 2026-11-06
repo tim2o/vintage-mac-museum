@@ -61,6 +61,7 @@
       var shaded = win.classList.contains("is-shaded");
       var animate = !reduceMotion && typeof body.animate === "function";
 
+      if (window.macSound) window.macSound.zip(shaded ? "up" : "down");
       if (!shaded) {
         pauseVideos(body);
         box.setAttribute("aria-expanded", "false");
@@ -166,7 +167,7 @@
           right = deskIcons.getBoundingClientRect().left - 12;
         }
         var maxW = right - left;
-        var room = window.innerHeight - top - 16;
+        var room = window.innerHeight - top - 40; // 40: clear of the Control Strip
         var r = win.getBoundingClientRect();
         before = {
           width: win.style.width,
@@ -227,7 +228,7 @@
         // Stay where it is, unless that would put part of it off the screen.
         var r2 = win.getBoundingClientRect();
         var nx = Math.max(left, Math.min(r2.left, right - r2.width));
-        var ny = Math.max(top, Math.min(r2.top, window.innerHeight - 16 - r2.height));
+        var ny = Math.max(top, Math.min(r2.top, window.innerHeight - 40 - r2.height));
         place(before.dx + (nx - r2.left), before.dy + (ny - r2.top));
         win.classList.add("is-zoomed");
         zoom.setAttribute("aria-pressed", "true");
