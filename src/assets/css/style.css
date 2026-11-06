@@ -655,19 +655,21 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
     cursor: default;
     touch-action: none;
   }
-  /* Size box, in the bottom-right corner under the scroll arrows: Platinum's diagonal grip */
+  /* Size box, in the bottom-right corner under the scroll arrows. Drawn after the Mac OS 9 windows: window
+     grey with a white highlight along its top and left edges under a black line, and the little diamond of
+     diagonal grip lines (white, with a darker shadow beside each one) measured from the screenshots. */
   .growbox {
     order: 2;
     flex: none;
     display: none;
-    height: 16px;
-    background:
-      linear-gradient(135deg, transparent 0 45%, #fff 45% 50%, #777 50% 55%, transparent 55%) 5px 5px / 9px 9px no-repeat,
-      linear-gradient(135deg, transparent 0 45%, #fff 45% 50%, #777 50% 55%, transparent 55%) 8px 8px / 6px 6px no-repeat,
-      linear-gradient(135deg, transparent 0 45%, #fff 45% 50%, #777 50% 55%, transparent 55%) 11px 11px / 3px 3px no-repeat,
-      #eee;
-    border-top: 1px solid #444;
+    position: relative;
+    z-index: 1;
+    height: 18px;
+    margin: 0 -1px -1px 0; /* covers the pane's outline here, so the box sits in the window frame */
+    background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2214%22 height=%2215%22 shape-rendering=%22crispEdges%22%3E%3Crect x=%227%22 y=%222%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%228%22 y=%222%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%226%22 y=%223%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%228%22 y=%223%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%225%22 y=%224%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%227%22 y=%224%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%229%22 y=%224%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%2210%22 y=%224%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%224%22 y=%225%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%226%22 y=%225%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%228%22 y=%225%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%2210%22 y=%225%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%223%22 y=%226%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%225%22 y=%226%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%227%22 y=%226%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%229%22 y=%226%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%2211%22 y=%226%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%2212%22 y=%226%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%222%22 y=%227%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%224%22 y=%227%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%226%22 y=%227%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%228%22 y=%227%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%2210%22 y=%227%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%2212%22 y=%227%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%222%22 y=%228%22 width=%221%22 height=%221%22 fill=%22%23aaa%22/%3E%3Crect x=%223%22 y=%228%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%225%22 y=%228%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%227%22 y=%228%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%229%22 y=%228%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%2211%22 y=%228%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%224%22 y=%229%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%226%22 y=%229%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%228%22 y=%229%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%2210%22 y=%229%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%224%22 y=%2210%22 width=%221%22 height=%221%22 fill=%22%23aaa%22/%3E%3Crect x=%225%22 y=%2210%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%227%22 y=%2210%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%229%22 y=%2210%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%226%22 y=%2211%22 width=%221%22 height=%221%22 fill=%22%23fff%22/%3E%3Crect x=%228%22 y=%2211%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3Crect x=%226%22 y=%2212%22 width=%221%22 height=%221%22 fill=%22%23aaa%22/%3E%3Crect x=%227%22 y=%2212%22 width=%221%22 height=%221%22 fill=%22%23777%22/%3E%3C/svg%3E") 1px 1px / 14px 15px no-repeat, var(--frame);
+    border-top: 1px solid #000;
     box-shadow: inset 1px 1px 0 #fff;
+    image-rendering: pixelated;
     cursor: nwse-resize;
     touch-action: none;
   }
