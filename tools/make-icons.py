@@ -342,25 +342,6 @@ def build(kind):
         ic.rect(24, 23, 2, 1, "#4a4a4a")
         ic.rect(15, 24, 3, 1, "#7ac2ff")
         ic.shadow()
-    elif kind == "trash":
-        # A wire-mesh trash can, wider at the top than the bottom, with a rolled rim, a lid and a handle
-        def edge(y, top, bottom):  # x of the can's side at row y (top at y=8, bottom at y=29)
-            return top + (bottom - top) * (y - 8) / 21.0
-        ic.rect(12, 2, 8, 2, hgrad(12, 20, "#d8d8d8", "#8a8a8a"))      # handle
-        ic.rrect(4, 4, 24, 4, 2, hgrad(4, 28, "#f2f2f2", "#9a9a9a"))   # lid
-        ic.poly([(6, 8), (26, 8), (24, 29), (8, 29)], hgrad(6, 26, "#e6e6e6", "#7c7c7c"))
-        for i in range(1, 6):  # vertical wires, leaning in with the sides
-            t = i / 6.0
-            for y in range(9, 29):
-                x = round(edge(y, 6 + 20 * t, 8 + 16 * t))
-                ic.put(x, y, "#5a5a5a" if i % 2 else "#6c6c6c")
-        for y in (13, 18, 23):  # the rings round the can
-            for x in range(int(edge(y, 6, 8)) + 1, int(edge(y, 26, 24)) + 1):
-                ic.put(x, y, lerp("#bcbcbc", "#4a4a4a", (x - 6) / 20.0))
-        ic.rect(8, 28, 16, 1, "#3c3c3c")                              # the base
-        ic.outline()
-        ic.line(5, 5, 26, 5, "#ffffff")                               # light along the lid
-        ic.shadow()
     elif kind == "caution":
         ic.poly([(16, 2), (30, 28), (2, 28)], dgrad(2, 2, 30, 28, "#fff58a", "#d49e00"))
         ic.outline()
@@ -402,7 +383,125 @@ def apple():
     return ic
 
 
-KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "checklist", "trash", "caution"]
+def trash_hd(path):
+    """The Trash: a silver wire-mesh can, drawn smoothly (not as 32 x 32 pixel art) at 128 x 128, shown at 64.
+
+    Drawn at four times the size and shrunk with a good filter so the edges are clean. Light comes from the
+    top left: a bright band down the can, dark at the right edge, wires with a light edge beside each dark one,
+    rings that curve round the can, a rolled rim and a dark inside.
+    """
+    import numpy as np
+    from PIL import Image, ImageDraw, ImageFilter
+    S, W = 4, 128
+    n = W * S
+    yy, xx = np.mgrid[0:n, 0:n].astype(np.float64) / S      # coordinates in 128-unit space
+    cx = 64.0
+    TOP_Y, BOT_Y = 30.0, 112.0
+    RX_T, RX_B = 44.0, 32.0
+    RY_T, RY_B = 11.0, 8.0
+
+    def rx(y): return RX_T + (RX_B - RX_T) * (y - TOP_Y) / (BOT_Y - TOP_Y)
+    def ry(y): return RY_T + (RY_B - RY_T) * (y - TOP_Y) / (BOT_Y - TOP_Y)
+
+    # Shapes, as masks
+    yc = np.clip(yy, TOP_Y, BOT_Y)
+    half = rx(yc)
+    u = (xx - (cx - half)) / (2 * half)                       # 0 at the left edge of the can, 1 at the right
+    inside_x = (u >= 0) & (u <= 1)
+    uu = np.clip(2 * u - 1, -1, 1)
+    bottom_arc = BOT_Y + RY_B * np.sqrt(1 - uu ** 2)
+    body = inside_x & (yy >= TOP_Y) & (yy <= bottom_arc)
+    rim_out = ((xx - cx) / RX_T) ** 2 + ((yy - TOP_Y) / RY_T) ** 2 <= 1
+    rim_in = ((xx - cx) / 39.0) ** 2 + ((yy - (TOP_Y - 0.5)) / 8.0) ** 2 <= 1
+    sil = body | rim_out
+
+    # The can's metal: a bright band left of centre, falling away to the right edge
+    v = 0.30 + 0.62 * np.exp(-((u - 0.27) / 0.30) ** 2) + 0.10 * np.exp(-((u - 0.92) / 0.06) ** 2)
+    v = np.clip(v, 0, 1)
+    g = 70 + 185 * v
+    rgb = np.stack([g, g, g + 7], axis=-1)
+
+    # Vertical wires: a dark line with a light line just right of it
+    for i in range(1, 9):
+        ui = i / 9.0
+        xw = (cx - half) + 2 * half * ui
+        d = xx - xw
+        dark = np.clip(1 - np.abs(d) / 1.1, 0, 1)
+        light = np.clip(1 - np.abs(d - 1.5) / 0.9, 0, 1)
+        m = body & (yy > TOP_Y + 3)
+        rgb = rgb * (1 - 0.55 * dark * m)[..., None]
+        rgb = rgb + (255 - rgb) * (0.55 * light * m * (v > 0.2))[..., None]
+
+    # Rings round the can, curving down at the front
+    for y0 in (47.0, 67.0, 87.0, 104.0):
+        arc = y0 + ry(y0) * np.sqrt(1 - uu ** 2)
+        dark = np.clip(1 - np.abs(yy - arc) / 1.2, 0, 1)
+        light = np.clip(1 - np.abs(yy - arc - 1.7) / 0.9, 0, 1)
+        m = body & (yy > TOP_Y + 3)
+        rgb = rgb * (1 - 0.5 * dark * m)[..., None]
+        rgb = rgb + (255 - rgb) * (0.45 * light * m)[..., None]
+
+    # The base: a darker ring near the bottom, with a light line above it
+    base = body & (yy > bottom_arc - 7)
+    rgb = np.where(base[..., None], rgb * 0.72, rgb)
+    edge = body & (np.abs(yy - (bottom_arc - 7)) < 0.8)
+    rgb = np.where(edge[..., None], 255 - (255 - rgb) * 0.45, rgb)
+
+    # Under the rim: the shadow of the rolled lip across the front of the can
+    lip = np.clip(1 - np.abs(yy - (TOP_Y + 9.5 * np.sqrt(np.clip(1 - ((xx - cx) / 43.0) ** 2, 0, 1)) + 1.5)) / 2.2, 0, 1)
+    rgb = rgb * (1 - 0.45 * lip * (body & ~rim_out))[..., None]
+
+    # The rim: a light metal band, brightest at the back left
+    rv = 0.62 + 0.38 * np.exp(-((xx - 48.0) / 20.0) ** 2) - 0.25 * np.clip((yy - TOP_Y) / RY_T, 0, 1)
+    rg = np.clip(110 + 150 * rv, 0, 255)
+    rim_rgb = np.stack([rg, rg, rg + 6], axis=-1)
+    rgb = np.where((rim_out & ~rim_in)[..., None], rim_rgb, rgb)
+    # The dark inside, a little lighter towards the front wall
+    iv = np.clip((yy - (TOP_Y - 8.5)) / 16.5, 0, 1)
+    ig = 28 + 52 * iv
+    inner = np.stack([ig, ig, ig + 6], axis=-1)
+    back_wall = np.clip(1 - np.abs(xx - 44.0) / 9.0, 0, 1) * (1 - iv) * 22
+    inner = inner + back_wall[..., None]
+    rgb = np.where(rim_in[..., None], inner, rgb)
+
+    # Black outline round everything, and a fine one round the opening
+    mask_img = Image.fromarray((sil * 255).astype(np.uint8))
+    grown = mask_img.filter(ImageFilter.MaxFilter(2 * int(1.7 * S) + 1))
+    outline = np.array(grown) > 127
+    ring = np.array(rim_in)
+    ring_edge = np.array(Image.fromarray((ring * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(2 * int(1.1 * S) + 1))) > 127
+    ring_edge &= ~ring
+    ring_edge &= rim_out
+
+    out = np.zeros((n, n, 4), dtype=np.float64)
+    # Soft drop shadow, to the lower right
+    sh = Image.fromarray((np.array(grown) * 1).astype(np.uint8)).transform((n, n), Image.AFFINE, (1, 0, -5 * S, 0, 1, -5 * S))
+    sh = np.array(sh.filter(ImageFilter.GaussianBlur(2.6 * S))) / 255.0
+    out[..., 3] = 0.34 * sh
+    # Outline, then the can over it
+    o = outline[..., None]
+    out[..., :3] = np.where(o, 0, out[..., :3])
+    out[..., 3] = np.where(outline, 1.0, out[..., 3])
+    body_m = sil[..., None]
+    out[..., :3] = np.where(body_m, np.clip(rgb, 0, 255), out[..., :3])
+    out[..., 3] = np.where(sil, 1.0, out[..., 3])
+    out[..., :3] = np.where(ring_edge[..., None], 40, out[..., :3])
+    # Premultiply before shrinking, so the soft shadow stays clean at the edges
+    pre = out.copy()
+    pre[..., :3] *= pre[..., 3:4]
+    im = Image.fromarray(np.clip(pre, 0, 255).astype(np.uint8), "RGBA") if False else None
+    chans = [Image.fromarray(np.clip(pre[..., i], 0, 255).astype(np.uint8)).resize((W, W), Image.LANCZOS) for i in range(3)]
+    alpha = Image.fromarray(np.clip(out[..., 3] * 255, 0, 255).astype(np.uint8)).resize((W, W), Image.LANCZOS)
+    a = np.array(alpha).astype(np.float64) / 255.0
+    final = np.zeros((W, W, 4), dtype=np.uint8)
+    for i, c in enumerate(chans):
+        ci = np.array(c).astype(np.float64)
+        final[..., i] = np.clip(np.where(a > 0, ci / np.maximum(a, 1e-6), 0), 0, 255).astype(np.uint8)
+    final[..., 3] = np.array(alpha)
+    Image.fromarray(final, "RGBA").save(path, optimize=True)
+
+
+KINDS = ["laptop-small", "laptop-dark", "laptop-round", "laptop-silver", "ibook", "emate", "crt", "emac", "imac-g4", "mini", "compact", "desktop", "imac", "laptop", "cube", "flatpanel", "tower", "disk", "doc", "checklist", "caution"]
 
 
 def save_png(ic, path):
@@ -421,7 +520,7 @@ MACRO = """{#
   They are drawn for this site as generic computer shapes and are not copies of any Apple icon.
   The pictures are generated: edit tools/make-icons.py and run  python3 -I tools/make-icons.py
   Use: {% from "icons.njk" import icon %}{{ icon("compact", 64) }}
-  Kinds: KINDS.
+  Kinds: KINDS, and trash (a smoother 128 x 128 drawing, shown at 64).
   Draw them at 32 or 64 pixels so every drawn pixel lands on a whole screen pixel.
 #}
 {% macro icon(kind, size) %}<img class="icon icon-{{ kind }}" src="{{ ('/assets/img/icons/' ~ kind ~ '.png') | url }}" width="{{ size or 32 }}" height="{{ size or 32 }}" alt="" decoding="async">{% endmacro %}
@@ -433,6 +532,7 @@ def main():
     os.makedirs("src/assets/img/icons", exist_ok=True)
     for k in KINDS:
         save_png(build(k), "src/assets/img/icons/%s.png" % k)
+    trash_hd("src/assets/img/icons/trash.png")  # smooth, 128 x 128, shown at 64
     save_png(menu_mac(), "src/assets/img/icons/menu-mac.png")
     save_png(menu_mac(blue=True), "src/assets/img/icons/menu-finder.png")
     save_png(apple(), "src/assets/img/icons/menu-apple-flat.png")

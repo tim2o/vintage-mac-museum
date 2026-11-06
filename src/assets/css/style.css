@@ -732,6 +732,8 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 }
 /* The photo fills the fixed 4:3 box without changing its size. Tall photos show the screen and front of the machine; the full photo opens on click. */
 .icon { image-rendering: pixelated; }
+/* The Trash is a smooth 128 px drawing shown at 64, not pixel art, so it is scaled smoothly */
+.icon-trash, .icon[src$="trash.png"] { image-rendering: auto; }
 .thumb img {
   position: absolute;
   inset: 0;
