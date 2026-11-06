@@ -422,6 +422,8 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   border: 1px solid #2f5f99;
   box-shadow: none;
 }
+/* A sticky note's boxes always work, even while another window is in front of it */
+.window.sticky.is-inactive .closebox, .window.sticky.is-inactive .collapsebox { opacity: 1; pointer-events: auto; }
 .sticky .closebox { left: 3px; }
 .sticky .collapsebox { right: 3px; }
 .sticky .collapsebox::after,

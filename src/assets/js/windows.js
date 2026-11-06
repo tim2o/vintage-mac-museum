@@ -788,24 +788,33 @@
   // The Collection window can be closed, leaving just the desktop. It is hidden, not removed, and the Collection
   // menu, the shelf icon on the desktop and the Application menu bring it back.
   var finderWin = document.querySelector(".window.finder");
-  if (finderWin && canDrag.matches) {
-    var oldBox = finderWin.querySelector(".closebox");
-    if (oldBox && oldBox.tagName !== "BUTTON") {
-      var closeBtn = document.createElement("button");
-      closeBtn.type = "button";
-      closeBtn.className = "closebox";
-      closeBtn.setAttribute("aria-label", "Close Collection");
-      oldBox.replaceWith(closeBtn);
-      closeBtn.addEventListener("click", function (e) {
-        e.stopPropagation();
-        pauseVideos(finderWin);
-        finderWin.classList.add("is-closed");
-        var next = topmostWindow();
-        if (next) activate(next);
+  // The Read Me sticky note on the home page closes the same way (it comes back when the page is loaded again).
+  function makeClosable(win, label, after) {
+    var oldBox = win.querySelector(".closebox");
+    if (!oldBox || oldBox.tagName === "BUTTON") return;
+    var closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.className = "closebox";
+    closeBtn.setAttribute("aria-label", label);
+    oldBox.replaceWith(closeBtn);
+    closeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      pauseVideos(win);
+      win.classList.add("is-closed");
+      var next = topmostWindow();
+      if (next) activate(next);
+      if (after) after();
+    });
+  }
+  if (canDrag.matches) {
+    if (finderWin) {
+      makeClosable(finderWin, "Close Collection", function () {
         var back = document.querySelector('.desk-icon[data-open-window="collection"]');
         if (back) back.focus({ preventScroll: true });
       });
     }
+    var stickyWin = document.querySelector(".window.sticky");
+    if (stickyWin) makeClosable(stickyWin, "Close Read Me");
   }
   function openCollection() {
     if (!finderWin) return;
