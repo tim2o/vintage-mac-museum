@@ -867,17 +867,6 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   .window.is-open { position: absolute; margin: 0; }
 }
 
-/* Footer bar */
-.footer {
-  padding: 8px 12px;
-  background: var(--plat);
-  border-top: 1px solid var(--black);
-  box-shadow: inset 0 1px 0 #fff;
-  font: 400 0.72rem/1.45 var(--geneva);
-  text-align: center;
-}
-.footer p { max-width: 70ch; margin: 0 auto; }
-
 @media (max-width: 52rem) {
   .machine-layout { grid-template-columns: minmax(0, 1fr); }
 }
