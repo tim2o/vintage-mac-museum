@@ -121,8 +121,9 @@
       toggle();
     });
 
-    // Zoom box: toggles between the window's own size and a large one that fills the part of the desktop you
-    // are looking at (clear of the menu bar and the desktop icons). Click again to put it back.
+    // Zoom box: toggles between the window's own size and the size of its contents (as big as will fit in the
+    // part of the desktop you are looking at, clear of the menu bar and the desktop icons). Click again to put
+    // it back.
     var zoom = bar.querySelector(".zoombox");
     if (zoom) {
       zoom.removeAttribute("aria-hidden");
@@ -157,13 +158,16 @@
           return;
         }
         var menu = document.querySelector(".menubar");
-        var icons = document.querySelector(".desk-icons");
+        var deskIcons = document.querySelector(".desk-icons");
         var top = (menu ? menu.offsetHeight : 22) + 8;
         var left = 12;
         var right = document.documentElement.clientWidth - 12;
-        if (icons && window.getComputedStyle(icons).display !== "none") {
-          right = icons.getBoundingClientRect().left - 12;
+        if (deskIcons && window.getComputedStyle(deskIcons).display !== "none") {
+          right = deskIcons.getBoundingClientRect().left - 12;
         }
+        var maxW = right - left;
+        var room = window.innerHeight - top - 16;
+        var r = win.getBoundingClientRect();
         before = {
           width: win.style.width,
           dx: parseFloat(win.getAttribute("data-dx")) || 0,
@@ -171,16 +175,60 @@
           maxHeight: view ? view.style.maxHeight : "",
           height: view ? view.style.height : "",
         };
-        win.style.width = Math.max(320, Math.min(right - left, 1200)) + "px";
-        var r2 = win.getBoundingClientRect();
-        place(before.dx + (left - r2.left), before.dy + (top - r2.top));
-        if (view) {
-          // Windows with a scrolling list take the extra height; others keep the height their content needs.
-          var room = window.innerHeight - top - 16;
-          var viewH = view.clientHeight; // measured before its height limit is lifted
+
+        // The standard size is the size of the contents, as in Mac OS: just big enough to show everything,
+        // or as big as the desktop allows if everything will not fit.
+        var slides = win.querySelector("[data-strip-slides]");
+        var grid = win.querySelector(".icons");
+        // The list takes the height it needs, so the window can be measured.
+        var natural = function () {
           view.style.maxHeight = "none";
-          view.style.height = Math.max(120, viewH + room - r2.height) + "px";
+          view.style.height = "auto";
+          var content = view.scrollHeight;
+          return { content: content, chrome: win.getBoundingClientRect().height - content };
+        };
+        var targetW;
+        if (slides) {
+          // A strip of photos or videos: wide enough to show one whole slide.
+          win.style.width = maxW + "px";
+          var first = slides.querySelector(".slide");
+          var cs = window.getComputedStyle(slides);
+          var frame = win.getBoundingClientRect().width - slides.clientWidth;
+          var peek = win.querySelector(".strip-multi") ? 28 : 0; // room the strip leaves for the next slide
+          targetW = first
+            ? first.getBoundingClientRect().width + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + frame + peek + 2
+            : maxW;
+        } else if (grid && view) {
+          // A grid of icons: the narrowest window, no narrower than now, in which every icon fits on screen.
+          var from = Math.min(r.width, maxW);
+          targetW = maxW;
+          for (var i = 0; i <= 12; i++) {
+            win.style.width = from + ((maxW - from) * i) / 12 + "px";
+            var n0 = natural();
+            if (n0.content + n0.chrome <= room) {
+              targetW = from + ((maxW - from) * i) / 12;
+              break;
+            }
+          }
+        } else {
+          // Anything else: as wide as its contents want to be.
+          win.style.width = "max-content";
+          targetW = win.getBoundingClientRect().width;
+          // Text and forms wrap, so only a movie is allowed to grow past its usual width.
+          if (!win.hasAttribute("data-movie-window")) targetW = Math.min(targetW, r.width);
         }
+        targetW = Math.max(320, Math.min(targetW, maxW));
+        win.style.width = Math.ceil(targetW) + "px";
+        if (view) {
+          var n = natural();
+          view.style.height = Math.max(120, Math.min(n.content, room - n.chrome)) + "px";
+        }
+
+        // Stay where it is, unless that would put part of it off the screen.
+        var r2 = win.getBoundingClientRect();
+        var nx = Math.max(left, Math.min(r2.left, right - r2.width));
+        var ny = Math.max(top, Math.min(r2.top, window.innerHeight - 16 - r2.height));
+        place(before.dx + (nx - r2.left), before.dy + (ny - r2.top));
         win.classList.add("is-zoomed");
         zoom.setAttribute("aria-pressed", "true");
       };
