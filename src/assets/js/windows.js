@@ -117,9 +117,84 @@
       toggle();
     });
     bar.addEventListener("dblclick", function (e) {
-      if (e.target.closest("a, button")) return;
+      if (e.target.closest("a, button, .zoombox")) return;
       toggle();
     });
+
+    // Zoom box: toggles between the window's own size and a large one that fills the part of the desktop you
+    // are looking at (clear of the menu bar and the desktop icons). Click again to put it back.
+    var zoom = bar.querySelector(".zoombox");
+    if (zoom) {
+      zoom.removeAttribute("aria-hidden");
+      zoom.setAttribute("role", "button");
+      zoom.setAttribute("tabindex", "0");
+      zoom.setAttribute("aria-label", "Zoom " + title);
+      zoom.setAttribute("aria-pressed", "false");
+      var before = null;
+      var place = function (dx, dy) {
+        win.setAttribute("data-dx", dx);
+        win.setAttribute("data-dy", dy);
+        win.style.setProperty("--dx", dx + "px");
+        win.style.setProperty("--dy", dy + "px");
+      };
+      var toggleZoom = function () {
+        if (win.classList.contains("is-shaded")) {
+          box.click(); // a rolled-up window is unrolled first
+          return;
+        }
+        var view = win.querySelector("[data-vs-view]");
+        activate(win);
+        if (before) {
+          win.style.width = before.width;
+          place(before.dx, before.dy);
+          if (view) {
+            view.style.maxHeight = before.maxHeight;
+            view.style.height = before.height;
+          }
+          before = null;
+          win.classList.remove("is-zoomed");
+          zoom.setAttribute("aria-pressed", "false");
+          return;
+        }
+        var menu = document.querySelector(".menubar");
+        var icons = document.querySelector(".desk-icons");
+        var top = (menu ? menu.offsetHeight : 22) + 8;
+        var left = 12;
+        var right = document.documentElement.clientWidth - 12;
+        if (icons && window.getComputedStyle(icons).display !== "none") {
+          right = icons.getBoundingClientRect().left - 12;
+        }
+        before = {
+          width: win.style.width,
+          dx: parseFloat(win.getAttribute("data-dx")) || 0,
+          dy: parseFloat(win.getAttribute("data-dy")) || 0,
+          maxHeight: view ? view.style.maxHeight : "",
+          height: view ? view.style.height : "",
+        };
+        win.style.width = Math.max(320, Math.min(right - left, 1200)) + "px";
+        var r2 = win.getBoundingClientRect();
+        place(before.dx + (left - r2.left), before.dy + (top - r2.top));
+        if (view) {
+          // Windows with a scrolling list take the extra height; others keep the height their content needs.
+          var room = window.innerHeight - top - 16;
+          var viewH = view.clientHeight; // measured before its height limit is lifted
+          view.style.maxHeight = "none";
+          view.style.height = Math.max(120, viewH + room - r2.height) + "px";
+        }
+        win.classList.add("is-zoomed");
+        zoom.setAttribute("aria-pressed", "true");
+      };
+      zoom.addEventListener("click", function (e) {
+        e.stopPropagation();
+        toggleZoom();
+      });
+      zoom.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggleZoom();
+        }
+      });
+    }
 
     // Bring the window forward when it is clicked anywhere.
     win.addEventListener(
@@ -132,7 +207,7 @@
 
     // Dragging, with an outline like Mac OS 8.
     bar.addEventListener("pointerdown", function (e) {
-      if (!canDrag.matches || e.button !== 0 || e.target.closest("a, button")) return;
+      if (!canDrag.matches || e.button !== 0 || e.target.closest("a, button, .zoombox")) return;
       e.preventDefault();
       activate(win);
 

@@ -310,14 +310,14 @@ main {
 .zoombox::after { left: 2px; top: 2px; width: 8px; height: 8px; }
 .zoombox::before { left: 2px; top: 2px; width: 4px; height: 4px; border-width: 1px; }
 .collapsebox::after { left: 2px; right: 2px; top: 3px; height: 3px; border-width: 0; border-top: 2px solid #222; border-bottom: 1px solid #222; }
-.closebox:active, .collapsebox:active {
+.closebox:active, .collapsebox:active, .zoombox[role="button"]:active {
   background: #808080;
   box-shadow:
     inset 1px 1px 0 #555, inset -1px -1px 0 #aaa,
     -1px -1px 0 #888, 1px 1px 0 #fff,
     0 0 0 3px var(--frame);
 }
-a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
+a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visible, .zoombox:focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
 
 /* Only the window in front shows its stripes. Others go flat and grey. */
 .window.is-inactive .titlebar::before { display: none; }
@@ -328,7 +328,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   opacity: 0;
   pointer-events: none;
 }
-.window.is-inactive .closebox:focus-visible, .window.is-inactive .collapsebox:focus-visible { opacity: 1; }
+.window.is-inactive .closebox:focus-visible, .window.is-inactive .collapsebox:focus-visible, .window.is-inactive .zoombox:focus-visible { opacity: 1; }
 .window.is-inactive .closebox::before, .window.is-inactive .closebox::after,
 .window.is-inactive .zoombox::before, .window.is-inactive .zoombox::after,
 .window.is-inactive .collapsebox::after { display: none; }
