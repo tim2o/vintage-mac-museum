@@ -83,6 +83,8 @@
     var xy = carried.split(",");
     show(parseFloat(xy[0]) || 0, parseFloat(xy[1]) || 0);
     var done = function () { window.setTimeout(hide, 350); };
+    // The sound from the click was cut off by leaving the page, so the new page carries it on (if the browser allows).
+    if (window.macSound && window.macSound.hd) window.macSound.hd(300);
     if (document.readyState === "complete") done(); else window.addEventListener("load", done, { once: true });
     window.setTimeout(hide, 4000); // never leave it up if something is slow
   }

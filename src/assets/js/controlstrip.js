@@ -81,52 +81,88 @@
     teeth.stop(t + length);
   }
 
-  // A hard drive at work: a soft spin-up hum, then little seek clicks at uneven gaps. Short bursts of filtered noise,
-  // so it costs next to nothing, and it follows the volume in the Control Strip.
+  // A hard drive at work. Real drives mostly tick: the head's actuator slaps against its stops in quick runs, with a
+  // low thump under each tick, a thin spindle whine, and pauses while it thinks. Everything is made from a few tiny
+  // pre-made click buffers, so it costs next to nothing, and it follows the volume in the Control Strip.
+  // The sound deliberately outlasts the busy wheel (about a second longer), trailing off like a drive settling down.
+  var clicks = null;
+  function clickBuffers(c) {
+    if (clicks && clicks.rate === c.sampleRate) return clicks.list;
+    var list = [];
+    for (var k = 0; k < 5; k++) {
+      var len = Math.ceil(c.sampleRate * 0.022);
+      var buf = c.createBuffer(1, len, c.sampleRate);
+      var d = buf.getChannelData(0);
+      var ring = 1800 + k * 650;          // each click rings at its own pitch, so a run does not sound like a machine gun
+      var prev = 0;
+      for (var i = 0; i < len; i++) {
+        var t = i / c.sampleRate;
+        var noise = Math.random() * 2 - 1;
+        var sharp = noise - prev;         // differencing the noise = a bright, hard-edged transient
+        prev = noise;
+        var snap = sharp * Math.exp(-t / 0.0008);
+        var tone = Math.sin(2 * Math.PI * ring * t) * Math.exp(-t / 0.0035);
+        var thud = Math.sin(2 * Math.PI * (150 - k * 12) * t) * Math.exp(-t / 0.006);
+        d[i] = Math.max(-1, Math.min(1, snap * 0.9 + tone * 0.8 + thud * 0.9));
+      }
+      list.push(buf);
+    }
+    clicks = { rate: c.sampleRate, list: list };
+    return list;
+  }
+
   function hd(ms) {
     if (!level) return;
     var c = context();
     if (!c) return;
-    var t0 = c.currentTime;
-    var total = Math.max(0.3, ms / 1000);
-    var vol = 0.5 * (level / MAX);
+    var t0 = c.currentTime + 0.01;
+    var total = Math.max(0.9, ms / 1000) + 1.0;
+    var vol = 0.9 * (level / MAX);
     var out = c.createGain();
     out.gain.value = vol;
     out.connect(c.destination);
 
-    var hum = c.createOscillator();
-    var humGain = c.createGain();
-    hum.type = "triangle";
-    hum.frequency.setValueAtTime(48, t0);
-    hum.frequency.linearRampToValueAtTime(96, t0 + 0.25);
-    humGain.gain.setValueAtTime(0.0001, t0);
-    humGain.gain.linearRampToValueAtTime(0.05, t0 + 0.12);
-    humGain.gain.linearRampToValueAtTime(0.03, t0 + total * 0.8);
-    humGain.gain.exponentialRampToValueAtTime(0.0001, t0 + total);
-    hum.connect(humGain);
-    humGain.connect(out);
-    hum.start(t0);
-    hum.stop(t0 + total + 0.05);
+    // The spindle whine: a thin hum that winds up, runs, and winds down through the tail.
+    var whine = c.createOscillator();
+    var whineGain = c.createGain();
+    whine.type = "sawtooth";
+    whine.frequency.setValueAtTime(70, t0);
+    whine.frequency.linearRampToValueAtTime(118, t0 + 0.3);
+    whine.frequency.setValueAtTime(118, t0 + total - 0.5);
+    whine.frequency.linearRampToValueAtTime(80, t0 + total);
+    var lp = c.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.value = 420;
+    whineGain.gain.setValueAtTime(0.0001, t0);
+    whineGain.gain.linearRampToValueAtTime(0.045, t0 + 0.15);
+    whineGain.gain.setValueAtTime(0.04, t0 + total - 0.6);
+    whineGain.gain.exponentialRampToValueAtTime(0.0001, t0 + total);
+    whine.connect(lp);
+    lp.connect(whineGain);
+    whineGain.connect(out);
+    whine.start(t0);
+    whine.stop(t0 + total + 0.05);
 
-    var len = Math.ceil(c.sampleRate * 0.05);
-    var buf = c.createBuffer(1, len, c.sampleRate);
-    var d = buf.getChannelData(0);
-    for (var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (len * 0.18));
-    var t = t0 + 0.06;
-    while (t < t0 + total - 0.05) {
-      var src = c.createBufferSource();
-      src.buffer = buf;
-      var f = c.createBiquadFilter();
-      f.type = "bandpass";
-      f.frequency.value = 700 + Math.random() * 2200;
-      f.Q.value = 3 + Math.random() * 3;
-      var g = c.createGain();
-      g.gain.value = 0.35 + Math.random() * 0.65;
-      src.connect(f);
-      f.connect(g);
-      g.connect(out);
-      src.start(t);
-      t += 0.035 + Math.random() * Math.random() * 0.13; // mostly quick runs of clicks, now and then a pause
+    // The clicks: runs of 3 to 9 at 14-40 ms apart, then a pause. Runs thin out toward the end.
+    var list = clickBuffers(c);
+    var t = t0 + 0.04;
+    var end = t0 + total - 0.1;
+    while (t < end) {
+      var progress = (t - t0) / total;
+      var fade = progress < 0.6 ? 1 : Math.max(0.25, 1 - (progress - 0.6) / 0.45);
+      var run = 3 + Math.floor(Math.random() * 7);
+      for (var n = 0; n < run && t < end; n++) {
+        var src = c.createBufferSource();
+        src.buffer = list[Math.floor(Math.random() * list.length)];
+        src.playbackRate.value = 0.9 + Math.random() * 0.25;
+        var g = c.createGain();
+        g.gain.value = (0.45 + Math.random() * 0.55) * fade;
+        src.connect(g);
+        g.connect(out);
+        src.start(t);
+        t += 0.014 + Math.random() * 0.026;
+      }
+      t += (0.07 + Math.random() * 0.2) / (0.6 + fade * 0.4); // the pause between runs gets longer as it settles
     }
   }
 
