@@ -1266,3 +1266,29 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   .movie-foot .growbox { display: none; width: 16px; height: 16px; margin: 0; border-top: 0; border-left: 1px solid #000; box-shadow: none; }
   .movie-foot .growbox.is-live { display: block; }
 }
+
+/* Movable desktop icons (desk-icons.js adds .is-free): the icons are placed on a grid by script */
+@media (min-width: 64rem) {
+  .desk-icons.is-free { top: 0; right: 0; bottom: 0; left: 0; width: auto; display: block; pointer-events: none; }
+  .desk-icons.is-free .desk-icon,
+  .desk-icons.is-free .desk-trash {
+    position: absolute;
+    right: auto;
+    bottom: auto;
+    width: 6.25rem;
+    pointer-events: auto;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: left 0.12s ease-out, top 0.12s ease-out;
+  }
+  .desk-icons.is-free .desk-icon.is-dragging {
+    z-index: 1500;
+    opacity: 0.75;
+    transition: none;
+  }
+  .desk-icons.is-free .desk-icon.is-dragging span { background: var(--hilite); color: var(--white); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .desk-icons.is-free .desk-icon { transition: none !important; }
+}

@@ -72,29 +72,29 @@
   {# Desktop icons down the right-hand side, one for each page of the site #}
   {% from "icons.njk" import icon %}
   <nav class="desk-icons" aria-label="Desktop">
-    <a class="desk-icon" href="{{ '/' | url }}" data-open-window="collection">
+    <a class="desk-icon" data-icon-id="shelf" href="{{ '/' | url }}" data-open-window="collection">
       {{ icon("disk", 64) }}
       <span>{{ site.title }}</span>
     </a>
-    <a class="desk-icon" href="{{ '/about/' | url }}" data-open-window="about">
+    <a class="desk-icon" data-icon-id="about" href="{{ '/about/' | url }}" data-open-window="about">
       {{ icon("doc", 64) }}
       <span>About This Collection</span>
     </a>
-    <a class="desk-icon" href="{{ '/checklist/' | url }}" data-open-window="checklist">
+    <a class="desk-icon" data-icon-id="checklist" href="{{ '/checklist/' | url }}" data-open-window="checklist">
       {{ icon("checklist", 64) }}
       <span>Checklist</span>
     </a>
     {# Placeholders: each opens a "coming soon" window (see windows.js) #}
-    <button type="button" class="desk-icon" data-popup="intel" data-popup-title="Intel Macs" data-popup-icon="{{ '/assets/img/icons/laptop.png' | url }}" aria-haspopup="dialog">
+    <button type="button" class="desk-icon" data-icon-id="intel" data-popup="intel" data-popup-title="Intel Macs" data-popup-icon="{{ '/assets/img/icons/laptop.png' | url }}" aria-haspopup="dialog">
       {{ icon("laptop", 64) }}
       <span>Intel Macs</span>
     </button>
-    <button type="button" class="desk-icon" data-popup="m-series" data-popup-title="Modern M-Series Macs" data-popup-icon="{{ '/assets/img/icons/mini.png' | url }}" aria-haspopup="dialog">
+    <button type="button" class="desk-icon" data-icon-id="mseries" data-popup="m-series" data-popup-title="Modern M-Series Macs" data-popup-icon="{{ '/assets/img/icons/mini.png' | url }}" aria-haspopup="dialog">
       {{ icon("mini", 64) }}
       <span>Modern M-Series Macs</span>
     </button>
     {# The Trash, lower right as on the Mac OS desktop. For now it only says it is empty (see windows.js). #}
-    <button type="button" class="desk-icon desk-trash" data-popup="trash" data-popup-title="Trash" data-popup-heading="The Trash is empty." data-popup-text="" data-popup-icon="{{ '/assets/img/icons/trash.png' | url }}" aria-haspopup="dialog">
+    <button type="button" class="desk-icon desk-trash" data-icon-id="trash" data-popup="trash" data-popup-title="Trash" data-popup-heading="The Trash is empty." data-popup-text="" data-popup-icon="{{ '/assets/img/icons/trash.png' | url }}" aria-haspopup="dialog">
       {{ icon("trash", 64) }}
       <span>Trash</span>
     </button>
@@ -108,6 +108,7 @@
   <script type="application/json" id="machine-urls">[{% for m in collections.machines %}"{{ m.url | url }}"{% if not loop.last %},{% endif %}{% endfor %}]</script>
   <script src="{{ '/assets/js/windows.js' | url }}?v={{ build }}" defer></script>
   <script src="{{ '/assets/js/controlstrip.js' | url }}?v={{ build }}" defer></script>
+  <script src="{{ '/assets/js/desk-icons.js' | url }}?v={{ build }}" defer></script>
 
   <script>
     (function () {

@@ -327,6 +327,16 @@
         set("cs-desk", d[0]);
       }, "cs-swatch desk-sw", "data-desk", d[0]));
     });
+    if (window.deskIcons) {
+      var sep = document.createElement("div");
+      sep.className = "cs-sep";
+      sep.setAttribute("role", "separator");
+      p.appendChild(sep);
+      var clean = menuItem("Clean Up Icons", false, function () { window.deskIcons.cleanUp(); });
+      clean.setAttribute("role", "menuitem");
+      clean.removeAttribute("aria-checked");
+      p.appendChild(clean);
+    }
   }
 
   function label(text) {
