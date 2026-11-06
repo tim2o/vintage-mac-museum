@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Sacramento&display=swap" rel="stylesheet">
-  <script>document.documentElement.classList.add("js");try{var d=localStorage.getItem("cs-desk"),h=localStorage.getItem("cs-hilite");if(d)document.documentElement.setAttribute("data-desk",d);if(h)document.documentElement.setAttribute("data-hilite",h)}catch(e){}</script>
+  <script>document.documentElement.classList.add("js");try{var d=localStorage.getItem("cs-desk"),h=localStorage.getItem("cs-hilite"),t=localStorage.getItem("cs-theme");if(d)document.documentElement.setAttribute("data-desk",d);if(h)document.documentElement.setAttribute("data-hilite",h);if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | url }}?v={{ build }}">
 </head>
 <body data-home="{{ '/' | url }}">
@@ -24,9 +24,10 @@
         </ul>
       </div>
       <div class="menu">
-        <a href="{{ '/' | url }}">Collection</a>
+        {# On a desktop browser the title only shows the menu; All machines opens the Collection window (see windows.js) #}
+        <a href="{{ '/' | url }}" data-menu-title>Collection</a>
         <ul class="dropdown" role="list">
-          <li><a href="{{ '/' | url }}">All machines</a></li>
+          <li><a href="{{ '/' | url }}" data-open-window="collection">All machines</a></li>
           <li class="sep" aria-hidden="true"></li>
           {% for m in collections.machines %}
           <li><a href="{{ m.url | url }}">{{ m.data.title }}</a></li>
@@ -58,7 +59,7 @@
         <ul class="app-list" id="app-list" role="menu" hidden>
           <li class="is-front" role="none"><button type="button" role="menuitem"><img src="{{ '/assets/img/icons/menu-finder.png' | url }}" width="16" height="16" alt="">Finder</button></li>
           <li class="sep" role="separator"></li>
-          <li role="none"><a role="menuitem" href="{{ '/' | url }}"><img src="{{ '/assets/img/icons/disk-16.png' | url }}" width="16" height="16" alt="">{{ site.title }}</a></li>
+          <li role="none"><a role="menuitem" href="{{ '/' | url }}" data-open-window="collection"><img src="{{ '/assets/img/icons/disk-16.png' | url }}" width="16" height="16" alt="">{{ site.title }}</a></li>
           <li role="none"><a role="menuitem" href="{{ '/about/' | url }}" data-open-window="about"><img src="{{ '/assets/img/icons/doc-16.png' | url }}" width="16" height="16" alt="">About This Collection</a></li>
           <li role="none"><a role="menuitem" href="{{ '/checklist/' | url }}" data-open-window="checklist"><img src="{{ '/assets/img/icons/checklist-16.png' | url }}" width="16" height="16" alt="">Checklist</a></li>
           <li role="none"><button type="button" role="menuitem" data-popup="intel" data-popup-title="Intel Macs" data-popup-icon="{{ '/assets/img/icons/laptop.png' | url }}"><img src="{{ '/assets/img/icons/laptop-16.png' | url }}" width="16" height="16" alt="">Intel Macs</button></li>
@@ -71,7 +72,7 @@
   {# Desktop icons down the right-hand side, one for each page of the site #}
   {% from "icons.njk" import icon %}
   <nav class="desk-icons" aria-label="Desktop">
-    <a class="desk-icon" href="{{ '/' | url }}">
+    <a class="desk-icon" href="{{ '/' | url }}" data-open-window="collection">
       {{ icon("disk", 64) }}
       <span>{{ site.title }}</span>
     </a>

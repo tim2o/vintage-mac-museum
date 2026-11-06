@@ -159,6 +159,10 @@
     ["graphite", "Graphite"],
     ["black", "Black"]
   ];
+  var THEMES = [
+    ["", "Mac OS 9"],
+    ["system7", "System 7"]
+  ];
   var LOOKS = [
     ["", "Lavender"],
     ["blue", "Blue"],
@@ -207,7 +211,7 @@
   var bRandom = addModule("random", "Random Machine", ICONS.random, "Random Machine: jump to a machine picked at random");
   var bView = addModule("view", "Collection View", ICONS.view, "Collection View: show the Collection as icons or as a list");
   var bDate = addModule("date", "Date", ICONS.date, "Date and Time: today's date and the time");
-  var bLook = addModule("look", "Highlight Color", ICONS.look, "Highlight Color: change the color of highlights and scroll bars");
+  var bLook = addModule("look", "Appearance", ICONS.look, "Appearance: switch between Mac OS 9 and System 7, and pick a highlight color");
   [bSound, bDesk, bView, bDate, bLook].forEach(function (b) {
     b.setAttribute("aria-haspopup", "true");
     b.setAttribute("aria-expanded", "false");
@@ -325,15 +329,38 @@
     });
   }
 
+  function label(text) {
+    var d = document.createElement("div");
+    d.className = "cs-label";
+    d.setAttribute("role", "presentation");
+    d.textContent = text;
+    return d;
+  }
+
   function buildLook(p) {
     p.setAttribute("role", "menu");
-    p.setAttribute("aria-label", "Highlight Color");
+    p.setAttribute("aria-label", "Appearance");
+    var theme = root.getAttribute("data-theme") || "";
+    p.appendChild(label("Theme"));
+    THEMES.forEach(function (t) {
+      p.appendChild(menuItem(t[1], theme === t[0], function () {
+        if (t[0]) root.setAttribute("data-theme", t[0]); else root.removeAttribute("data-theme");
+        set("cs-theme", t[0]);
+      }));
+    });
+    var sep = document.createElement("div");
+    sep.className = "cs-sep";
+    sep.setAttribute("role", "separator");
+    p.appendChild(sep);
+    p.appendChild(label(theme ? "Highlight Color (Mac OS 9 only)" : "Highlight Color"));
     var cur = root.getAttribute("data-hilite") || "";
     LOOKS.forEach(function (d) {
-      p.appendChild(menuItem(d[1], cur === d[0], function () {
+      var item = menuItem(d[1], cur === d[0], function () {
         if (d[0]) root.setAttribute("data-hilite", d[0]); else root.removeAttribute("data-hilite");
         set("cs-hilite", d[0]);
-      }, "cs-swatch look-sw", "data-hilite", d[0]));
+      }, "cs-swatch look-sw", "data-hilite", d[0]);
+      if (theme) item.disabled = true; // System 7 highlights in black and white
+      p.appendChild(item);
     });
   }
 
@@ -412,7 +439,7 @@
     if (!openMod) return;
     if (e.key === "Escape") { e.preventDefault(); closePop(true); return; }
     if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-    var items = Array.prototype.slice.call(pop.querySelectorAll("button"));
+    var items = Array.prototype.slice.call(pop.querySelectorAll("button:not(:disabled)"));
     if (!items.length) return;
     var i = items.indexOf(document.activeElement);
     // The volume column runs from loud at the top to mute at the bottom, like the menus, so both go top to bottom.

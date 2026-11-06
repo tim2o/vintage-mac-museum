@@ -397,7 +397,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 /* A hand-written greeting at the top of About This Collection */
 .prose .hello {
   margin: 0 0 0.35em;
-  font: 400 clamp(3.5rem, 9vw, 5.25rem)/1 "Sacramento", cursive;
+  font: 400 clamp(4.375rem, 11.25vw, 6.5625rem)/1 "Sacramento", cursive;
   letter-spacing: 0.01em;
   color: var(--black);
 }
@@ -1135,3 +1135,120 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   pointer-events: none;
 }
 .cs-tip[hidden] { display: none; }
+
+
+/* ================= System 7 theme (Control Strip > Appearance) =================
+   Black and white: white windows and menus, a title bar of black lines, flat push buttons, a dotted grey
+   scroll bar track with a plain white thumb, highlights that go black, and a grey dithered desktop. */
+:root[data-theme="system7"] {
+  --plat: #fff;
+  --frame: #fff;
+  --hilite: #000;
+  --hilite-dark: #000;
+  --knob: #fff;
+  --knob-hi: #fff;
+  --knob-lo: #fff;
+  --knob-grip: #000;
+  --raised: 0 0 0 0 transparent;
+  --sunken: 0 0 0 0 transparent;
+}
+:root[data-theme="system7"]:not([data-desk]) body {
+  background: conic-gradient(#555 25%, #bbb 0 50%, #555 0 75%, #bbb 0) 0 0 / 2px 2px;
+}
+/* Menus */
+:root[data-theme="system7"] .menubar { background: #fff; box-shadow: none; }
+:root[data-theme="system7"] .dropdown,
+:root[data-theme="system7"] .app-list { background: #fff; box-shadow: 2px 2px 0 #000; }
+:root[data-theme="system7"] .dropdown .sep,
+:root[data-theme="system7"] .app-list .sep { border-top: 1px dotted #000; box-shadow: none; }
+:root[data-theme="system7"] .app-menu { border-left: 1px solid #000; box-shadow: none; }
+/* Windows */
+:root[data-theme="system7"] .window { padding: 0; box-shadow: 2px 2px 0 #000; }
+:root[data-theme="system7"] .titlebar { height: 21px; border-bottom: 1px solid #000; box-shadow: none; }
+:root[data-theme="system7"] .titlebar::before {
+  top: 4px;
+  bottom: 4px;
+  background: repeating-linear-gradient(to bottom, #000 0 1px, #fff 1px 2px);
+}
+:root[data-theme="system7"] .titlebar h1, :root[data-theme="system7"] .titlebar h2 { padding: 0 12px; }
+:root[data-theme="system7"] .window.is-inactive .titlebar h1,
+:root[data-theme="system7"] .window.is-inactive .titlebar h2 { color: #000; }
+:root[data-theme="system7"] .window.is-shaded .titlebar { height: 21px; }
+:root[data-theme="system7"] .winbody { margin: 0; border: 0; }
+:root[data-theme="system7"] .window.info .winbody { border-top: 0; }
+/* Title bar boxes: plain white squares with a black outline, set into the stripes */
+:root[data-theme="system7"] .closebox,
+:root[data-theme="system7"] .zoombox,
+:root[data-theme="system7"] .collapsebox {
+  top: 3px;
+  width: 13px;
+  height: 13px;
+  background: #fff;
+  border: 1px solid #000;
+  box-shadow: 0 0 0 2px #fff;
+}
+:root[data-theme="system7"] .closebox { left: 8px; }
+:root[data-theme="system7"] .zoombox { right: 8px; }
+:root[data-theme="system7"] .zoombox::after { left: 1px; top: 1px; width: 9px; height: 9px; border-color: #000; }
+:root[data-theme="system7"] .zoombox::before { left: 1px; top: 1px; width: 5px; height: 5px; border-color: #000; }
+:root[data-theme="system7"] .closebox:active,
+:root[data-theme="system7"] .collapsebox:active,
+:root[data-theme="system7"] .zoombox[role="button"]:active { background: #000; box-shadow: 0 0 0 2px #fff; }
+/* System 7 has no roll-up box: a window is rolled up by double-clicking its title bar (the box stays for the keyboard) */
+:root[data-theme="system7"] .collapsebox { opacity: 0; pointer-events: none; }
+:root[data-theme="system7"] .collapsebox:focus-visible { opacity: 1; }
+:root[data-theme="system7"] .sticky .closebox, :root[data-theme="system7"] .sticky .collapsebox { box-shadow: none; }
+/* Push buttons */
+:root[data-theme="system7"] .btn,
+:root[data-theme="system7"] .btn-default { background: #fff; border-radius: 7px; box-shadow: none; }
+:root[data-theme="system7"] .btn-default { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000; }
+:root[data-theme="system7"] .btn:active,
+:root[data-theme="system7"] .btn[aria-pressed="true"] { background: #000; color: #fff; box-shadow: none; }
+:root[data-theme="system7"] .btn-default:active { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000; }
+/* Scroll bars: a dotted track, a white thumb, white arrow boxes with a black line between */
+:root[data-theme="system7"] .sbar, :root[data-theme="system7"] .vbar { background: #fff; }
+:root[data-theme="system7"] .sbtn, :root[data-theme="system7"] .vbtn { background: #fff; box-shadow: none; border-color: #000; }
+:root[data-theme="system7"] .sbtn:active:not(:disabled), :root[data-theme="system7"] .vbtn:active:not(:disabled) { background: #000; color: #fff; box-shadow: none; }
+:root[data-theme="system7"] .track, :root[data-theme="system7"] .vtrack {
+  background: conic-gradient(#000 25%, #fff 0 50%, #000 0 75%, #fff 0) 0 0 / 2px 2px;
+  box-shadow: none;
+}
+:root[data-theme="system7"] .track:has(.knob[hidden]), :root[data-theme="system7"] .vtrack:has(.vknob[hidden]) { background: #fff; }
+:root[data-theme="system7"] .knob::after, :root[data-theme="system7"] .vknob::after { display: none; }
+@media (min-width: 52rem) {
+  :root[data-theme="system7"] .growbox {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='15' shape-rendering='crispEdges'%3E%3Crect x='1.5' y='1.5' width='7' height='7' fill='%23fff' stroke='%23000'/%3E%3Crect x='5.5' y='5.5' width='8' height='8' fill='%23fff' stroke='%23000'/%3E%3C/svg%3E") 0 0 / 14px 15px no-repeat, #fff;
+    border-left: 1px solid #000;
+    box-shadow: none;
+  }
+}
+/* Selected and hovered items go black with white text */
+:root[data-theme="system7"] .desk-icon span { background: #fff; }
+:root[data-theme="system7"] .desk-icon:hover span, :root[data-theme="system7"] .desk-icon:focus-visible span,
+:root[data-theme="system7"] .icon-item:hover .name, :root[data-theme="system7"] .icon-item:focus-visible .name,
+:root[data-theme="system7"] .check-row:hover, :root[data-theme="system7"] .check-row:focus-visible,
+:root[data-theme="system7"] .icons.is-list .icon-item:hover, :root[data-theme="system7"] .icons.is-list .icon-item:focus-visible,
+:root[data-theme="system7"] .icons.is-list .icon-item:hover .sub, :root[data-theme="system7"] .icons.is-list .icon-item:focus-visible .sub { color: #fff; }
+:root[data-theme="system7"] .alert { box-shadow: 0 0 0 1px #fff, 0 0 0 2px #000; }
+:root[data-theme="system7"] .note-field input[type="text"], :root[data-theme="system7"] .note-field input[type="email"],
+:root[data-theme="system7"] .note-field textarea { box-shadow: none; }
+:root[data-theme="system7"] .infobar { box-shadow: none; border-bottom-color: #000; }
+/* The Control Strip and its menus */
+:root[data-theme="system7"] .cs-tab::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='26' viewBox='0 0 22 26' shape-rendering='crispEdges'%3E%3Cpath d='M0.5 0.5H15L21.5 7V19L15 25.5H0.5Z' fill='%23fff' stroke='%23000'/%3E%3Cpath d='M5.5 6V20M8.5 6V20M11.5 6V20' stroke='%23000'/%3E%3C/svg%3E"); }
+:root[data-theme="system7"] .cs-wrap { box-shadow: none; }
+:root[data-theme="system7"] .cs-mod { box-shadow: none; border-color: #000; }
+:root[data-theme="system7"] .cs-mod:hover { background: #fff; }
+:root[data-theme="system7"] .cs-mod:active, :root[data-theme="system7"] .cs-mod.is-open { background: #000; }
+:root[data-theme="system7"] .cs-mod:active svg, :root[data-theme="system7"] .cs-mod.is-open svg { filter: invert(1); }
+:root[data-theme="system7"] .cs-pop { background: #fff; box-shadow: 2px 2px 0 #000; }
+:root[data-theme="system7"] .cs-tip { background: #fff; }
+:root[data-theme="system7"] .cs-notches { background: #888; }
+:root[data-theme="system7"] .cs-notch.is-on { background: #000; }
+.cs-label { padding: 3px 18px 2px 22px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.cs-sep { margin: 3px 0; border-top: 1px solid #999; box-shadow: 0 1px 0 #fff; }
+:root[data-theme="system7"] .cs-sep { border-top: 1px dotted #000; box-shadow: none; }
+.cs-item:disabled { color: #888; }
+.cs-item:disabled:hover { background: transparent; color: #888; }
+
+/* A closed Collection window (its close box), until it is opened again from the menu or the desktop icon */
+.window.is-closed { display: none; }

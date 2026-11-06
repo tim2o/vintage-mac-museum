@@ -469,6 +469,7 @@
       // Hand the front back to the topmost window that is left.
       var topmost = null;
       wins.forEach(function (w) {
+        if (w.classList.contains("is-closed")) return;
         if (!topmost || (parseInt(w.style.zIndex, 10) || 0) >= (parseInt(topmost.style.zIndex, 10) || 0)) topmost = w;
       });
       if (topmost) activate(topmost);
@@ -566,6 +567,7 @@
   function topmostWindow() {
     var top = null;
     wins.forEach(function (w) {
+      if (w.classList.contains("is-closed")) return;
       if (!top || (parseInt(w.style.zIndex, 10) || 0) >= (parseInt(top.style.zIndex, 10) || 0)) top = w;
     });
     return top;
@@ -736,6 +738,7 @@
     if (field) field.focus({ preventScroll: true });
   });
   var spawn = {
+    collection: { win: { get available() { return !!finderWin; } }, open: function () { openCollection(); } },
     note: { win: noteWin, open: function () { noteWin.open(); } },
     videos: { win: videosWin, open: function () { openVideos(); } },
     movie: { win: { available: movieWins.length > 0 }, open: openMovie },
@@ -781,6 +784,38 @@
       m.classList.remove("is-dismissed");
     });
   });
+
+  // The Collection window can be closed, leaving just the desktop. It is hidden, not removed, and the Collection
+  // menu, the shelf icon on the desktop and the Application menu bring it back.
+  var finderWin = document.querySelector(".window.finder");
+  if (finderWin && canDrag.matches) {
+    var oldBox = finderWin.querySelector(".closebox");
+    if (oldBox && oldBox.tagName !== "BUTTON") {
+      var closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.className = "closebox";
+      closeBtn.setAttribute("aria-label", "Close Collection");
+      oldBox.replaceWith(closeBtn);
+      closeBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        pauseVideos(finderWin);
+        finderWin.classList.add("is-closed");
+        var next = topmostWindow();
+        if (next) activate(next);
+        var back = document.querySelector('.desk-icon[data-open-window="collection"]');
+        if (back) back.focus({ preventScroll: true });
+      });
+    }
+  }
+  function openCollection() {
+    if (!finderWin) return;
+    finderWin.classList.remove("is-closed");
+    if (finderWin.classList.contains("is-shaded")) {
+      var rb = finderWin.querySelector(".collapsebox");
+      if (rb) rb.click();
+    }
+    activate(finderWin);
+  }
 
   wins.forEach(setup);
   var desktop = canDrag.matches;
