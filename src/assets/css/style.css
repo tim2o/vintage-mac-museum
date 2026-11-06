@@ -1254,6 +1254,8 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 
 /* A closed Collection window (its close box), until it is opened again from the menu or the desktop icon */
 .window.is-closed { display: none; }
+/* A closed sticky note keeps its place, so the windows below it stay where they are */
+.window.sticky.is-closed { display: block; visibility: hidden; pointer-events: none; }
 
 /* The bottom frame of a movie window or the Videos window, with a size box at the right (desktop browsers) */
 .movie-foot { display: none; }
