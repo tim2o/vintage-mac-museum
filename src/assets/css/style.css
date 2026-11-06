@@ -134,7 +134,9 @@ a:focus-visible, video:focus-visible, button:focus-visible {
   .menu:hover > a { background: var(--hilite-dark); color: var(--white); }
 }
 /* The right-hand end of the menu bar: the clock, then the application menu. */
+button.clock { background: none; border: 0; font: inherit; font-weight: 400; cursor: default; }
 .clock { padding: 0 10px; font-weight: 400; white-space: nowrap; }
+.clock:focus-visible { outline: 2px solid var(--black); outline-offset: -3px; }
 .app-menu { position: relative; display: none; border-left: 1px solid #aaa; box-shadow: -1px 0 0 #fff; }
 @media (min-width: 52rem) and (hover: hover) and (pointer: fine) { .app-menu { display: flex; } }
 .app-menu-button {

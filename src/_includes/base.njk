@@ -50,7 +50,7 @@
       </div>
     </nav>
     <div class="menubar-right">
-      <span class="clock" id="clock"></span>
+      <button type="button" class="clock" id="clock" title="Click to show today's date"></button>
       {# The Application menu: Finder, then the same places as the desktop icons #}
       <div class="app-menu">
         <button type="button" class="app-menu-button" aria-haspopup="menu" aria-expanded="false" aria-controls="app-list">
@@ -113,13 +113,32 @@
     (function () {
       var el = document.getElementById("clock");
       if (!el) return;
+      var showingDate = false;
+      var timer = null;
       function tick() {
+        if (showingDate) return;
         var now = new Date();
         // The Mac OS 8 clock shows the day of the week and the time, like "Sat 5:08 PM".
         el.textContent =
           now.toLocaleDateString([], { weekday: "short" }) + " " +
           now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
       }
+      // Click the time to see the whole date for a few seconds, as on the Mac OS clock, then it goes back.
+      el.addEventListener("click", function () {
+        window.clearTimeout(timer);
+        var narrow = window.matchMedia("(max-width: 40rem)").matches;
+        showingDate = true;
+        el.textContent = new Date().toLocaleDateString([], {
+          weekday: narrow ? "short" : "long",
+          month: narrow ? "short" : "long",
+          day: "numeric",
+          year: "numeric"
+        });
+        timer = window.setTimeout(function () {
+          showingDate = false;
+          tick();
+        }, 4000);
+      });
       tick();
       setInterval(tick, 15000);
     })();
