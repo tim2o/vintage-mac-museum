@@ -433,6 +433,7 @@
   }
   function setDock(side) {
     strip.setAttribute("data-dock", side);
+    root.setAttribute("data-cs-dock", side); // the Trash moves out of the way when the strip is on the right
     set("cs-dock", side);
   }
 

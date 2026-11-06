@@ -167,7 +167,8 @@
           right = deskIcons.getBoundingClientRect().left - 12;
         }
         var maxW = right - left;
-        var room = window.innerHeight - top - 40; // 40: clear of the Control Strip
+        var bottomGap = clearOfStrip();
+        var room = window.innerHeight - top - bottomGap;
         var r = win.getBoundingClientRect();
         before = {
           width: win.style.width,
@@ -228,7 +229,7 @@
         // Stay where it is, unless that would put part of it off the screen.
         var r2 = win.getBoundingClientRect();
         var nx = Math.max(left, Math.min(r2.left, right - r2.width));
-        var ny = Math.max(top, Math.min(r2.top, window.innerHeight - 40 - r2.height));
+        var ny = Math.max(top, Math.min(r2.top, window.innerHeight - bottomGap - r2.height));
         place(before.dx + (nx - r2.left), before.dy + (ny - r2.top));
         win.classList.add("is-zoomed");
         zoom.setAttribute("aria-pressed", "true");
@@ -361,6 +362,12 @@
         grow.addEventListener("pointercancel", up);
       });
     }
+  }
+
+  // How far up from the bottom of the screen a zoomed window must stop to stay clear of the Control Strip.
+  function clearOfStrip() {
+    var cs = document.querySelector(".cstrip");
+    return cs ? Math.max(16, window.innerHeight - cs.getBoundingClientRect().top + 8) : 16;
   }
 
   // "Coming soon" windows, opened from the desktop icons. Each one is built here, joins the other
