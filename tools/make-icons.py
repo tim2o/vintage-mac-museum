@@ -368,12 +368,24 @@ def menu_mac(blue=False):
     return ic
 
 
+def ripen(y0, y1, stops):
+    """A colour that moves through several stops (lime, yellow, orange, red) from y0 down to y1, leaning a little to the right."""
+    def f(x, y):
+        t = ((y - y0) + (x - 1) * 0.25) / max(1, (y1 - y0) + 3.5)
+        t = max(0.0, min(1.0, t)) * (len(stops) - 1)
+        i = min(int(t), len(stops) - 2)
+        return lerp(stops[i], stops[i + 1], t - i)
+    return f
+
+
 def apple():
-    """A plain fruit apple, 16 x 16, for the menu bar: black outline and flat colours."""
+    """A plain fruit apple, 16 x 16, for the menu bar: black outline, and a colour that ripens from lime green at
+    the top through yellow and orange to red at the bottom."""
     ic = Icon(16)
-    ic.rrect(1, 6, 14, 9, 4, "#e8372c")
-    ic.rrect(1, 5, 7, 7, 3, "#e8372c")
-    ic.rrect(8, 5, 7, 7, 3, "#e8372c")
+    fruit = ripen(5, 14, ["#9fd43a", "#f1dc3a", "#f59a2b", "#e23a30"])
+    ic.rrect(1, 6, 14, 9, 4, fruit)
+    ic.rrect(1, 5, 7, 7, 3, fruit)
+    ic.rrect(8, 5, 7, 7, 3, fruit)
     ic.rect(8, 2, 1, 3, "#7a4a22")
     ic.poly([(9, 2), (12, 1), (14, 2), (13, 3), (10, 3)], "#3fae3f")
     ic.outline()
