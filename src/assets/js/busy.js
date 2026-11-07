@@ -12,12 +12,12 @@
   wheel.className = "busy-wheel" + (still ? " is-still" : "");
   wheel.hidden = true;
   wheel.setAttribute("aria-hidden", "true");
-  // Five black wedges, one in every fifth of the circle, with white between them.
-  var spokes = '<circle cx="11" cy="11" r="9.5" fill="#fff"/>';
+  // Five equal slices, alternating black and white. Five is odd, so the last black slice sits next to the first.
+  var spokes = "";
   var p = function (a) { return (11 + 9.5 * Math.cos(a)).toFixed(2) + " " + (11 + 9.5 * Math.sin(a)).toFixed(2); };
   for (var i = 0; i < 5; i++) {
-    var a0 = (i * 72 - 90) * Math.PI / 180, a1 = (i * 72 + 30 - 90) * Math.PI / 180;
-    spokes += '<path d="M11 11L' + p(a0) + "A9.5 9.5 0 0 1 " + p(a1) + 'Z" fill="#000"/>';
+    var a0 = (i * 72 - 90) * Math.PI / 180, a1 = ((i + 1) * 72 - 90) * Math.PI / 180;
+    spokes += '<path d="M11 11L' + p(a0) + "A9.5 9.5 0 0 1 " + p(a1) + 'Z" fill="' + (i % 2 ? "#fff" : "#000") + '"/>';
   }
   wheel.innerHTML =
     '<svg viewBox="0 0 22 22" width="22" height="22" aria-hidden="true" focusable="false">' + spokes +
