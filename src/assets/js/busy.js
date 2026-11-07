@@ -12,11 +12,11 @@
   wheel.className = "busy-wheel" + (still ? " is-still" : "");
   wheel.hidden = true;
   wheel.setAttribute("aria-hidden", "true");
-  // Five equal slices, alternating black and white. Five is odd, so the last black slice sits next to the first.
+  // Four equal slices, alternating black and white.
   var spokes = "";
   var p = function (a) { return (11 + 9.5 * Math.cos(a)).toFixed(2) + " " + (11 + 9.5 * Math.sin(a)).toFixed(2); };
-  for (var i = 0; i < 5; i++) {
-    var a0 = (i * 72 - 90) * Math.PI / 180, a1 = ((i + 1) * 72 - 90) * Math.PI / 180;
+  for (var i = 0; i < 4; i++) {
+    var a0 = (i * 90 - 90) * Math.PI / 180, a1 = ((i + 1) * 90 - 90) * Math.PI / 180;
     spokes += '<path d="M11 11L' + p(a0) + "A9.5 9.5 0 0 1 " + p(a1) + 'Z" fill="' + (i % 2 ? "#fff" : "#000") + '"/>';
   }
   wheel.innerHTML =

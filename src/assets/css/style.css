@@ -1306,7 +1306,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   will-change: transform;
 }
 .busy-wheel[hidden] { display: none; }
-.busy-wheel svg { display: block; animation: busy-turn 1.6s steps(10) infinite; }
+.busy-wheel svg { display: block; animation: busy-turn 1.6s steps(8) infinite; }
 .busy-wheel.is-still svg { animation: none; }
 @keyframes busy-turn { to { transform: rotate(360deg); } }
 body.is-busy, body.is-busy * { cursor: none !important; }
