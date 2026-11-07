@@ -1,22 +1,19 @@
 // Magnifier: a loupe for the photos in a machine's window, so a label, a port or a screen can be read without
-// leaving the page. A "Magnifier" button in the window's info bar turns it on; then a square lens follows the
-// mouse over a photo and shows that spot at a larger size, from the full-size picture. Desktop browsers with a
-// mouse only: on a touch screen the photo still opens full size, where you can pinch to zoom.
+// leaving the page. Clicking a photo turns it on (clicking a photo again turns it off, as does Escape or the
+// "Magnifier" button in the window's info bar); while it is on, a square lens follows the mouse over the photos and
+// shows that spot at a larger size, from the full-size picture. Desktop browsers with a mouse only: on a touch screen
+// the photo still opens full size, where you can pinch to zoom. The full-size picture is still one
+// ctrl/cmd/middle-click away, or Enter on the focused photo.
 (function () {
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
   var strips = document.querySelectorAll("[data-strip]");
   if (!strips.length) return;
 
-  function remembered() {
-    try { return window.localStorage.getItem("magnifier") === "1"; } catch (e) { return false; }
-  }
-  function remember(on) {
-    try { window.localStorage.setItem("magnifier", on ? "1" : "0"); } catch (e) { /* not remembered; fine */ }
-  }
+  try { window.localStorage.removeItem("magnifier"); } catch (e) { /* the old remembered setting is gone: it starts off now */ }
 
   var LENS = 200;    // the lens is a square this many pixels across
-  var on = remembered();
+  var on = false;
   var lens = document.createElement("div");
   lens.className = "loupe";
   lens.hidden = true;
@@ -26,7 +23,6 @@
   var buttons = [];
   function setOn(value) {
     on = value;
-    remember(on);
     buttons.forEach(function (b) {
       b.setAttribute("aria-pressed", on ? "true" : "false");
       b.closest("[data-strip]").classList.toggle("is-magnifying", on);
@@ -42,7 +38,7 @@
     b.type = "button";
     b.className = "btn btn-mag";
     b.setAttribute("aria-pressed", "false");
-    b.title = "Show a magnified view of the photo under the pointer";
+    b.title = "Magnify photos (or just click a photo)";
     b.innerHTML =
       '<svg viewBox="0 0 14 14" width="14" height="14" shape-rendering="crispEdges" aria-hidden="true" focusable="false">' +
       '<circle cx="5.5" cy="5.5" r="4" fill="#cde" stroke="#000"/><path d="M8.5 8.5l4 4" stroke="#000" stroke-width="2.2" fill="none"/></svg>' +
@@ -77,9 +73,10 @@
     lens.hidden = false;
   }
 
-  function photoAt(e) {
+  // A photo in a machine's window; unless `anyTime` is set, only while the magnifier is on.
+  function photoAt(e, anyTime) {
     var t = e.target;
-    return t && t.tagName === "IMG" && t.closest(".strip.is-magnifying .slide") ? t : null;
+    return t && t.tagName === "IMG" && t.closest(anyTime ? ".strip .slide" : ".strip.is-magnifying .slide") ? t : null;
   }
   document.addEventListener("pointermove", function (e) {
     if (!on || e.pointerType !== "mouse") return;
@@ -92,9 +89,15 @@
   document.addEventListener("pointerdown", function (e) {
     if (on && !photoAt(e)) lens.hidden = true;
   });
-  // While the magnifier is on, clicking a photo does not take you off to the full-size picture.
+  // Clicking a photo turns the magnifier on, and clicking one again turns it off, instead of going off to the
+  // full-size picture. Keyboard (Enter on the link), ctrl/cmd/shift/middle clicks and touch still follow the link.
   document.addEventListener("click", function (e) {
-    if (on && photoAt(e)) e.preventDefault();
+    if (e.button !== 0 || e.detail === 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var img = photoAt(e, true);
+    if (!img) return;
+    e.preventDefault();
+    setOn(!on);
+    if (on) show(img, e);
   });
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape" && on && !lens.hidden) setOn(false);
