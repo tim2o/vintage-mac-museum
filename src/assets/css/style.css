@@ -1313,3 +1313,378 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 .busy-wheel.is-still svg { animation: none; }
 @keyframes busy-turn { to { transform: rotate(360deg); } }
 body.is-busy, body.is-busy * { cursor: none !important; }
+
+
+/* ================= Mac OS X theme (Control Strip > Appearance), after Panther and Tiger =================
+   Aqua: a pale grey title bar with glossy red, yellow and green buttons on the left, white windows and pinstriped
+   panels, gel push buttons (the default one blue), blue gel scroll bar thumbs, menus that highlight in blue, white
+   desktop labels on a blue desktop, and a rainbow spinning wheel. Blue or Graphite, from the highlight colors. */
+:root[data-theme="macosx"] {
+  --lucida: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --charcoal: var(--lucida);
+  --geneva: var(--lucida);
+  --text: var(--lucida);
+  --plat: #ececec;
+  --frame: #e9e9e9;
+  --muted: #555;
+  --raised: 0 0 0 0 transparent;
+  --sunken: 0 0 0 0 transparent;
+  --ax-hi: #cfe2fb;     /* the Aqua gel: top highlight, body, lower half, and the glow at the bottom */
+  --ax-mid: #6fa4ee;
+  --ax-bot: #3b7ede;
+  --ax-glow: #86c4f8;
+  --ax-line: #2e62b0;
+  --ax-sel-a: #5b97ea;  /* menu selection */
+  --ax-sel-b: #2f6fd5;
+  --hilite: #3a79de;
+  --hilite-dark: #3a79de;
+  --stripes: repeating-linear-gradient(to bottom, #f1f1f1 0 2px, #e7e7e7 2px 4px);
+}
+:root[data-theme="macosx"][data-hilite="graphite"] {
+  --ax-hi: #e1e4e9;
+  --ax-mid: #a4abb6;
+  --ax-bot: #7b8391;
+  --ax-glow: #bcc3cd;
+  --ax-line: #5d6470;
+  --ax-sel-a: #9199a6;
+  --ax-sel-b: #6b7482;
+  --hilite: #7c8493;
+  --hilite-dark: #7c8493;
+}
+:root[data-theme="macosx"] body { font-size: 1rem; line-height: 1.55; }
+:root[data-theme="macosx"]:not([data-desk]) body {
+  background:
+    radial-gradient(ellipse 80% 60% at 22% 12%, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0) 62%),
+    radial-gradient(ellipse 70% 50% at 86% 92%, rgba(130, 205, 255, 0.4), rgba(130, 205, 255, 0) 66%),
+    linear-gradient(160deg, #5ba2f2 0%, #2f74d6 46%, #17489c 100%);
+  background-attachment: fixed;
+}
+/* Menu bar and menus */
+:root[data-theme="macosx"] .menubar {
+  background: linear-gradient(#fcfcfc, #e3e3e3);
+  border-bottom: 1px solid #8d8d8d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font: 400 0.8rem/1 var(--lucida);
+}
+:root[data-theme="macosx"] .menus a:hover,
+:root[data-theme="macosx"] .menus a:focus-visible,
+:root[data-theme="macosx"] .menu:focus-within > a,
+:root[data-theme="macosx"] .menu:hover > a,
+:root[data-theme="macosx"] .menu:hover > .menu-logo,
+:root[data-theme="macosx"] .menu.is-open > .menu-logo,
+:root[data-theme="macosx"] .menu-logo:focus-visible,
+:root[data-theme="macosx"] .app-menu-button:hover,
+:root[data-theme="macosx"] .app-menu-button[aria-expanded="true"],
+:root[data-theme="macosx"] .app-menu-button:focus-visible,
+:root[data-theme="macosx"] .app-list a:hover, :root[data-theme="macosx"] .app-list button:hover,
+:root[data-theme="macosx"] .app-list a:focus-visible, :root[data-theme="macosx"] .app-list button:focus-visible,
+:root[data-theme="macosx"] .cs-item:hover, :root[data-theme="macosx"] .cs-item:focus-visible {
+  background: linear-gradient(var(--ax-sel-a), var(--ax-sel-b));
+  color: #fff;
+}
+:root[data-theme="macosx"] .dropdown,
+:root[data-theme="macosx"] .app-list {
+  padding: 4px 0;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-top: 0;
+  border-radius: 0 0 6px 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+}
+:root[data-theme="macosx"] .dropdown .sep,
+:root[data-theme="macosx"] .app-list .sep { border-top: 1px solid #dadada; box-shadow: none; }
+:root[data-theme="macosx"] .app-menu { border-left: 0; box-shadow: none; }
+
+/* Windows: a pale title bar, with the red, yellow and green buttons at the left */
+:root[data-theme="macosx"] .window {
+  padding: 0;
+  background: var(--frame);
+  border: 1px solid #6c6c6c;
+  border-radius: 6px 6px 0 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.46), 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+:root[data-theme="macosx"] .window.is-inactive { box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.25); }
+:root[data-theme="macosx"] .window.is-shaded { border-radius: 6px; }
+:root[data-theme="macosx"] .titlebar {
+  height: 22px;
+  padding: 0 74px;
+  background: linear-gradient(#ececec 0%, #d6d6d6 52%, #c3c3c3 100%);
+  border-bottom: 1px solid #8b8b8b;
+  border-radius: 5px 5px 0 0;
+  box-shadow: inset 0 1px 0 #fff;
+}
+:root[data-theme="macosx"] .window.is-inactive .titlebar { background: linear-gradient(#f3f3f3, #e1e1e1); border-bottom-color: #aaa; }
+:root[data-theme="macosx"] .window.is-shaded .titlebar { height: 22px; border-radius: 5px; border-bottom-color: transparent; }
+:root[data-theme="macosx"] .titlebar::before { display: none; }
+:root[data-theme="macosx"] .titlebar h1, :root[data-theme="macosx"] .titlebar h2 {
+  padding: 0 6px;
+  background: transparent;
+  font: 400 0.8rem/1.2 var(--lucida);
+  color: #000;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+:root[data-theme="macosx"] .window.is-inactive .titlebar h1,
+:root[data-theme="macosx"] .window.is-inactive .titlebar h2 { color: #8a8a8a; }
+:root[data-theme="macosx"] .winbody { margin: 0; background: #fff; border: 0; }
+:root[data-theme="macosx"] .window.info .winbody { background: var(--stripes); border-top: 0; }
+:root[data-theme="macosx"] .infobar {
+  background: linear-gradient(#f5f5f5, #e3e3e3);
+  border-bottom: 1px solid #b3b3b3;
+  box-shadow: none;
+}
+/* The three buttons: glossy balls, grey when the window is not in front, with their symbols on hover */
+:root[data-theme="macosx"] .closebox,
+:root[data-theme="macosx"] .zoombox,
+:root[data-theme="macosx"] .collapsebox,
+:root[data-theme="macosx"] .window.is-inactive .closebox,
+:root[data-theme="macosx"] .window.is-inactive .zoombox,
+:root[data-theme="macosx"] .window.is-inactive .collapsebox {
+  top: 4px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 1px solid #8d8d8d;
+  background:
+    radial-gradient(ellipse 60% 38% at 50% 24%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    linear-gradient(#d9d9d9, #aeaeae);
+  box-shadow: inset 0 -1px 2px rgba(255, 255, 255, 0.5), 0 1px 0 rgba(255, 255, 255, 0.7);
+  opacity: 1;
+  pointer-events: auto;
+}
+:root[data-theme="macosx"] .window:not(.is-inactive) .closebox {
+  border-color: #a62a1d;
+  background:
+    radial-gradient(ellipse 60% 38% at 50% 24%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    linear-gradient(#ff8c7e, #d8331f);
+}
+:root[data-theme="macosx"] .window:not(.is-inactive) .collapsebox {
+  border-color: #b27a0a;
+  background:
+    radial-gradient(ellipse 60% 38% at 50% 24%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    linear-gradient(#ffd96a, #e9a50e);
+}
+:root[data-theme="macosx"] .window:not(.is-inactive) .zoombox {
+  border-color: #2b8a1d;
+  background:
+    radial-gradient(ellipse 60% 38% at 50% 24%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 100%),
+    linear-gradient(#8fe27a, #35aa22);
+}
+:root[data-theme="macosx"] .closebox { left: 8px; }
+:root[data-theme="macosx"] .collapsebox { left: 28px; right: auto; }
+:root[data-theme="macosx"] .zoombox { left: 48px; right: auto; }
+:root[data-theme="macosx"] .closebox:active,
+:root[data-theme="macosx"] .collapsebox:active,
+:root[data-theme="macosx"] .zoombox[role="button"]:active { filter: brightness(0.82); }
+:root[data-theme="macosx"] .zoombox::before { display: none; }
+:root[data-theme="macosx"] .closebox::before, :root[data-theme="macosx"] .collapsebox::before { display: none; }
+:root[data-theme="macosx"] .closebox::after,
+:root[data-theme="macosx"] .zoombox::after,
+:root[data-theme="macosx"] .collapsebox::after,
+:root[data-theme="macosx"] .window.is-inactive .closebox::after,
+:root[data-theme="macosx"] .window.is-inactive .zoombox::after,
+:root[data-theme="macosx"] .window.is-inactive .collapsebox::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  width: auto;
+  height: auto;
+  border: 0;
+  font: 700 11px/13px var(--lucida);
+  text-align: center;
+  color: rgba(0, 0, 0, 0.55);
+}
+:root[data-theme="macosx"] .titlebar:hover .closebox::after { content: "\00d7"; font-size: 13px; }
+:root[data-theme="macosx"] .titlebar:hover .collapsebox::after { content: "\2212"; }
+:root[data-theme="macosx"] .titlebar:hover .zoombox::after { content: "+"; }
+/* The Read Me sticky note keeps its note look, with smaller buttons */
+:root[data-theme="macosx"] .sticky { background: #c9e1fb; border-radius: 3px; border-color: #6a8fb8; }
+:root[data-theme="macosx"] .sticky .titlebar {
+  height: 15px;
+  padding: 0;
+  background: #9cc4f0;
+  border-bottom: 1px solid #5b8fc6;
+  border-radius: 2px 2px 0 0;
+  box-shadow: none;
+}
+:root[data-theme="macosx"] .window.sticky.is-shaded .titlebar { height: 15px; border-radius: 2px; }
+:root[data-theme="macosx"] .sticky .closebox, :root[data-theme="macosx"] .sticky .collapsebox,
+:root[data-theme="macosx"] .window.sticky.is-inactive .closebox,
+:root[data-theme="macosx"] .window.sticky.is-inactive .collapsebox { top: 2px; width: 10px; height: 10px; }
+:root[data-theme="macosx"] .sticky .closebox { left: 4px; }
+:root[data-theme="macosx"] .sticky .collapsebox { left: auto; right: 4px; }
+:root[data-theme="macosx"] .sticky .titlebar .closebox::after,
+:root[data-theme="macosx"] .sticky .titlebar .collapsebox::after { display: none; }
+:root[data-theme="macosx"] .sticky .winbody { background: transparent; }
+
+/* Push buttons: gel pills, with the default one in blue and gently pulsing */
+:root[data-theme="macosx"] .btn,
+:root[data-theme="macosx"] .btn-default {
+  padding: 2px 18px;
+  background: linear-gradient(#fefefe 0%, #f3f3f3 48%, #dadada 52%, #ebebeb 100%);
+  border: 1px solid #7b7b7b;
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  font: 400 0.8rem/1.45 var(--lucida);
+  color: #000;
+}
+:root[data-theme="macosx"] .btn:active,
+:root[data-theme="macosx"] .btn[aria-pressed="true"] {
+  background: linear-gradient(#bdbdbd, #dcdcdc);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
+  color: #000;
+}
+:root[data-theme="macosx"] .btn-default {
+  background: linear-gradient(var(--ax-hi) 0%, var(--ax-mid) 48%, var(--ax-bot) 52%, var(--ax-glow) 100%);
+  border-color: var(--ax-line);
+  animation: aqua-pulse 1.7s ease-in-out infinite;
+}
+:root[data-theme="macosx"] .btn-default:active { animation: none; filter: brightness(0.85); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4); }
+@keyframes aqua-pulse { 50% { filter: brightness(1.14) saturate(1.1); } }
+@media (prefers-reduced-motion: reduce) { :root[data-theme="macosx"] .btn-default { animation: none; } }
+:root[data-theme="macosx"] .btn-full { padding: 1px 14px; font-size: 0.72rem; }
+
+/* Scroll bars: a grooved track and a blue (or graphite) gel thumb */
+:root[data-theme="macosx"] .sbar { background: #f1f1f1; border-top: 1px solid #b8b8b8; }
+:root[data-theme="macosx"] .vbar { background: #f1f1f1; border-left: 1px solid #b8b8b8; }
+:root[data-theme="macosx"] .sbtn, :root[data-theme="macosx"] .vbtn {
+  background: linear-gradient(#fff, #d9d9d9);
+  border-color: #a9a9a9;
+  box-shadow: none;
+}
+:root[data-theme="macosx"] .sbtn:active:not(:disabled), :root[data-theme="macosx"] .vbtn:active:not(:disabled) {
+  background: linear-gradient(#bcbcbc, #dedede);
+  box-shadow: none;
+}
+:root[data-theme="macosx"] .track {
+  background: linear-gradient(#cdcdcd, #f2f2f2 55%, #fff);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+:root[data-theme="macosx"] .vtrack {
+  background: linear-gradient(to right, #cdcdcd, #f2f2f2 55%, #fff);
+  box-shadow: inset 1px 0 2px rgba(0, 0, 0, 0.35);
+}
+:root[data-theme="macosx"] .track:has(.knob[hidden]), :root[data-theme="macosx"] .vtrack:has(.vknob[hidden]) { background: #f1f1f1; box-shadow: none; }
+:root[data-theme="macosx"] .knob {
+  top: 1px;
+  bottom: 1px;
+  background: linear-gradient(var(--ax-hi) 0%, var(--ax-mid) 48%, var(--ax-bot) 52%, var(--ax-glow) 100%);
+  border: 1px solid var(--ax-line);
+  border-radius: 8px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+:root[data-theme="macosx"] .vknob {
+  left: 1px;
+  right: 1px;
+  background: linear-gradient(to right, var(--ax-hi) 0%, var(--ax-mid) 48%, var(--ax-bot) 52%, var(--ax-glow) 100%);
+  border: 1px solid var(--ax-line);
+  border-radius: 8px;
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.7);
+}
+:root[data-theme="macosx"] .knob::after, :root[data-theme="macosx"] .vknob::after { display: none; }
+@media (min-width: 52rem) {
+  :root[data-theme="macosx"] .growbox {
+    background:
+      linear-gradient(135deg, transparent 0 52%, #8c8c8c 52% 58%, transparent 58% 68%, #8c8c8c 68% 74%, transparent 74% 84%, #8c8c8c 84% 90%, transparent 90%),
+      #efefef;
+    border-top: 1px solid #b8b8b8;
+    border-left: 1px solid #b8b8b8;
+    box-shadow: none;
+    image-rendering: auto;
+  }
+  :root[data-theme="macosx"] .movie-foot .growbox { border-top: 0; }
+}
+:root[data-theme="macosx"] .movie-foot { background: #e4e4e4; border-top: 1px solid #b0b0b0; }
+
+/* Desktop labels, Finder names and list rows */
+:root[data-theme="macosx"] .desk-icon { font-family: var(--lucida); }
+:root[data-theme="macosx"] .desk-icon span {
+  padding: 1px 8px;
+  background: transparent;
+  border-radius: 9px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 4px rgba(0, 0, 0, 0.5);
+}
+:root[data-theme="macosx"] .desk-icon:hover span, :root[data-theme="macosx"] .desk-icon:focus-visible span,
+:root[data-theme="macosx"] .desk-icons.is-free .desk-icon.is-dragging span {
+  background: var(--hilite);
+  text-shadow: none;
+}
+:root[data-theme="macosx"] .icon-item .name { border-radius: 9px; padding: 1px 8px; }
+:root[data-theme="macosx"] .icon-item:hover .name, :root[data-theme="macosx"] .icon-item:focus-visible .name {
+  background: var(--hilite);
+  color: #fff;
+}
+:root[data-theme="macosx"] .check-row:hover, :root[data-theme="macosx"] .check-row:focus-visible,
+:root[data-theme="macosx"] .icons.is-list .icon-item:hover, :root[data-theme="macosx"] .icons.is-list .icon-item:focus-visible {
+  background: linear-gradient(var(--ax-sel-a), var(--ax-sel-b));
+  color: #fff;
+}
+:root[data-theme="macosx"] .icons.is-list .icon-item:hover .sub, :root[data-theme="macosx"] .icons.is-list .icon-item:focus-visible .sub { color: #fff; }
+:root[data-theme="macosx"] .check { border-radius: 3px; border-color: #858585; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25); }
+:root[data-theme="macosx"] .alert {
+  background: var(--stripes);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+:root[data-theme="macosx"] .note-field input[type="text"], :root[data-theme="macosx"] .note-field input[type="email"],
+:root[data-theme="macosx"] .note-field textarea {
+  border: 1px solid #a3a3a3;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-family: var(--lucida);
+}
+
+/* The Control Strip, as a shelf of frosted glass, and its menus and help tags */
+:root[data-theme="macosx"] .cs-wrap {
+  background: linear-gradient(rgba(255, 255, 255, 0.82), rgba(214, 226, 243, 0.72));
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 12px;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+:root[data-theme="macosx"] .cstrip.is-collapsed .cs-wrap { border-left-width: 0; border-right-width: 0; }
+:root[data-theme="macosx"] .cs-modules { border-radius: 11px; }
+:root[data-theme="macosx"] .cs-mod, :root[data-theme="macosx"] .cstrip[data-dock="right"] .cs-mod { border: 0; box-shadow: none; }
+:root[data-theme="macosx"] .cs-mod:hover { background: rgba(255, 255, 255, 0.6); }
+:root[data-theme="macosx"] .cs-mod:active, :root[data-theme="macosx"] .cs-mod.is-open { background: rgba(120, 150, 200, 0.4); }
+:root[data-theme="macosx"] .cs-tab::before {
+  image-rendering: auto;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='26' viewBox='0 0 22 26'%3E%3Cpath d='M0.5 0.5H13Q21.5 0.5 21.5 9V17Q21.5 25.5 13 25.5H0.5Z' fill='%23e6edf8' stroke='%237f93b3'/%3E%3Cpath d='M5.5 7V19M9.5 7V19' stroke='%2399a9c5'/%3E%3Cpath d='M6.5 7V19M10.5 7V19' stroke='%23fff'/%3E%3C/svg%3E");
+}
+:root[data-theme="macosx"] .cs-pop {
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(0, 0, 0, 0.32);
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+}
+:root[data-theme="macosx"] .cs-sep { border-top: 1px solid #dadada; box-shadow: none; }
+:root[data-theme="macosx"] .cs-notches { background: #cfcfcf; border-radius: 4px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3); }
+:root[data-theme="macosx"] .cs-notch { border-radius: 2px; }
+:root[data-theme="macosx"] .cs-tip {
+  background: #ffffe1;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+/* The busy wheel becomes a glossy spinning rainbow ball: eight colored wedges, shaded like a sphere, with a highlight
+   that stays put while the colors turn */
+:root[data-theme="macosx"] .busy-wheel svg { display: none; }
+:root[data-theme="macosx"] .busy-wheel::before,
+:root[data-theme="macosx"] .busy-wheel::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; } /* a little larger than the black and white wheel */
+:root[data-theme="macosx"] .busy-wheel::before {
+  background: conic-gradient(#ff3b30 0 45deg, #ff9500 0 90deg, #ffd60a 0 135deg, #34c759 0 180deg, #00c7be 0 225deg, #0a84ff 0 270deg, #bf5af2 0 315deg, #ff2d92 0 360deg);
+  animation: busy-turn 1s linear infinite;
+}
+:root[data-theme="macosx"] .busy-wheel::after {
+  background:
+    radial-gradient(ellipse 52% 34% at 38% 24%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 100%),
+    radial-gradient(circle at 50% 50%, #fff 0 1.5px, rgba(255, 255, 255, 0) 2.5px),
+    radial-gradient(circle at 42% 36%, rgba(255, 255, 255, 0) 38%, rgba(0, 0, 0, 0.38) 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.55);
+}
+:root[data-theme="macosx"] .busy-wheel.is-still::before { animation: none; }

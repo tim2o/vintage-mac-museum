@@ -161,7 +161,8 @@
   ];
   var THEMES = [
     ["", "Mac OS 9"],
-    ["system7", "System 7"]
+    ["system7", "System 7"],
+    ["macosx", "Mac OS X"]
   ];
   var LOOKS = [
     ["", "Lavender"],
@@ -362,14 +363,16 @@
     sep.className = "cs-sep";
     sep.setAttribute("role", "separator");
     p.appendChild(sep);
-    p.appendChild(label(theme ? "Highlight Color (Mac OS 9 only)" : "Highlight Color"));
+    p.appendChild(label(theme === "macosx" ? "Highlight Color (Blue or Graphite)" : theme ? "Highlight Color (Mac OS 9 only)" : "Highlight Color"));
     var cur = root.getAttribute("data-hilite") || "";
+    if (theme === "macosx" && cur !== "graphite") cur = "blue"; // Mac OS X only has these two
     LOOKS.forEach(function (d) {
       var item = menuItem(d[1], cur === d[0], function () {
         if (d[0]) root.setAttribute("data-hilite", d[0]); else root.removeAttribute("data-hilite");
         set("cs-hilite", d[0]);
       }, "cs-swatch look-sw", "data-hilite", d[0]);
-      if (theme) item.disabled = true; // System 7 highlights in black and white
+      // System 7 highlights in black and white; Mac OS X has only Blue and Graphite
+      if (theme === "system7" || (theme === "macosx" && d[0] !== "blue" && d[0] !== "graphite")) item.disabled = true;
       p.appendChild(item);
     });
   }
