@@ -316,7 +316,7 @@
     // Movie windows and the Videos window have a size box in the bottom frame. Dragging it changes the width,
     // and the height follows so the picture keeps its shape (an outline shows the size, as below).
     var movieGrow = win.querySelector(".movie-foot [data-growbox]");
-    var movieVideo = win.querySelector("video");
+    var movieVideo = win.querySelector("video, .full-img");
     if (movieGrow && movieVideo) {
       movieGrow.classList.add("is-live");
       movieGrow.addEventListener("pointerdown", function (e) {
@@ -633,7 +633,7 @@
   }
   function placeWindow(win, inset, drop) {
     if (!canDrag.matches) return;
-    var host = document.querySelector(".finder") || document.querySelector(".stack");
+    var host = document.querySelector(".finder") || document.querySelector(".stack") || document.querySelector(".machine-layout") || document.body;
     var r = host.getBoundingClientRect();
     var menu = document.querySelector(".menubar");
     var minTop = window.scrollY + (menu ? menu.offsetHeight : 22) + 24;
@@ -646,14 +646,16 @@
   // down and across a little from the last so that several can be seen when they are open together.
   function placeMovie(win, step) {
     if (!canDrag.matches) return;
-    var host = document.querySelector(".finder") || document.querySelector(".stack");
+    var host = document.querySelector(".finder") || document.querySelector(".stack") || document.querySelector(".machine-layout") || document.body;
     var r = host.getBoundingClientRect();
     var menu = document.querySelector(".menubar");
     var menuH = menu ? menu.offsetHeight : 22;
     var bar = win.querySelector(":scope > .titlebar");
     var chrome = (bar ? bar.offsetHeight : 22) + 6; // title bar and window frame
-    var video = win.querySelector("video");
+    var video = win.querySelector("video, .full-img");
     var aspect = (video && parseFloat(video.getAttribute("data-aspect"))) || 16 / 9;
+    var foot = win.querySelector(".movie-foot");
+    if (foot) chrome += foot.offsetHeight; // the bottom frame with the size box
     var offset = step * 28;
     // Top of the window in the viewport; the video then gets the height left below it.
     var topInView = Math.min(Math.max(r.top + 40, menuH + 24), window.innerHeight * 0.3) + offset;
@@ -734,6 +736,42 @@
     var video = win && win.querySelector("video");
     if (video) video.focus({ preventScroll: true });
   }
+  // "Open Full Image" on a machine page: one photo window, filled with the photo asked for. Asking for another photo
+  // while it is open shows that one in the same window, sized to fit the screen again.
+  var pendingImage = null;
+  function fillImage(win, info) {
+    var img = win.querySelector(".full-img");
+    if (!img) return;
+    img.alt = info.alt || "";
+    img.setAttribute("data-aspect", String(info.width / info.height));
+    img.style.aspectRatio = info.width + " / " + info.height;
+    img.src = info.src;
+    var h = win.querySelector(".titlebar h2");
+    if (h) h.textContent = info.title;
+    var closer = win.querySelector("button.closebox");
+    if (closer) closer.setAttribute("aria-label", "Close " + info.title);
+  }
+  var imageWin = lazyWindow("image-template", 0, 0, function (win) {
+    fillImage(win, pendingImage);
+  }, function (win) {
+    placeMovie(win, 0);
+  });
+  window.openFullImage = function (info) {
+    if (!imageWin.available || !canDrag.matches) return false;
+    pendingImage = info;
+    var existing = imageWin.current();
+    var win = imageWin.open();
+    if (existing && win) {
+      fillImage(win, info);
+      win.style.width = "";
+      win.setAttribute("data-dx", 0);
+      win.setAttribute("data-dy", 0);
+      win.style.setProperty("--dx", "0px");
+      win.style.setProperty("--dy", "0px");
+      placeMovie(win, 0);
+    }
+    return true;
+  };
   var checklistWin = lazyWindow("checklist-template", 88, 88);
   var aboutWin = lazyWindow("about-template", 120, 40, function (win) {
     if (window.initVScrolls) window.initVScrolls(win);

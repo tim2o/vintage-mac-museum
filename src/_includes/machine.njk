@@ -150,5 +150,22 @@ layout: base.njk
 
 </div>
 
+{# The window that "Open Full Image" fills with a photo and opens (see magnifier.js and windows.js) #}
+{% if photos and photos.length %}
+<template id="image-template">
+  <section class="window movie-window image-window" aria-labelledby="image-title">
+    <div class="titlebar">
+      <button type="button" class="closebox" aria-label="Close photo"></button>
+      <h2 id="image-title">{{ title }}</h2>
+      <span class="zoombox" aria-hidden="true"></span>
+    </div>
+    <div class="winbody">
+      <div class="movie"><img class="full-img" src="" alt="" decoding="async" draggable="false"></div>
+    </div>
+    <div class="movie-foot"><span class="growbox" data-growbox aria-hidden="true"></span></div>
+  </section>
+</template>
+{% endif %}
+
 <script src="{{ '/assets/js/strip.js' | url }}?v={{ build }}" defer></script>
 <script src="{{ '/assets/js/magnifier.js' | url }}?v={{ build }}" defer></script>

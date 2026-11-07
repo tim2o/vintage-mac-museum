@@ -1086,8 +1086,9 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
 .icons.is-list .name { margin: 0; padding: 0; background: transparent !important; font-size: 0.8rem; }
 .icons.is-list .sub { margin: 0; }
 
-/* Magnifier (machine pages, desktop browsers with a mouse): a button in the info bar and a square lens */
-.btn-mag {
+/* Open Full Image (machine pages, desktop browsers with a mouse): a button in the info bar; the photo window and the
+   square magnifier lens */
+.btn-full {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1095,10 +1096,12 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   font: 700 0.68rem/1.6 var(--charcoal);
   cursor: default;
 }
-.btn-mag svg { display: block; }
-.btn-mag[aria-pressed="true"] { background: #999; box-shadow: inset 1px 1px 0 #555, inset 2px 2px 0 #777; }
-.strip.is-magnifying .slide img { cursor: none; }
-@media (hover: hover) and (pointer: fine) { .strip:not(.is-magnifying) .slide:not(.slide-video) img { cursor: zoom-in; } }
+.btn-full svg { display: block; }
+.strip.is-magnifying .slide img, body.is-magnifying .full-img { cursor: none; }
+@media (hover: hover) and (pointer: fine) {
+  .strip:not(.is-magnifying) .slide:not(.slide-video) img, body:not(.is-magnifying) .full-img { cursor: zoom-in; }
+}
+.movie .full-img { display: block; width: 100%; height: auto; max-height: none; background: var(--black); }
 .loupe {
   position: fixed;
   z-index: 1700;
@@ -1125,7 +1128,7 @@ a.closebox:focus-visible, button.closebox:focus-visible, .collapsebox:focus-visi
   filter: invert(1);
 }
 .loupe[hidden] { display: none; }
-@media (hover: none), (pointer: coarse) { .btn-mag, .loupe { display: none; } }
+@media (hover: none), (pointer: coarse) { .btn-full, .loupe { display: none; } }
 
 /* Control Strip help tags, in the pale yellow of Mac OS Balloon Help */
 .cs-tip {

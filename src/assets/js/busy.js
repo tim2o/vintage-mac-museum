@@ -57,7 +57,7 @@
   }
 
   // What counts as clicking "something": places that open or do things, not scroll bars, window boxes or fields.
-  var OPENERS = "a[href], .desk-icon, .icon-item, .btn:not(.btn-mag), .app-list button[role=menuitem]";
+  var OPENERS = "a[href], .desk-icon, .icon-item, .btn, .app-list button[role=menuitem]";
 
   document.addEventListener("click", function (e) {
     if (e.button !== 0 || !e.target.closest) return;
