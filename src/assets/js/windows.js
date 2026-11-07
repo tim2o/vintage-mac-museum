@@ -423,9 +423,9 @@
     }
   }
 
-  // How far up from the bottom of the screen a zoomed window must stop to stay clear of the Control Strip.
+  // How far up from the bottom of the screen a zoomed window must stop to stay clear of the Control Strip (or the Dock).
   function clearOfStrip() {
-    var cs = document.querySelector(".cstrip");
+    var cs = document.querySelector(document.documentElement.getAttribute("data-theme") === "macosx" ? ".dock" : ".cstrip");
     return cs ? Math.max(16, window.innerHeight - cs.getBoundingClientRect().top + 8) : 16;
   }
 

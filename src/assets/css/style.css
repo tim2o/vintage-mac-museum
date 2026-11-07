@@ -1638,24 +1638,8 @@ body.is-busy, body.is-busy * { cursor: none !important; }
   font-family: var(--lucida);
 }
 
-/* The Control Strip, as a shelf of frosted glass, and its menus and help tags */
-:root[data-theme="macosx"] .cs-wrap {
-  background: linear-gradient(rgba(255, 255, 255, 0.82), rgba(214, 226, 243, 0.72));
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  border-radius: 12px;
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-:root[data-theme="macosx"] .cstrip.is-collapsed .cs-wrap { border-left-width: 0; border-right-width: 0; }
-:root[data-theme="macosx"] .cs-modules { border-radius: 11px; }
-:root[data-theme="macosx"] .cs-mod, :root[data-theme="macosx"] .cstrip[data-dock="right"] .cs-mod { border: 0; box-shadow: none; }
-:root[data-theme="macosx"] .cs-mod:hover { background: rgba(255, 255, 255, 0.6); }
-:root[data-theme="macosx"] .cs-mod:active, :root[data-theme="macosx"] .cs-mod.is-open { background: rgba(120, 150, 200, 0.4); }
-:root[data-theme="macosx"] .cs-tab::before {
-  image-rendering: auto;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='26' viewBox='0 0 22 26'%3E%3Cpath d='M0.5 0.5H13Q21.5 0.5 21.5 9V17Q21.5 25.5 13 25.5H0.5Z' fill='%23e6edf8' stroke='%237f93b3'/%3E%3Cpath d='M5.5 7V19M9.5 7V19' stroke='%2399a9c5'/%3E%3Cpath d='M6.5 7V19M10.5 7V19' stroke='%23fff'/%3E%3C/svg%3E");
-}
+/* In this theme the Control Strip gives way to the Dock (below); its menus come up from the Dock's icons */
+:root[data-theme="macosx"] .cstrip { display: none; }
 :root[data-theme="macosx"] .cs-pop {
   background: rgba(255, 255, 255, 0.97);
   border: 1px solid rgba(0, 0, 0, 0.32);
@@ -1688,3 +1672,103 @@ body.is-busy, body.is-busy * { cursor: none !important; }
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.55);
 }
 :root[data-theme="macosx"] .busy-wheel.is-still::before { animation: none; }
+
+/* The Dock: it replaces the Control Strip in this theme. A glass shelf along the bottom with smooth icons that grow as
+   the pointer passes (controlstrip.js sets --s on each one), launchers for the windows, the Control Strip's settings,
+   and the Trash. */
+.dock { display: none; }
+:root[data-theme="macosx"] .dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  z-index: 1800;
+  display: flex;
+  justify-content: center;
+  height: 66px;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.dock-bar {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+  padding: 0 14px 9px;
+  pointer-events: auto;
+}
+.dock-bar::before { /* the glass shelf, behind the icons */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 58px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 14px;
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(205, 222, 248, 0.38) 55%, rgba(255, 255, 255, 0.5));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -1px 0 rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.dock.is-settling .dock-item { transition: width 0.18s ease-out, height 0.18s ease-out; }
+.dock-item {
+  --s: 1;
+  position: relative;
+  flex: none;
+  width: calc(48px * var(--s));
+  height: calc(48px * var(--s));
+  margin: 0 2px;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: default;
+}
+.dock-item svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+.dock-item:focus-visible { outline: 2px solid var(--hilite); outline-offset: 2px; border-radius: 10px; }
+.dock-item::after { /* the name that shows above an icon */
+  content: attr(data-label);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 8px);
+  padding: 3px 12px;
+  border-radius: 10px;
+  background: rgba(40, 40, 40, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font: 400 13px/1.3 var(--lucida);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 0.1s;
+}
+.dock-item:hover::after, .dock-item:focus-visible::after { opacity: 1; }
+.dock-item.is-open::after { opacity: 0; }
+.dock-item.is-bouncing svg { animation: dock-bounce 0.8s ease-out; }
+@keyframes dock-bounce {
+  0%, 100% { transform: translateY(0); }
+  22% { transform: translateY(-22px); }
+  44% { transform: translateY(0); }
+  62% { transform: translateY(-9px); }
+  80% { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) { .dock.is-settling .dock-item { transition: none; } .dock-item.is-bouncing svg { animation: none; } }
+.dock-sep {
+  flex: none;
+  align-self: flex-end;
+  width: 2px;
+  height: 44px;
+  margin: 0 7px 2px;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75) 25%, rgba(255, 255, 255, 0.75) 75%, rgba(255, 255, 255, 0));
+  box-shadow: -1px 0 0 rgba(0, 0, 0, 0.18);
+}
+/* The Trash is in the Dock in this theme, and the page leaves room for the Dock */
+:root[data-theme="macosx"] .desk-trash { display: none !important; }
+:root[data-theme="macosx"] main { padding-bottom: 96px; }

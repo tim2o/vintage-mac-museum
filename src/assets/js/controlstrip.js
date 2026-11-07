@@ -1,4 +1,4 @@
-/* The Control Strip, after Mac OS 9: a small bar of modules along the bottom of the desktop, with a tab that
+/* The Control Strip, after Mac OS 9 (in the Mac OS X theme it is replaced by a Dock, at the end of this file): a small bar of modules along the bottom of the desktop, with a tab that
    rolls it away. It only exists on desktop browsers; a phone gets none of it (window.macSound still works there,
    but only the windows' zip sound uses it). Settings are remembered with localStorage when it is allowed. */
 (function () {
@@ -446,7 +446,7 @@
   bRandom.addEventListener("click", function () { closePop(false); randomMachine(); });
 
   document.addEventListener("pointerdown", function (e) {
-    if (openMod && !pop.contains(e.target) && !e.target.closest(".cs-mod")) closePop(false);
+    if (openMod && !pop.contains(e.target) && !e.target.closest(".cs-mod, .dock-item")) closePop(false);
   });
   document.addEventListener("keydown", function (e) {
     if (!openMod) return;
@@ -565,6 +565,161 @@
   strip.addEventListener("focusout", hideTip);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideTip(); });
 
+  /* ---------- The Dock (Mac OS X theme): it takes the Control Strip's place, with icons that grow as the pointer passes ---------- */
+
+  var DOCK_BASE = 48;   // the size of an icon at rest, in px
+  var DOCK_GROW = 0.8;  // the icon under the pointer grows by this much (1.8 times in all)
+  var DOCK_SPREAD = 62; // how far from the pointer, in px, icons are still growing
+
+  function dockTile(id, top, bot, inner) {
+    return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs>' +
+      '<linearGradient id="dk-' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + top + '"/><stop offset="1" stop-color="' + bot + '"/></linearGradient>' +
+      '<linearGradient id="dg-' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>' +
+      '<rect x="3" y="3" width="58" height="58" rx="13" fill="url(#dk-' + id + ')" stroke="rgba(0,0,0,.45)" stroke-width="1.5"/>' + inner +
+      '<path d="M5 18Q5 5 18 5H46Q59 5 59 18Q32 32 5 18Z" fill="url(#dg-' + id + ')"/></svg>';
+  }
+  var now0 = new Date();
+  var DOCK_ICONS = {
+    collection: dockTile("col", "#86b9f7", "#2a62c6",
+      '<rect x="18" y="12" width="28" height="38" rx="3.5" fill="#ebe6d6" stroke="#7a7566" stroke-width="1.5"/>' +
+      '<rect x="22.5" y="17" width="19" height="15" rx="2.5" fill="#1f3b58"/><rect x="24" y="18.5" width="16" height="12" rx="1.5" fill="#92d6ea"/>' +
+      '<rect x="25" y="38" width="14" height="2.5" rx="1" fill="#8a8576"/><rect x="16" y="50" width="32" height="4" rx="2" fill="#cfc9b8" stroke="#7a7566"/>'),
+    videos: dockTile("vid", "#6a6a6a", "#1a1a1a",
+      '<circle cx="32" cy="32" r="17" fill="none" stroke="#fff" stroke-width="3.5"/><path d="M27 23v18l15-9z" fill="#fff"/>'),
+    checklist: dockTile("chk", "#ffffff", "#d3d8e2",
+      '<path d="M13 22l5 5 8-11M13 34l5 5 8-11M13 46l5 5 8-11" fill="none" stroke="#2f9e44" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="M32 23H51M32 35H51M32 47H51" stroke="#8a93a6" stroke-width="3.2" stroke-linecap="round"/>'),
+    about: dockTile("abt", "#8fb0f6", "#2f55b8",
+      '<circle cx="32" cy="18.5" r="4.6" fill="#fff"/><rect x="27.5" y="27" width="9" height="21" rx="3.2" fill="#fff"/>'),
+    note: dockTile("nte", "#fff3a6", "#f1c23a",
+      '<path d="M14 22H50M14 32H50M14 42H34" stroke="#b78f1e" stroke-width="2.6" stroke-linecap="round" opacity=".75"/>' +
+      '<path d="M61 47L47 61V52Q47 47 52 47Z" fill="#d6a728" stroke="rgba(0,0,0,.25)" stroke-width="1"/>'),
+    random: dockTile("rnd", "#ffffff", "#cdd2db",
+      '<g fill="#222"><circle cx="20" cy="20" r="4.3"/><circle cx="44" cy="20" r="4.3"/><circle cx="32" cy="32" r="4.3"/><circle cx="20" cy="44" r="4.3"/><circle cx="44" cy="44" r="4.3"/></g>'),
+    sound: dockTile("snd", "#dde1e8", "#8a919f",
+      '<path d="M13 26H23L35 16V48L23 38H13Z" fill="#fff" stroke="#4a5160" stroke-width="2.2" stroke-linejoin="round"/>' +
+      '<path d="M41 24Q47 32 41 40M46 18Q57 32 46 46" fill="none" stroke="#4a5160" stroke-width="2.8" stroke-linecap="round"/>'),
+    desk: dockTile("dsk", "#9bd6ff", "#3f86df",
+      '<circle cx="45" cy="21" r="7" fill="#ffe27a"/><path d="M5 52L22 32L35 45L44 37L59 52V56Q59 59 56 59H8Q5 59 5 56Z" fill="#3b8f4f" stroke="#26683a" stroke-width="1.2" stroke-linejoin="round"/>'),
+    view: dockTile("viw", "#cfdaf3", "#6f8fd0",
+      '<g fill="#fff" stroke="#4d6cb0" stroke-width="1.5"><rect x="13" y="13" width="17" height="17" rx="3.5"/><rect x="34" y="13" width="17" height="17" rx="3.5"/><rect x="13" y="34" width="17" height="17" rx="3.5"/><rect x="34" y="34" width="17" height="17" rx="3.5"/></g>'),
+    date: dockTile("dat", "#ffffff", "#d8dce4",
+      '<path d="M3 16Q3 3 16 3H48Q61 3 61 16V23H3Z" fill="#df382c"/>' +
+      '<text x="32" y="18" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700" fill="#fff">' + now0.toLocaleDateString("en-US", { month: "short" }).toUpperCase() + '</text>' +
+      '<text x="32" y="53" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="30" font-weight="700" fill="#2a2a2a">' + now0.getDate() + '</text>'),
+    look: dockTile("lok", "#d9dde4", "#7c8594",
+      '<circle cx="32" cy="32" r="17" fill="none" stroke="#4b5361" stroke-width="7" stroke-dasharray="6.7 6.7"/><circle cx="32" cy="32" r="14" fill="#4b5361"/><circle cx="32" cy="32" r="6" fill="#d9dde4"/>'),
+    trash: '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><defs><linearGradient id="dk-trs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8f96a2"/><stop offset=".35" stop-color="#e8ebf0"/><stop offset="1" stop-color="#7c8390"/></linearGradient></defs>' +
+      '<path d="M15 20L19 56Q19.5 60 24 60H40Q44.5 60 45 56L49 20Z" fill="url(#dk-trs)" stroke="#555c68" stroke-width="1.6" stroke-linejoin="round"/>' +
+      '<path d="M24 26L26 55M32 26V56M40 26L38 55" stroke="#5b626e" stroke-width="1.6" opacity=".7"/>' +
+      '<ellipse cx="32" cy="20" rx="17" ry="5" fill="#d3d8e0" stroke="#555c68" stroke-width="1.6"/><ellipse cx="32" cy="20.5" rx="13" ry="3" fill="#6d7480"/></svg>'
+  };
+
+  var dock = document.createElement("div");
+  dock.className = "dock";
+  dock.setAttribute("role", "toolbar");
+  dock.setAttribute("aria-label", "Dock");
+  var dockBar = document.createElement("div");
+  dockBar.className = "dock-bar";
+  dock.appendChild(dockBar);
+  var dockItems = [];
+
+  function dockItem(id, label, onClick) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "dock-item";
+    b.setAttribute("data-dock", id);
+    b.setAttribute("data-label", label);
+    b.setAttribute("aria-label", label);
+    b.innerHTML = DOCK_ICONS[id];
+    b.addEventListener("click", function () { onClick(b); });
+    dockBar.appendChild(b);
+    dockItems.push(b);
+    return b;
+  }
+  function dockSep() {
+    var d = document.createElement("span");
+    d.className = "dock-sep";
+    d.setAttribute("role", "separator");
+    dockBar.appendChild(d);
+  }
+  function bounce(item) {
+    if (reduceMotion) return;
+    item.classList.remove("is-bouncing");
+    void item.offsetWidth;
+    item.classList.add("is-bouncing");
+    window.setTimeout(function () { item.classList.remove("is-bouncing"); }, 900);
+  }
+  // A launcher does what the matching menu item does: the page's own code opens the window.
+  function press(target, item) {
+    if (!target) return;
+    var r = item.getBoundingClientRect();
+    target.dispatchEvent(new MouseEvent("click", {
+      bubbles: true, cancelable: true, button: 0, view: window,
+      clientX: r.left + r.width / 2, clientY: r.top + r.height / 2
+    }));
+  }
+  function launcher(id, label, name) {
+    dockItem(id, label, function (item) {
+      closePop(false);
+      bounce(item);
+      press(document.querySelector('a[data-open-window="' + name + '"]'), item);
+    });
+  }
+  launcher("collection", "Collection", "collection");
+  launcher("videos", "Videos", "videos");
+  launcher("checklist", "Checklist", "checklist");
+  launcher("about", "About This Collection", "about");
+  launcher("note", "Leave Me a Note", "note");
+  dockItem("random", "Random Machine", function (item) { closePop(false); bounce(item); randomMachine(); });
+  dockSep();
+  dockItem("sound", "Sound", function (item) { show(item, buildSound); });
+  dockItem("desk", "Desktop Pattern", function (item) { show(item, buildDesk); });
+  dockItem("view", "Collection View", function (item) { show(item, buildView); });
+  dockItem("date", "Date and Time", function (item) { show(item, buildDate); });
+  dockItem("look", "Appearance", function (item) { show(item, buildLook); });
+  dockSep();
+  dockItem("trash", "Trash", function (item) {
+    closePop(false);
+    bounce(item);
+    press(document.querySelector(".desk-trash"), item);
+  });
+
+  // Magnification: each icon grows by how near the pointer is to its resting place, and its neighbours move over.
+  var restCenters = [];
+  var settle = 0;
+  function setScales(x) {
+    dockItems.forEach(function (b, i) {
+      var d = x === null ? 1e6 : x - restCenters[i];
+      b.style.setProperty("--s", (1 + DOCK_GROW * Math.exp(-(d * d) / (2 * DOCK_SPREAD * DOCK_SPREAD))).toFixed(3));
+    });
+  }
+  function measure() {
+    setScales(null);
+    dock.classList.remove("is-settling");
+    restCenters = dockItems.map(function (b) {
+      var r = b.getBoundingClientRect();
+      return r.left + r.width / 2;
+    });
+  }
+  dock.addEventListener("pointerenter", function (e) {
+    if (e.pointerType !== "mouse") return;
+    window.clearTimeout(settle);
+    measure();
+    setScales(e.clientX);
+  });
+  dock.addEventListener("pointermove", function (e) {
+    if (e.pointerType !== "mouse" || !restCenters.length) return;
+    setScales(e.clientX);
+  });
+  dock.addEventListener("pointerleave", function () {
+    dock.classList.add("is-settling");
+    setScales(null);
+    settle = window.setTimeout(function () { dock.classList.remove("is-settling"); }, 220);
+  });
+  dockItems.forEach(function (b) { b.style.setProperty("--s", "1"); });
+
+  document.body.appendChild(dock);
   document.body.appendChild(strip);
   document.body.appendChild(tip);
   document.body.appendChild(pop);
